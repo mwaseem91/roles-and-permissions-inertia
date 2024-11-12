@@ -1,107 +1,94 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Inertia\Inertia;
 use App\Models\Module;
-use Illuminate\Http\Request;
+use App\Http\Requests\PermissionRequest;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\DB;
 
 class PermissionController extends Controller
 {
-    public $model;
-
-    // Constructor to bind model to repo
-    public function __construct(Permission $model)
-    {
-        $this->model = $model;
-    }
-
     public function index()
     {
-        $models= $this->model->join('modules','modules.id','=','permissions.module_id')
-            ->select('permissions.*','modules.name as module')->get();
-           
-            return Inertia::render('Admin/Role/ListRole' , [
-                'models' => $models
-            ]);
+        $permissions = Permission::join('modules', 'modules.id', '=', 'permissions.module_id')
+            ->select('permissions.*', 'modules.name as module_name')->get();
+
+        return Inertia::render('Admin/Permission/index', [
+            'permissions' => $permissions
+        ]);
     }
 
     // Get Module List
     public function create()
     {
-        $modules =Module::get();
-        return Inertia::render('Admin/Permission/Form' , [
-            'modules' =>  $modules
-        ]);
-       
-    }
-  
-
-    // Store Permission in Database
-    public function store(Request $request)
-    {
-
-        DB::beginTransaction();
         try {
-            $this->model->create([
-
-                'module_id' => $request->module,
-                'name' => $request->name,
-                'type' => $request->type
+            $modules = Module::get();
+            return Inertia::render('Admin/Permission/Form', [
+                'modules' => $modules
             ]);
-            DB::commit();
-            return to_route('permissions.index')->with('success', 'Permission Added Successfully');
         } catch (\Exception $e) {
-
-            DB::rollback();
-            return to_route('permissions.index')->with('danger', 'Something went Wrong');
+            return to_route('permissions.index')->with('error', 'Something went wrong');
         }
     }
-    public function edit($id)
+
+    // Store Permission in Database
+    public function store(PermissionRequest $request)
     {
-       
+        try {
+            Permission::create([
+                'module_id' => $request->module_id,
+                'name' => $request->name,
+            ]);
 
-        $module = Module::get();
-
-        $detail = $this->model->join('modules','modules.id','=','permissions.module_id')
-        ->select('permissions.*','modules.name as module')->where('permissions.id','=',$id)->first();
-
-        return view('pages.permission.edit',compact('detail','module','breadCumb'));
+            return to_route('permissions.index')->with('success', 'Permission Added Successfully');
+        } catch (\Exception $e) {
+            return to_route('permissions.index')->with('error', 'Something went wrong');
+        }
     }
 
-    // Get Permission Detail By ID
-    public function show($id)
+    public function edit($id)
     {
-        return $this->model->join('modules','modules.id','=','permissions.module_id')
-            ->select('permissions.*','modules.name as module')->where('permissions.id','=',$id)->first();
+        try {
+            $modules = Module::get();
+            $detail = Permission::join('modules', 'modules.id', '=', 'permissions.module_id')
+                ->select('permissions.*', 'modules.name as module')->where('permissions.id', '=', $id)->first();
 
-            $associated = $this->associatedRole($id);
-            return view('pages.permission.view', compact('detail', 'associated', 'breadCumb'));
+            return Inertia::render('Admin/Permission/Form', [
+                'modules' => $modules,
+                'detail' => $detail,
+            ]);
+        } catch (\Exception $e) {
+            return to_route('permissions.index')->with('error', 'Something went wrong');
+        }
     }
 
     // Update Permission Data in Database
-    public function update(array $data, $id)
+    public function update(PermissionRequest $request, $id)
     {
-        return $this->model->find($id)->update([
+        try {
+            Permission::findOrFail($id)->update([
+                'module_id' => $request->module_id,
+                'name' => $request->name,
+            ]);
 
-            'module_id' => $data['module'],
-            'name' => $data['name'],
-            'type' => $data['type']
-        ]);
+            return to_route('permissions.index')->with('success', 'Permission Updated Successfully');
+        } catch (\Exception $e) {
+            return to_route('permissions.index')->with('error', 'Something went wrong');
+        }
     }
 
-    // Get Associated Role Against Permission
-    public function associatedRole($id)
+    // Delete a Permission from the Database
+    public function destroy($id)
     {
-        return $this->model->join('role_has_permissions','role_has_permissions.permission_id','=','permissions.id')
-            ->join('roles','roles.id','=','role_has_permissions.role_id')
-            ->select('roles.name as role','permissions.*')->where('permissions.id','=',$id)->get();
+        try {
+            $permission = Permission::findOrFail($id);
+            $permission->delete();
+
+            return to_route('permissions.index')->with('success', 'Permission deleted successfully');
+        } catch (\Exception $e) {
+            return to_route('permissions.index')->with('error', 'Something went wrong');
+        }
     }
 
-    // Destroy Permission in Database
-    public function destroy(array $data)
-    {
-        return $this->model->find($data['permission_id'])->delete();
-    }
 }

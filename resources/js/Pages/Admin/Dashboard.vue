@@ -1,12 +1,20 @@
+<script setup>
+  import { Head } from '@inertiajs/vue3'
+  import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
+
+  import { usePermissions } from '@/Composables/permissions';
+  const { hasRole } = usePermissions();
+
+</script>
+
 <template>
+    <Head title="Admin Dashboard" />
     <MasterLayout>
       <template #content>
      <!-- Page body -->
       <div class="page-body">
-        {{ $page.props.auth.roles.includes('Writer') }}
-        <button v-can="'admin'">Admin Dashboard</button>
-        <button v-can="'writer'">writer Dashboard</button>
-        <button > Dashboard</button>
+        <button v-if="hasRole('Admin')"> Admin Dashboard</button>
+        <button v-if="hasRole('Writer')">Writer Dashboard</button> 
           <div class="container-xl">
             <div class="row row-deck row-cards">
               <div class="col-sm-6 col-lg-3">
@@ -221,35 +229,11 @@
             </div>
           </div>
         </div>
+
       </template>
     </MasterLayout>
   </template>
   
-  <script>
-    import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
-    
-  
-  export default {
-    props:['dashboard_data'],
-    data() {
-    return {
-    }
-  },
-  methods:{
-  
-  
-    },
-  components: {
-    MasterLayout,
-   
-  },
-    setup() {
-  
-    },
-  };
-  </script>
-  
-  <style scoped>
-  
-  </style>
+
+ 
   

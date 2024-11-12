@@ -1,82 +1,89 @@
 <script setup>
-import { defineProps, reactive, onMounted, ref } from 'vue';
+import { defineProps, reactive, onMounted ,ref} from 'vue';
 import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
-import { router } from '@inertiajs/vue3'; 
+import { router ,Link , Head } from '@inertiajs/vue3';
+import { useToastr } from '@/toaster';
+ import { Link } from '@inertiajs/vue3'
+const toastr = useToastr();
 
 const props = defineProps({
-    roles: Array,
-    user: Object, 
+    module: Object,
 });
 
 const form = reactive({
-    name: props.user?.name || '',
-    email: props.user?.email || '',
-    password: '',  
-    role: props.user?.role || '', 
+    name: props.module?.name || '',
 });
 
-const role = ref(form.role); 
-
-onMounted(() => {
-    role.value = form.role;
-});
+const errors = ref({});
 
 function submit(event) {
     event.preventDefault();
+    errors.value = {};
 
-    const data = { ...form, role: role.value }; 
-
-    if (props.user) {
-        router.put(`/users/${props.user.id}`, data);
+    if (props.module) {
+        router.put(`/modules/${props.module.id}`, form, {
+            onError: (err) => {
+                errors.value = err;
+            }
+        });
+        
     } else {
-        router.post('/users', data);
+        router.post('/modules', form, {
+            onError: (err) => {
+                errors.value = err;
+            }
+        });
     }
 }
 </script>
 
 <template>
+    <Head title="Module" />
     <MasterLayout>
         <template #content>
             <div class="m-3 col-lg-11">
                 <div class="row row-cards">
+                    <!-- Page header -->
+                    <div class="page-header d-print-none">
+                        <div class="container-xl">
+                            <div class="row g-2 align-items-center">
+                                <div class="col">
+                                    <h2 class="page-title">
+                                        {{ props.module ? 'Update Module' : 'Create Module' }}
+                                    </h2>
+                                </div>
+                                <!-- Page title actions -->
+                                <div class="col-auto ms-auto d-print-none">
+                                    <div class="btn-list">
+                                        <Link href="/modules" class="btn btn-primary">
+                                        <!-- Back Arrow SVG Icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M19 12H5" />
+                                            <path d="M12 19l-7-7 7-7" />
+                                        </svg>
+                                            Back
+                                        </Link>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <form @submit="submit" class="card">
                             <div class="card-body">
-                                <h3 class="card-title">{{ props.user ? 'Edit User' : 'Create User' }}</h3>
+                                <h3 class="card-title">{{ props.module ? 'Edit Module' : 'Create Module' }}</h3>
                                 <div class="row row-cards">
-                                    <!-- User Name Input -->
-                                    <div class="col-sm-6 col-md-6">
+                                    <!-- Module Name Input -->
+                                    <div class="col-sm-6 col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
                                             <input type="text" class="form-control" placeholder="Enter Name"
-                                                v-model="form.name" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" placeholder="Enter Email.."
-                                                v-model="form.email" required />
-                                        </div>
-                                    </div>
-                                    <!-- Role Selection -->
-                                    <div class="col-sm-6 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Role</label>
-                                            <select class="form-control form-select" v-model="role" required>
-                                                <option value="">Select Role</option>
-                                                <option v-for="role in props.roles" :key="role.id" :value="role.id">
-                                                    {{ role.name }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!-- Password Input (only for new user or when updating password) -->
-                                    <div class="col-sm-6 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Password</label>
-                                            <input type="password" class="form-control" placeholder="Enter Password"
-                                                v-model="form.password" :required="!props.user" />
+                                                v-model="form.name"  :class="{ 'is-invalid': errors.name }" />
+                                                <span v-if="errors.name" class="invalid-feedback">{{ errors.name }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -84,7 +91,7 @@ function submit(event) {
                             <!-- Submit Button -->
                             <div class="card-footer text-end">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ props.user ? 'Update User' : 'Create User' }}
+                                    {{ props.module ? 'Update Module' : 'Create Module' }}
                                 </button>
                             </div>
                         </form>
@@ -94,3 +101,4 @@ function submit(event) {
         </template>
     </MasterLayout>
 </template>
+

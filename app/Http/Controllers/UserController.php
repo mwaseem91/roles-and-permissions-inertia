@@ -2,13 +2,13 @@
     
 namespace App\Http\Controllers;
     
-use DB;
-use Hash;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -19,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::latest()->with('roles')->get();
-        return Inertia::render('Admin/User/ListUser' , [
+        return Inertia::render('Admin/User/index' , [
             'users' =>  $users
         ]);
        
@@ -47,13 +47,6 @@ class UserController extends Controller
     }
     
    
-    public function show($id)
-    {
-        $user = User::find($id);
-
-        return view('users.show',compact('user'));
-    }
-    
     
     public function edit($id)
     {
@@ -71,13 +64,7 @@ class UserController extends Controller
    
     public function update(UserUpdateRequest $request, $id): RedirectResponse
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
-        ]);
-    
+       
         $input = $request->all();
         if(!empty($input['password'])){ 
             $input['password'] = Hash::make($input['password']);
@@ -91,15 +78,16 @@ class UserController extends Controller
     
         $user->assignRole($request->input('roles'));
     
-        return redirect()->route('users.index')
-                        ->with('success','User updated successfully');
+        return redirect()->route('users.index')->with('success','User updated successfully');
     }
     
    
     public function destroy($id): RedirectResponse
     {
         User::find($id)->delete();
-        return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+       
+        return to_route('users.index')->with('success','User deleted successfully');
     }
+   
 }
+ 

@@ -1,20 +1,36 @@
 <script setup>
-import { defineProps ,onMounted ,nextTick} from 'vue'; 
-import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
-import { router } from '@inertiajs/vue3'; 
+import { defineProps ,onMounted ,nextTick ,ref} from 'vue'; 
+import { router , Head ,Link} from '@inertiajs/vue3'; 
 
+import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
+import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
 
 const props = defineProps({
   users: Array
 });
 
+const idToDelete = ref(null);
+const ConfirmationModal = ref(null);
+
 function editRole(id) {
   router.get(route('users.edit', id));
 }
 
-function deleteRole(id) {
-  router.delete(route('users.edit', id));
-}
+const showDeleteModal = (id) => {
+  idToDelete.value = id;
+  ConfirmationModal.value.show(); 
+};
+
+const confirmDelete = () => {
+  if (idToDelete.value) {
+    router.delete(route('users.destroy', idToDelete.value));
+    idToDelete.value = null; 
+  }
+};
+
+const cancelDelete = () => {
+  idToDelete.value = null; 
+};
 
 onMounted(() => {
   nextTick(() => {
@@ -42,54 +58,32 @@ onMounted(() => {
 <template>
     <MasterLayout>
         <template #content>
-            <div class="m-3 col-lg-11">
+            <Head title="User" />
+            <div class="col-lg-11">
                 <div class="row row-cards">
                     <div class="col-12">
-                        <!-- <div class="table-responsive">
-                            <table class="table table-vcenter">
-                                <thead>
-                                    <tr>
-                                        <th>S No</th>
-                                        <th>Name</th>
-                                        <th> Email </th>
-                                        <th>Role</th>
-                                        <th class="w-1">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                            
-                                    <tr v-for="(user, index) in props.users" :key="user.id">
-                                        <td>{{ index + 1 }}</td>
-                                        <td>{{ user.name }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <td>
-                                            <span v-for="(role, roleIndex) in user.roles" :key="role.id">
-                                                {{ role.name }}
-                                                <span v-if="roleIndex < user.roles.length - 1">, </span>
-                                            </span>
-                                        </td>
-                                        <td class="text-secondary">{{ user.title }}</td> 
-                                        <td><a href="#">Edit</a></td>
-                                    </tr>
-                                   
-                                </tbody>
-                            </table>
-                        </div> -->
-                        
                         <div class="page-wrapper">
-                            <!-- Page header -->
-                            <div class="page-header d-print-none">
-                            <div class="container-xl">
-                                <div class="row g-2 align-items-center">
-                                <div class="col">
-                                    <h2 class="page-title">
-                                    Users
-                                    </h2>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
                             <!-- Page body -->
+                            <div class="page-header d-print-none">
+                                <div class="container-xl">
+                                    <div class="row g-2 align-items-center">
+                                    <div class="col">
+                                        <h2 class="page-title">
+                                          Users
+                                        </h2>
+                                    </div>
+                                    <!-- Page title actions -->
+                                    <div class="col-auto ms-auto d-print-none">
+                                        <div class="btn-list">
+                                            <Link  href="/users/create" class="btn btn-primary "> 
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                                                Create User
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="page-body">
                             <div class="container-xl">
                                 <div class="card">
@@ -103,7 +97,7 @@ onMounted(() => {
                                             <th><button class="table-sort desc" data-sort="sort-city">Email</button></th>
                                             <th><button class="table-sort" data-sort="sort-type">Role</button></th>
                                             
-                                            <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
+                                            <th><button class="table-sort" >Action</button></th>
                                         </tr>
                                         </thead>
                                         <tbody class="table-tbody">
@@ -119,8 +113,12 @@ onMounted(() => {
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <a href="#"  @click.prevent="editRole(user.id)">Edit</a>
-                                                    <a href="#"  @click.prevent="deleteRole(user.id)">Delete</a>
+                                                    <a href="#" class="me-3" @click.prevent="editRole(user.id)">
+                                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a href="#"   @click.prevent="showDeleteModal(user.id)" >
+                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                    </a>
                                                 </td>
                                                 
                                             </tr>
@@ -136,6 +134,12 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
+
+            <DeleteConfirmationModal
+                ref="ConfirmationModal"
+                @confirm="confirmDelete"
+                @cancel="cancelDelete"
+                />
 
         </template>
     </MasterLayout>

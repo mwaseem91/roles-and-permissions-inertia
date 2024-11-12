@@ -2,90 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Module;
+use Exception;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
+use App\Models\Module;
+use App\Http\Requests\ModuleRequest;
 
 class ModuleController extends Controller
 {
     public function index()
     {
-        $users = Module::latest()->with('roles')->get();
-        return Inertia::render('Admin/User/ListUser' , [
-            'users' =>  $users
-        ]);
-       
+        try {
+            $modules = Module::get();
+            return Inertia::render('Admin/Module/index', [
+                'modules' => $modules
+            ]);
+        } catch (Exception $e) {
+            return to_route('modules.index')->with('error', 'Failed to load modules');
+        }
     }
     
-   
     public function create()
     {
-        $roles = Role::select('id', 'name')->get();
-        return Inertia::render('Admin/User/create' , [
-            'roles' => $roles
-        ]);
+        try {
+            return Inertia::render('Admin/Module/create');
+        } catch (Exception $e) {
+            return to_route('modules.index')->with('error', 'Failed to load module creation page');
+        }
     }
     
-    
-    public function store(Request $request): RedirectResponse
+    public function store(ModuleRequest $request)
     {
-       
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-    
-        $user = Module::create($input);
-        $user->assignRole($request->role);
-        return to_route('users.index')->with('success', 'Role created successfully'); 
+        try {
+            Module::create(['name' => $request->name]);
+            return to_route('modules.index')->with('success', 'Module created successfully');
+        } catch (Exception $e) {
+            return back()->with('error', 'Failed to create module');
+        }
     }
-    
-   
-    public function show($id)
-    {
-        $user = Module::find($id);
 
-        return view('users.show',compact('user'));
-    }
-    
-    
     public function edit($id)
     {
-        $user = Module::find($id);
-        $roles = Role::select('id', 'name')->get();
-        $userRole = $user->roles->pluck('name','name')->all();
-    
-        return Inertia::render('Admin/User/create' , [
-            'user' => $user,
-            'roles' => $roles,
-            'userRole' => $userRole 
-        ]);
-    }
-    
-   
-    public function update(Request $request, $id): RedirectResponse
-    {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required'
-        ]);
-    
+        try {
+            $module = Module::findOrFail($id);
 
-        $user = Module::find($id);
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id',$id)->delete();
-    
-        $user->assignRole($request->input('roles'));
-    
-        return redirect()->route('users.index')
-                        ->with('success','User updated successfully');
+            return Inertia::render('Admin/Module/create', [
+                'module' => $module
+            ]);
+        } catch (Exception $e) {
+            return to_route('modules.index')->with('error', 'Failed to load module edit page');
+        }
     }
     
-   
-    public function destroy($id): RedirectResponse
+    public function update(ModuleRequest $request, $id)
     {
-        Module::find($id)->delete();
-        return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+        try {
+            $module = Module::findOrFail($id);
+            $module->update(['name' => $request->name]);
+
+            return to_route('modules.index')->with('success', 'Module updated successfully');
+        } catch (Exception $e) {
+            return back()->with('error', 'Failed to update module');
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $module = Module::findOrFail($id);
+            $module->delete();
+
+            return to_route('modules.index')->with('success', 'Module deleted successfully');
+        } catch (Exception $e) {
+            return to_route('modules.index')->with('error', 'Failed to delete module');
+        }
     }
 }

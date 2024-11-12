@@ -7,7 +7,6 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\Admin\AdminAuthController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -20,20 +19,16 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
+    Route::get('admin/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
-    })->name('dashboard');
+    })->name('admin.dashboard');
+
+    
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('permissions', PermissionController::class);
+    Route::resource('modules', ModuleController::class);
+
 });
 
-
-
-Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
-
-Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
-
-
-
-Route::resource('roles', RoleController::class);
-Route::resource('users', UserController::class);
-Route::resource('permissions', PermissionController::class);
-Route::resource('modules', ModuleController::class);
+require __DIR__.'/auth.php';

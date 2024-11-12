@@ -22,14 +22,32 @@ class Module extends Model
          static::created(function ($module) {
              $permissions = ['create', 'view', 'edit', 'delete'];
              foreach ($permissions as $action) {
-                 $permissionName = "{$module->name}_{$action}";
-                 $permissionName = str_replace(' ', '_', $permissionName);
+                 $permissionName = "{$module->name}-{$action}";
+                 $permissionName = str_replace(' ', '-', $permissionName);
                  Permission::firstOrCreate(['name' => $permissionName,'module_id' => $module->id]);
              }
              app()[PermissionRegistrar::class]->forgetCachedPermissions();
          });
+
+         static::updated(function ($module) {
+            $permissions = ['create', 'view', 'edit', 'delete'];
+        
+            foreach ($permissions as $action) {
+                $permissionName = "{$module->name}-{$action}";
+                $permissionName = str_replace(' ', '-', $permissionName);
+        
+                Permission::updateOrCreate(
+                    ['module_id' => $module->id],
+                    ['name' => $permissionName]
+                );
+            }
+        
+            app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        });
+        
+
          static::deleted(function ($module) {
-             Permission::where('name', 'like', "{$module->name}_%")->delete();
+             Permission::where('name', 'like', "{$module->name}-%")->delete();
              app()[PermissionRegistrar::class]->forgetCachedPermissions();
          });
      }
