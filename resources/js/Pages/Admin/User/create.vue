@@ -52,7 +52,7 @@ function submit(event) {
                             <div class="row g-2 align-items-center">
                                 <div class="col">
                                     <h2 class="page-title">
-                                        {{ props.user ? 'Update User' : 'Create User' }}
+                                        {{ props.user ? 'Edit User' : 'Create User' }}
                                     </h2>
                                 </div>
                                 <!-- Page title actions -->

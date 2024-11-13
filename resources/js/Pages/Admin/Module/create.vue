@@ -1,10 +1,7 @@
 <script setup>
-import { defineProps, reactive, onMounted ,ref} from 'vue';
+import { defineProps, reactive,ref} from 'vue';
 import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
-import { router ,Link , Head } from '@inertiajs/vue3';
-import { useToastr } from '@/toaster';
- import { Link } from '@inertiajs/vue3'
-const toastr = useToastr();
+import { router ,Link , Head } from '@inertiajs/vue3'; 
 
 const props = defineProps({
     module: Object,
@@ -49,7 +46,7 @@ function submit(event) {
                             <div class="row g-2 align-items-center">
                                 <div class="col">
                                     <h2 class="page-title">
-                                        {{ props.module ? 'Update Module' : 'Create Module' }}
+                                        {{ props.module ? 'Edit Module' : 'Create Module' }}
                                     </h2>
                                 </div>
                                 <!-- Page title actions -->

@@ -55,7 +55,7 @@ function submit(event) {
               <div class="row g-2 align-items-center">
                 <div class="col">
                   <h2 class="page-title">
-                    {{ props.role ? 'Update Role' : 'Create Role' }}
+                    {{ props.role ? 'Edit Role' : 'Create Role' }}
                   </h2>
                 </div>
                 <!-- Page title actions -->
@@ -80,7 +80,7 @@ function submit(event) {
           <div class="col-12">
             <form @submit="submit" class="card">
               <div class="card-body">
-                <h3 class="card-title">{{ props.role ? 'Update Role' : 'Create Role' }}</h3>
+                <h3 class="card-title">{{ props.role ? 'Edit Role' : 'Create Role' }}</h3>
                 <div class="row row-cards">
                   <div class="col-sm-12 col-md-12">
                     <div class="mb-3">

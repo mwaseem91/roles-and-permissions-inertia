@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue';
-  import { router } from '@inertiajs/vue3';
+  import { router , Link} from '@inertiajs/vue3';
 
   import '../../../../admin_scripts/css/tabler.min.css';
   import '../../../../admin_scripts/css/demo.min.css';
@@ -55,6 +55,9 @@
               </form>
               <div v-if="message" class="mt-4 text-center text-success">{{ message }}</div>
             </div>
+          </div>
+          <div class="text-center text-muted mt-3">
+            Forget it,<Link href="/login"> send me back  </Link> to the sign in screen.
           </div>
         </div>
       </div>

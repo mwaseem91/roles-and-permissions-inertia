@@ -14,7 +14,7 @@ import '../admin_scripts/libs/jsvectormap/dist/maps/world-merc.js?1684106062';
 import '../admin_scripts/js/tabler.min.js?1684106062';
 import '../admin_scripts/js/demo.min.js?1684106062';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel'; 
+const appName = import.meta.env.VITE_APP_NAME || 'Quantum Core'; 
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

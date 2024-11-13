@@ -14,9 +14,9 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <h1 class="navbar-brand navbar-brand-autodark">
-        <a href=".">
+        <Link href="/admin/dashboard">
           <img src="static/logo.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
-        </a>
+        </Link>
       </h1>
       <div class="navbar-nav flex-row d-lg-none">
         <div class="nav-item d-none d-lg-flex me-3">
@@ -76,7 +76,7 @@
       <div class="collapse navbar-collapse" id="sidebar-menu">
         <ul class="navbar-nav pt-lg-3">
           <li class="nav-item">
-            <Link class="nav-link" href="admin/dashboard">
+            <Link class="nav-link" href="/admin/dashboard">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                   stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -91,7 +91,7 @@
               </span>
             </Link>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" :class="{ active: url.startsWith('/modules') }">
             <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false"
               role="button" aria-expanded="false">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -112,7 +112,7 @@
             <div class="dropdown-menu" :class="{ show: url.startsWith('/modules') }">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <Link class="dropdown-item active" href="/modules">
+                  <Link class="dropdown-item " href="/modules">
                   Modules
                   </Link>
                   <Link class="dropdown-item" href="/modules/create">
@@ -122,7 +122,7 @@
               </div>
             </div>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown"  :class="{ active: url.startsWith('/permissions') }">
             <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false"
               role="button" aria-expanded="false">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -153,7 +153,7 @@
               </div>
             </div>
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" :class="{ active: url.startsWith('/roles') }">
             <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false"
               role="button" aria-expanded="false">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -185,7 +185,7 @@
             </div>
           </li>
 
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" :class="{ active: url.startsWith('/users') }">
             <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false"
               role="button" aria-expanded="false">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -210,6 +210,37 @@
                   Users
                   </Link>
                   <Link class="dropdown-item" href="/users/create">
+                  Create
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item dropdown" :class="{ active: url.startsWith('/attorneys') }">
+            <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false"
+              role="button" aria-expanded="false">
+              <span class="nav-link-icon d-md-none d-lg-inline-block">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+                  <path d="M12 12l8 -4.5" />
+                  <path d="M12 12l0 9" />
+                  <path d="M12 12l-8 -4.5" />
+                  <path d="M16 5.25l-8 4.5" />
+                </svg>
+              </span>
+              <span class="nav-link-title">
+                Attorneys
+              </span>
+            </a>
+            <div class="dropdown-menu" :class="{ show: url.startsWith('/attorneys') }">
+              <div class="dropdown-menu-columns">
+                <div class="dropdown-menu-column">
+                  <Link class="dropdown-item" href="/attorneys">
+                  Attorneys
+                  </Link>
+                  <Link class="dropdown-item" href="/attorneys/create">
                   Create
                   </Link>
                 </div>

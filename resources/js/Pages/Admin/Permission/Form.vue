@@ -54,7 +54,7 @@ function submit(event) {
               <div class="row g-2 align-items-center">
                 <div class="col">
                   <h2 class="page-title">
-                    {{ props.role ? 'Update Permission' : 'Create Permission' }}
+                    {{ props.role ? 'Edit Permission' : 'Create Permission' }}
                   </h2>
                 </div>
                 <!-- Page title actions -->
@@ -78,7 +78,7 @@ function submit(event) {
           <div class="col-12">
             <form @submit="submit" class="card">
               <div class="card-body">
-                <h3 class="card-title">{{ props.detail ? 'Update Permission' : 'Create Permission' }}</h3>
+                <h3 class="card-title">{{ props.detail ? 'Edit Permission' : 'Create Permission' }}</h3>
                 <div class="row row-cards">
                   <!-- Module Selection -->
                   <div class="col-sm-6 col-md-6">
