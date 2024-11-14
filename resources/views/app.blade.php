@@ -12,6 +12,19 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style> 
+            .navbar-collapse .dropdown-menu .dropdown-item:active,
+            .navbar-collapse .dropdown-menu .dropdown-item:hover,
+            .navbar-collapse .nav-item .nav-link:hover {
+                background-color: #4249e1 !important;
+            }
+
+            @media (min-width: 992px) {
+                .navbar-vertical.navbar-expand-lg .navbar-collapse .dropdown-menu .dropdown-item.active, .navbar-vertical.navbar-expand-lg .navbar-collapse .dropdown-menu .dropdown-item:active {
+                    background-color: #4249e1 !important;
+                }
+            }
+        </style>
 
         <!-- Scripts -->
         @routes

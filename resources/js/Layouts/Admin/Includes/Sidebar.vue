@@ -112,10 +112,10 @@
             <div class="dropdown-menu" :class="{ show: url.startsWith('/modules') }">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <Link class="dropdown-item " href="/modules">
+                  <Link class="dropdown-item" href="/modules"  :class="{ active: url.startsWith('/modules') && !url.startsWith('/modules/create') }" >
                   Modules
                   </Link>
-                  <Link class="dropdown-item" href="/modules/create">
+                  <Link class="dropdown-item" href="/modules/create" :class="{ active: url.startsWith('/modules/create') }">
                   Create
                   </Link>
                 </div>
@@ -140,13 +140,13 @@
                 Permissions
               </span>
             </a>
-            <div class="dropdown-menu" :class="{ show: url.startsWith('/permissions') }">
+            <div class="dropdown-menu" :class="{ show: url.startsWith('/permissions') }" >
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <Link class="dropdown-item" href="/permissions">
+                  <Link class="dropdown-item" href="/permissions" :class="{ active: url.startsWith('/permissions') && !url.startsWith('/permissions/create') }" >
                     Permissions
                   </Link>
-                  <Link class="dropdown-item" href="/permissions/create">
+                  <Link class="dropdown-item" href="/permissions/create" :class="{ active: url.startsWith('/permissions/create') }" >
                     Create
                   </Link>
                 </div>
@@ -174,10 +174,10 @@
             <div class="dropdown-menu" :class="{ show: url.startsWith('/roles') }">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <Link class="dropdown-item" href="/roles">
+                  <Link class="dropdown-item" href="/roles" :class="{ active: url.startsWith('/roles') && !url.startsWith('/roles/create') }" >
                   Roles
                   </Link>
-                  <Link class="dropdown-item" href="/roles/create">
+                  <Link class="dropdown-item" href="/roles/create" :class="{ active: url.startsWith('/roles/create') }" >
                   Create
                   </Link>
                 </div>
@@ -206,10 +206,10 @@
             <div class="dropdown-menu" :class="{ show: url.startsWith('/users') }">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <Link class="dropdown-item" href="/users">
+                  <Link class="dropdown-item" href="/users"  :class="{ active: url.startsWith('/users') && !url.startsWith('/users/create') }" >
                   Users
                   </Link>
-                  <Link class="dropdown-item" href="/users/create">
+                  <Link class="dropdown-item" href="/users/create" :class="{ active: url.startsWith('/users/create') }" >
                   Create
                   </Link>
                 </div>
@@ -237,10 +237,10 @@
             <div class="dropdown-menu" :class="{ show: url.startsWith('/attorneys') }">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <Link class="dropdown-item" href="/attorneys">
+                  <Link class="dropdown-item" href="/attorneys" :class="{ active: url.startsWith('/attorneys') && !url.startsWith('/attorneys/create') }">
                   Attorneys
                   </Link>
-                  <Link class="dropdown-item" href="/attorneys/create">
+                  <Link class="dropdown-item" href="/attorneys/create" :class="{ active: url.startsWith('/attorneys/create') }">
                   Create
                   </Link>
                 </div>

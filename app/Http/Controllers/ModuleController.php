@@ -12,7 +12,7 @@ class ModuleController extends Controller
     public function index()
     {
         try {
-            $modules = Module::get();
+            $modules = Module::latest()->get();
             return Inertia::render('Admin/Module/index', [
                 'modules' => $modules
             ]);
