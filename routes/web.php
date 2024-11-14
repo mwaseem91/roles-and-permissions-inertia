@@ -6,7 +6,9 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuleController;
+use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RequestFormController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -28,7 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('permissions', PermissionController::class);
     Route::resource('modules', ModuleController::class);
-
+    Route::resource('request-forms', RequestFormController::class);
 });
+
+Route::get('admin/form', function () {
+    return Inertia::render('Admin/form');
+})->name('form');
 
 require __DIR__.'/auth.php';
