@@ -24,6 +24,42 @@ class User extends Authenticatable
         'password',
     ];
 
+
+    public function referralInformation()
+    {
+        return $this->hasOne(ReferralInformation::class, 'user_id', 'id');
+    }
+
+
+    public function billToInformation()
+    {
+        return $this->hasOne(BillToInformation::class);
+    }
+
+    public function claimantInformation()
+    {
+        return $this->hasOne(ClaimantInformation::class);
+    }
+
+    public function physicianInformation()
+    {
+        return $this->hasMany(PhysicianInformation::class);
+    }
+
+    public function issuesAndItemsToAddress()
+    {
+        return $this->hasOne(IssuesAndItemsToAddress::class);
+    }
+
+    public function attorneyInformation()
+    {
+        return $this->hasOne(AttorneyInformation::class);
+    }
+
+    public function appointmentInformation()
+    {
+        return $this->hasOne(AppointmentInformation::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

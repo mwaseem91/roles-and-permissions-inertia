@@ -1,371 +1,94 @@
-<script setup>
-import { defineProps, reactive, onMounted, ref } from 'vue';
-import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
-import { router, Link, Head } from '@inertiajs/vue3';
-
-const props = defineProps({
-    roles: Array,
-    user: Object,
-});
-
-const form = reactive({
-    name: props.user?.name || '',
-    email: props.user?.email || '',
-    password: '',
-    role: props.user?.roles[0].id || '',
-});
-
-const errors = ref({});
-
-function submit(event) {
-    event.preventDefault();
-
-    const data = { ...form };
-
-    if (props.user) {
-        // Update existing user
-        router.put(`/users/${props.user.id}`, data, {
-            onError: (err) => {
-                errors.value = err;
-            },
-        });
-    } else {
-        // Create new user
-        router.post('/users', data, {
-            onError: (err) => {
-                errors.value = err;
-            },
-        });
-    }
-}
-</script>
-
 <template>
     <MasterLayout>
         <template #content>
-
-            <div class=" m-3 col-lg-11">
+            <div class="m-3 col-lg-11">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header well">
                         <h3 class="card-title">Referrer and Billing Information</h3>
                     </div>
-                    <div class="p-2 row row-cards">
+                    <!-- Bind billInfo with v-model -->
+                    <ReferrerAndBilling v-model:billInfo="billInfo" v-model:referralInfo="referralInfo" :errors="errors" />
+                    <ClaimantAndPhysician v-model:claimants="claimants" v-model:physicians ="physicians" :errors="errors" />
+                    <IssuesAndItems  v-model:issue="issue" :errors="errors"/>
+                    <AttorneyInformation v-model:defenseAttorney="defenseAttorney" v-model:claimantAttorney="claimantAttorney" :errors="errors" />
+                    <AppointmentInformation v-model:appointments="appointments" :errors="errors" />
+                    <FileUpload/> 
 
-                        <div class="col-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Referral Party Information</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="mb-3">
-                                        <label class="form-label"> Referring Company</label>
-                                        <input type="text" class="form-control" placeholder="Enter Name" />
-                                        <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                    </div>
-                                    <!-- User Name Input -->
-
-                                    <div class="mb-3">
-                                        <label class="form-label"> Referring Source</label>
-                                        <input type="text" class="form-control" placeholder="Enter Referring Source" />
-                                        <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Address</label>
-                                        <input type="text" class="form-control mb-2" placeholder="Address 1" />
-                                        <input type="text" class="form-control" placeholder="Address 2" />
-                                        <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">City</label>
-                                        <input type="text" class="form-control" placeholder="Enter City" />
-                                        <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">State</label>
-                                        <input type="text" name="input-mask" class="form-control" data-mask="00000-000"
-                                            data-mask-visible="true" placeholder="00000-000" autocomplete="off">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">ZIP Code</label>
-                                        <input type="text" name="input-mask" class="form-control" data-mask="00000-000"
-                                            data-mask-visible="true" placeholder="00000-000" autocomplete="off">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Phone</label>
-                                        <input type="text" name="input-mask" class="form-control"
-                                            data-mask="### ### ####" data-mask-visible="true" placeholder="### ### ####"
-                                            autocomplete="off">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Fax</label>
-                                        <input type="text" name="input-mask" class="form-control"
-                                            data-mask="### ### ####" data-mask-visible="true" placeholder="### ### ####"
-                                            autocomplete="off">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" data-mask="### ### ####"
-                                            placeholder="abc@gmail.co," autocomplete="off">
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Bill To Information</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="mb-3">
-
-                                        <label class="form-check">
-                                            <input class="form-check-input" type="checkbox">
-                                            <span class="form-label">Check here if same as Referral Party</span>
-                                        </label>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label"> Referring Company</label>
-                                        <input type="text" class="form-control" placeholder="Enter Name" />
-                                        <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                    </div>
-                                    <!-- User Name Input -->
-
-                                    <div class="mb-3">
-                                        <label class="form-label"> Referring Source</label>
-                                        <input type="text" class="form-control" placeholder="Enter Referring Source" />
-                                        <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Address</label>
-                                        <input type="text" class="form-control mb-2" placeholder="Address 1" />
-                                        <input type="text" class="form-control" placeholder="Address 2" />
-                                        <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">City</label>
-                                        <input type="text" class="form-control" placeholder="Enter City" />
-                                        <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">State</label>
-                                        <input type="text" name="input-mask" class="form-control" data-mask="00000-000"
-                                            data-mask-visible="true" placeholder="00000-000" autocomplete="off">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">ZIP Code</label>
-                                        <input type="text" name="input-mask" class="form-control" data-mask="00000-000"
-                                            data-mask-visible="true" placeholder="00000-000" autocomplete="off">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Phone</label>
-                                        <input type="text" name="input-mask" class="form-control"
-                                            data-mask="### ### ####" data-mask-visible="true" placeholder="### ### ####"
-                                            autocomplete="off">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Fax</label>
-                                        <input type="text" name="input-mask" class="form-control"
-                                            data-mask="### ### ####" data-mask-visible="true" placeholder="### ### ####"
-                                            autocomplete="off">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" data-mask="### ### ####"
-                                            placeholder="abc@gmail.co," autocomplete="off">
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
+                     <!-- /////////////////////// -->
+                     <div class="alert alert-info referralFormSSL">
+                        <img src="images/lock.gif" alt="Lock Icon" style="width: 19px; height: 19px;">
+                        <span>This electronic Request Form utilizes state of the art security and data encryption. By activating the browser's "LOCK" icon, the Leidos QTC Portal's Security
+                        Certificate employs 256-bit data encryption TLS (Transport Layer Security) and assures online visitors that confidential information cannot be viewed, intercepted
+                        or altered in any way.</span>
                     </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Claimant and Physician Information</h3>
-                        </div>
-                        <div class="p-2 row row-cards">
+                    <!-- //////////////////////// -->
 
-                            <div class="col-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Claimant Details</h3>
-                                    </div>
-                                    <div class="card-body row">
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter Last Name" />
-                                            <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                        </div>
-                                        <!-- User Name Input -->
-
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label"> First Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter First Name" />
-                                            <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                        </div>
-
-                                        <div class="mb-3 col-12">
-                                            <label class="form-label">Address</label>
-                                            <input type="text" class="form-control mb-2" placeholder="Address 1" />
-                                            <input type="text" class="form-control" placeholder="Address 2" />
-                                            <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                        </div>
-
-                                        <div class="mb-3 col-7">
-                                            <label class="form-label">City</label>
-                                            <input type="text" class="form-control" placeholder="Enter City" />
-                                            <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                        </div>
-                                        <div class="mb-3 col-2">
-                                            <label class="form-label">State</label>
-                                            <input type="text" name="input-mask" class="form-control"
-                                                data-mask="00000-000" data-mask-visible="true" placeholder="00000-000"
-                                                autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-3">
-                                            <label class="form-label">ZIP Code</label>
-                                            <input type="text" name="input-mask" class="form-control"
-                                                data-mask="00000-000" data-mask-visible="true" placeholder="00000-000"
-                                                autocomplete="off">
-                                        </div>
-
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Home Phone Number</label>
-                                            <input type="text" name="input-mask" class="form-control"
-                                                data-mask="### ### ####" data-mask-visible="true"
-                                                placeholder="### ### ####" autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Work Phone Number</label>
-                                            <input type="text" name="input-mask" class="form-control"
-                                                data-mask="### ### ####" data-mask-visible="true"
-                                                placeholder="### ### ####" autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Social Security Number</label>
-                                            <input type="text" name="input-mask" class="form-control"
-                                                data-mask="### ### ####" data-mask-visible="true"
-                                                placeholder="### ### ####" autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Date of Birth</label>
-                                            <input type="text" name="input-mask" class="form-control"
-                                                data-mask="### ### ####" data-mask-visible="true"
-                                                placeholder="### ### ####" autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Gender</label>
-                                            <input type="email" class="form-control" data-mask="### ### ####"
-                                                placeholder="abc@gmail.co," autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Employer</label>
-                                            <input type="text" name="input-mask" class="form-control"
-                                                data-mask="### ### ####" data-mask-visible="true"
-                                                placeholder="### ### ####" autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Occupation</label>
-                                            <input type="email" class="form-control" data-mask="### ### ####"
-                                                placeholder="abc@gmail.co," autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Language</label>
-                                            <input type="text" name="input-mask" class="form-control"
-                                                data-mask="### ### ####" data-mask-visible="true"
-                                                placeholder="### ### ####" autocomplete="off">
-                                        </div>
-                                        <div class="mb-3 col-6">
-                                            <label class="form-label">Other Language</label>
-                                            <input type="email" class="form-control" data-mask="### ### ####"
-                                                placeholder="abc@gmail.co," autocomplete="off">
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="card ">
-                                    <!-- <div class="card-header">
-                                        <h3 class="card-title">Bill To Information</h3>
-                                    </div> -->
-                                    <div class="card-body row mt-4">
-
-                                        <div class="mb-3 col-12">
-                                            <label class="form-label">Claim Number</label>
-                                            <input type="number" class="form-control" placeholder="EnterClaim Number" />
-                                            <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                        </div>
-                                        <!-- User Name Input -->
-
-                                        <div class="mb-3 col-12">
-                                            <label class="form-label">Date of Accident/ Injury</label>
-                                            <input type="text" class="form-control"
-                                                placeholder="Enter Referring Source" />
-                                            <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                        </div>
-
-                                        <div class="mb-3 col-12">
-                                            <label class="form-label">Injury Description / Nature of Injury</label>
-                                            <input type="text" class="form-control mb-2" placeholder="Address 1" />
-                                            <input type="text" class="form-control" placeholder="Address 2" />
-                                            <!-- <span v-if="errors.name" class="text-danger">{{ errors.name }}</span> -->
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="mb-3 mb-0">
-                                                <label class="form-label">Injury Description / Nature of Injury</label>
-                                                <textarea rows="5" class="form-control"
-                                                    placeholder="Here can be your description" value="Mike">
-                                                    Oh so, your weak rhyme  You doubt I'll bother, reading into it
-                                                </textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-3 mb-0">
-                                                <label class="form-label">Background of Injury</label>
-                                                <textarea rows="5" class="form-control"
-                                                    placeholder="Here can be your description" value="Mike">
-                                                    Oh so, your weak rhyme  You doubt I'll bother, reading into it
-                                                </textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Claim Accepted</label>
-                                                <select class="form-control form-select">
-                                                    <option value="">Yes</option>
-                                                    <option value="">No</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" data-mask="### ### ####"
-                                                placeholder="abc@gmail.co," autocomplete="off">
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-footer text-end">
+                        <button type="button" @click="formSubmit" class="btn btn-primary">Submit</button>
                     </div>
+                   
+
+                   
                 </div>
             </div>
-
-
         </template>
     </MasterLayout>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { router } from '@inertiajs/vue3';
+import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
+import ReferrerAndBilling from '@/Components/ReferrerAndBilling.vue';
+import ClaimantAndPhysician from '@/Components/ClaimantAndPhysician.vue';
+import IssuesAndItems from '@/Components/IssuesAndItems.vue';
+import AttorneyInformation from '@/Components/AttorneyInformation.vue';
+import AppointmentInformation from '@/Components/AppointmentInformation.vue';
+import FileUpload from '@/Components/FileUpload.vue';
+import test from '@/Components/test.vue';
+
+// Reactive data
+const billInfo = ref({}); 
+const referralInfo = ref({}); 
+const claimants = ref({}); 
+const physicians = ref([]); 
+const issue = ref([]); 
+const defenseAttorney = ref([]); 
+const claimantAttorney = ref([]); 
+const appointments = ref([]); 
+const errors = ref({}); 
+
+
+// Form submission handler
+function formSubmit() {
+
+    router.post(
+        route('request-forms.store'),
+        { 
+            billInfo: billInfo.value, referralInfo: referralInfo.value ,
+            claimants: claimants.value , physicians: physicians.value , 
+            issue: issue.value , defenseAttorney: defenseAttorney.value , 
+            claimantAttorney: claimantAttorney.value ,appointments: appointments.value
+        }, 
+        {
+            onError: (err) => {
+                console.error('Error:', err);
+                errors.value = err;
+            }
+        }
+    );
+}
+</script>
+
+<style scoped>
+.alert-info {
+    background-color: #e2e3e5 !important;
+    border-color: #e2e3e5 !important;
+    color: black !important;
+}
+
+.well{
+    background-color: #901588 !important;
+    color: white !important;
+}
+</style>
