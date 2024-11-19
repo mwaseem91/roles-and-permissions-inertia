@@ -12,9 +12,10 @@
                     </div>
                     <div class="card-body row">
                         <InputFieldComponent label="Last Name" placeholder="Enter Last Name" type="text"
-                            v-model="localClaimant.last_name" classes="mb-3 col-6" />
+                            v-model="localClaimant.last_name" :error="errors['claimants.last_name'] ?? ''"
+                            classes="mb-3 col-6" />
                         <InputFieldComponent label="First Name" placeholder="Enter First Name" type="text"
-                            v-model="localClaimant.first_name" classes="mb-3 col-6" />
+                            v-model="localClaimant.first_name" :error="errors['claimants.first_name'] ?? ''" classes="mb-3 col-6" />
                         <InputFieldComponent label="Address" placeholder="Address 1" type="text"
                             v-model="localClaimant.address1" classes="col-12" />
                         <InputFieldComponent placeholder="Address 2" type="text" v-model="localClaimant.address2"
@@ -47,7 +48,9 @@
                         </div>
                         <div class="mb-3 col-6">
                             <label class="form-label">Date of Birth</label>
-                            <input type="date" v-model="localClaimant.dob" class="form-control" autocomplete="off" />
+                            <input type="date" v-model="localClaimant.dob"
+                                class="form-control" autocomplete="off" />
+                            <span v-if="errors['claimants.dob']" class="text-danger">{{errors['claimants.dob']}}</span>
                         </div>
                         <div class="mb-3 col-12">
                             <label class="form-label">Gender</label>
@@ -62,16 +65,17 @@
                             v-model="localClaimant.occupation" classes="mb-3 col-12" />
                         <div class="mb-3 col-6">
                             <label class="form-label">Language</label>
-                            <select v-model="localClaimant.language" class="form-control form-select">
+                            <select v-model="localClaimant.language" class="form-control form-select" >
                                 <option value="english">English</option>
                                 <option value="spanish">Spanish</option>
                                 <option value="cambodian">Cambodian</option>
                                 <option value="other">Other</option>
                             </select>
+                            <span v-if="errors['claimants.language']" class="text-danger">{{errors['claimants.language']}}</span>
                         </div>
                         <InputFieldComponent label="Other Language"
                             :disabled="localClaimant.language === 'other' ? false : true" v-model="localClaimant.other_language"
-                            type="text" classes="mb-3 col-6" />
+                            type="text" classes="mb-3 col-6" :error="errors['claimants.other_language'] ?? ''"/>
                     </div>
                 </div>
             </div>
@@ -79,7 +83,7 @@
                 <div class="card">
                     <div class="card-body row mt-4">
                         <InputFieldComponent label="Claim Number" placeholder="Claim Number" type="text"
-                            v-model="localClaimant.claim_number" classes="mb-3 col-12" />
+                            v-model="localClaimant.claim_number" classes="mb-3 col-12"  :error="errors['claimants.claim_number'] ?? ''"/>
                         <InputFieldComponent label="Date of Accident/ Injury" type="date"
                             v-model="localClaimant.accident_date" classes="mb-3 col-12" />
                         <div class="col-md-12">
@@ -87,6 +91,7 @@
                                 <label class="form-label">Injury Description / Nature of Injury</label>
                                 <textarea rows="5" class="form-control" v-model="localClaimant.injury_description"
                                     placeholder="Here can be your description"></textarea>
+                                    <span v-if="errors['claimants.injury_description']" class="text-danger">{{errors['claimants.injury_description']}}</span>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -118,9 +123,74 @@
                             <div class="mb-3">
                                 <label class="form-label">Jurisdiction</label>
                                 <select v-model="localClaimant.jurisdiction" class="form-control form-select">
-                                    <option value="yes">Yes</option>
-                                    <option value="no">No</option>
+                                    <option selected="selected" value=""></option>
+                                    <option value="53">AB</option>
+                                    <option value="66">VI</option>
+                                    <option value="1">AL</option>
+                                    <option value="2">AK</option>
+                                    <option value="3">AZ</option>
+                                    <option value="4">AR</option>
+                                    <option value="5">CA</option>
+                                    <option value="6">CO</option>
+                                    <option value="7">CT</option>
+                                    <option value="8">DE</option>
+                                    <option value="9">DC</option>
+                                    <option value="10">FL</option>
+                                    <option value="11">GA</option>
+                                    <option value="12">HI</option>
+                                    <option value="13">ID</option>
+                                    <option value="14">IL</option>
+                                    <option value="17">KS</option>
+                                    <option value="18">KY</option>
+                                    <option value="19">LA</option>
+                                    <option value="20">ME</option>
+                                    <option value="21">MD</option>
+                                    <option value="22">MA</option>
+                                    <option value="23">MI</option>
+                                    <option value="24">MN</option>
+                                    <option value="25">MS</option>
+                                    <option value="26">MO</option>
+                                    <option value="27">MT</option>
+                                    <option value="28">NE</option>
+                                    <option value="29">NV</option>
+                                    <option value="30">NH</option>
+                                    <option value="31">NJ</option>
+                                    <option value="32">NM</option>
+                                    <option value="33">NY</option>
+                                    <option value="34">NC</option>
+                                    <option value="35">ND</option>
+                                    <option value="36">OH</option>
+                                    <option value="37">OK</option>
+                                    <option value="38">OR</option>
+                                    <option value="39">PA</option>
+                                    <option value="40">PR</option>
+                                    <option value="41">RI</option>
+                                    <option value="42">SC</option>
+                                    <option value="43">SD</option>
+                                    <option value="44">TN</option>
+                                    <option value="45">TX</option>
+                                    <option value="46">UT</option>
+                                    <option value="47">VT</option>
+                                    <option value="48">VA</option>
+                                    <option value="49">WA</option>
+                                    <option value="50">WV</option>
+                                    <option value="51">WI</option>
+                                    <option value="52">WY</option>
+                                    <option value="54">BC</option>
+                                    <option value="55">MB</option>
+                                    <option value="56">NB</option>
+                                    <option value="57">NF</option>
+                                    <option value="58">NWT</option>
+                                    <option value="59">NS</option>
+                                    <option value="60">ON</option>
+                                    <option value="61">PEI</option>
+                                    <option value="62">PQ</option>
+                                    <option value="63">SK</option>
+                                    <option value="64">YUK</option>
+                                    <option value="65">FLS</option>
+                                    <option value="67">FED</option>
                                 </select>
+                                <span v-if="errors['claimants.jurisdiction']" class="text-danger">{{errors['claimants.jurisdiction']}}</span>
                             </div>
                         </div>
                         <div class="mb-3 col-md-12">
@@ -136,6 +206,7 @@
                                 <option value="7">Workers Compensation</option>
                                 <option value="8">Federal (Longshore)</option>
                             </select>
+                            <span v-if="errors['claimants.claim_type']" class="text-danger">{{errors['claimants.claim_type']}}</span>
                         </div>
                         <div class="mb-3 col-md-12">
                             <label class="form-label">Type of Service</label>
@@ -149,11 +220,13 @@
                                 <option value="6">Review Services</option>
                                 <option value="9">Medical Records Prepping and Nurse Clinical Review</option>
                                 <option value="7">Medical Records Prepping Only</option>
-                                <option value="8">Other</option>
+                                <option value="other">Other</option>
                             </select>
+                            <span v-if="errors['claimants.service_type']" class="text-danger">{{errors['claimants.service_type']}}</span>
                         </div>
                         <InputFieldComponent label="If Other, please specify"
-                            :disabled="localClaimant.service_type == 8 ? false : true"
+                            :disabled="localClaimant.service_type == 'other' ? false : true"
+                            :error="errors['claimants.other_claim_type'] ?? ''"
                             v-model="localClaimant.other_claim_type" type="text" classes="mb-3 col-12" />
                         <InputFieldComponent label="Insured/Carrier" v-model="localClaimant.insured_carrier" type="text"
                             classes="mb-3 col-12" />

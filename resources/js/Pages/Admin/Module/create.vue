@@ -1,10 +1,7 @@
 <script setup>
 import { defineProps, reactive, onMounted ,ref} from 'vue';
 import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
-import { router ,Link , Head } from '@inertiajs/vue3';
-import { useToastr } from '@/toaster';
- import { Link } from '@inertiajs/vue3'
-const toastr = useToastr();
+import { router ,Link , Head } from '@inertiajs/vue3'; 
 
 const props = defineProps({
     module: Object,

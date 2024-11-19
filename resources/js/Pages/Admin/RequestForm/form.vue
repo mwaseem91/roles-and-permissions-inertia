@@ -65,7 +65,6 @@ function formSubmit() {
                     <div class="card-header well">
                         <h3 class="card-title">Referrer and Billing Information</h3>
                     </div>
-                    {{ errors }}
                     <!-- Bind billInfo with v-model -->
                     <ReferrerAndBilling v-model:billInfo="billInfo" v-model:referralInfo="referralInfo" :errors="errors" />
                     <ClaimantAndPhysician v-model:claimants="claimants" v-model:physicians ="physicians" :errors="errors" />
@@ -74,14 +73,14 @@ function formSubmit() {
                     <AppointmentInformation v-model:appointments="appointments" :errors="errors" />
                     <FileUpload ref="uploadFile" /> 
 
-                     <!-- /////////////////////// -->
+                    
                      <div class="alert alert-info referralFormSSL">
                         <img src="images/lock.gif" alt="Lock Icon" style="width: 19px; height: 19px;">
                         <span>This electronic Request Form utilizes state of the art security and data encryption. By activating the browser's "LOCK" icon, the Leidos QTC Portal's Security
                         Certificate employs 256-bit data encryption TLS (Transport Layer Security) and assures online visitors that confidential information cannot be viewed, intercepted
                         or altered in any way.</span>
                     </div>
-                    <!-- //////////////////////// -->
+                    
 
                     <div class="card-footer text-end">
                         <button type="button" @click.prevent="formSubmit" class="btn btn-primary">Submit</button>

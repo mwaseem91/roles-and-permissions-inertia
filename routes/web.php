@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('permissions', PermissionController::class);
     Route::resource('modules', ModuleController::class);
     Route::resource('request-forms', RequestFormController::class);
+    Route::post('/request-forms/file-upload', [RequestFormController::class, 'fileUpload']);
 });
 
 Route::get('admin/form', function () {

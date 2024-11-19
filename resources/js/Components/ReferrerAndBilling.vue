@@ -7,12 +7,12 @@
                     <h3 class="card-title">Referral Party Information</h3>
                 </div>
                 <div class="card-body row">
-
                     <InputFieldComponent type="text" label="Referring Company" placeholder="Enter Name"
-                        classes="col-12 mb-3" v-model="localReferralInfo.referring_company" />
+                        classes="col-12 mb-3" v-model="localReferralInfo.referring_company" :error="errors['referralInfo.referring_company'] ?? ''" />
 
                     <InputFieldComponent label="Referring Source" placeholder="Enter Referring Source" type="text"
-                        classes="col-12 mb-3" v-model="localReferralInfo.referring_source" />
+                        classes="col-12 mb-3" v-model="localReferralInfo.referring_source" 
+                        :error="errors['referralInfo.referring_source'] ?? ''" />
 
                     <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
                         v-model="localReferralInfo.address1" />
@@ -31,7 +31,7 @@
 
                     <div class="mb-3 col-3">
                         <label class="form-label">ZIP Code</label>
-                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"
+                        <input type="text" name="input-mask" class="form-control"
                             placeholder="Zip Code" autocomplete="off" v-model="localReferralInfo.zip_code">
                     </div>
 
@@ -39,6 +39,7 @@
                         <label class="form-label">Phone</label>
                         <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"
                             autocomplete="off" v-model="localReferralInfo.phone">
+                            <span v-if="errors['referralInfo.phone']" class="text-danger">{{errors['referralInfo.phone']}}</span>
                     </div>
 
                     <div class="mb-3 col-12">
@@ -48,7 +49,7 @@
                     </div>
 
                     <InputFieldComponent label="Email" placeholder="abc@gmail.co" type="email" classes="col-12 mb-3"
-                        v-model="localReferralInfo.email" />
+                        v-model="localReferralInfo.email" :error="errors['referralInfo.email'] ?? ''" />
                 </div>
             </div>
         </div>
@@ -69,10 +70,11 @@
 
                     <InputFieldComponent type="text" label="Referring Company" placeholder="Enter Name"
                         :disabled="localBillInfo.same_as_referral" classes="col-12 mb-3"
-                        v-model="localBillInfo.referring_company" />
+                        v-model="localBillInfo.referring_company" :error="errors['billInfo.referring_company'] ?? ''"/>
 
                     <InputFieldComponent label="Referring Source" placeholder="Enter Referring Source" type="text"
                         :disabled="localBillInfo.same_as_referral" classes="col-12 mb-3"
+                        :error="errors['billInfo.referring_source'] ?? ''"
                         v-model="localBillInfo.referring_source" />
 
                     <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
@@ -163,6 +165,7 @@
                     <div class="mb-3 col-12">
                         <label class="form-label">Phone</label>
                         <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"
+                         :error="errors['billInfo.phone'] ?? ''"
                             :disabled="localBillInfo.same_as_referral" autocomplete="off" v-model="localBillInfo.phone">
                     </div>
 
@@ -174,7 +177,8 @@
                     </div>
 
                     <InputFieldComponent label="Email" placeholder="abc@gmail.co" type="email" classes="col-12 mb-3"
-                        :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.email" />
+                        :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.email" 
+                        :error="errors['billInfo.email'] ?? ''"/>
                 </div>
             </div>
         </div>
@@ -186,6 +190,7 @@
 <script setup>
 import { reactive, watch } from 'vue';
 import InputFieldComponent from '@/Components/General/InputFieldComponent.vue';
+import { error } from 'toastr';
 
 // Define props and emits for parent-child communication
 const props = defineProps({

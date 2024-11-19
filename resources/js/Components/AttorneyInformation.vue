@@ -12,7 +12,7 @@
                     <h3 class="card-title">Defense Attorney Information</h3>
                 </div>
                 <div class="card-body row">
-                    
+                   
                     <InputFieldComponent type="text" label="Attorney Name" placeholder="Enter Name"
                         classes="col-12 mb-3" v-model="localDefenseAttorney.attorney_name" />
 
@@ -21,8 +21,10 @@
                     
                     <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
                         v-model="localDefenseAttorney.address1" />
+
                     <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3" 
                         v-model="localDefenseAttorney.address2" />
+
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-6" 
                         v-model="localDefenseAttorney.city" />
                     
@@ -36,7 +38,7 @@
                     
                     <div class="mb-3 col-3">
                         <label class="form-label">ZIP Code</label>
-                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'" 
+                        <input type="text" name="input-mask" class="form-control" 
                             placeholder="Zip Code" autocomplete="off" v-model="localDefenseAttorney.zip_code">
                     </div>
 
@@ -71,6 +73,7 @@
                     </h3>
                 </div>
                 <div class="card-body row">
+                   
                     <InputFieldComponent type="text" label="Attorney Name" placeholder="Enter Name"  
                         classes="col-12 mb-3" v-model="localClaimantAttorney.attorney_name" />
 
@@ -79,8 +82,10 @@
 
                     <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"  
                         v-model="localClaimantAttorney.address1" />
+
                     <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"   
                         v-model="localClaimantAttorney.address2" />
+
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-6"   
                         v-model="localClaimantAttorney.city" />
 
@@ -115,7 +120,7 @@
 
 
 <script setup>
-  import { reactive, watch } from 'vue';
+  import { onMounted, reactive, watch } from 'vue';
   import InputFieldComponent from '@/Components/General/InputFieldComponent.vue';
   
   // Define props and emits for parent-child communication
@@ -146,6 +151,12 @@
 
   watch(() => props.defenseAttorney, (newVal) => {
     Object.assign(localDefenseAttorney, newVal);
+  });
+
+// by default set attorney type
+  onMounted(() => {
+    localDefenseAttorney.type = 'defense';
+    localClaimantAttorney.type = 'claimant';
   });
   </script>
 
