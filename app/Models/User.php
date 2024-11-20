@@ -51,12 +51,16 @@ class User extends Authenticatable
         return $this->hasOne(IssuesAndItemsToAddress::class);
     }
 
-    public function attorneyInformation()
+    public function defenseattorney()
     {
-        return $this->hasOne(AttorneyInformation::class);
+        return $this->hasOne(AttorneyInformation::class)->where('type', 'defense');
+    }
+    public function claimantAttorney()
+    {
+        return $this->hasOne(AttorneyInformation::class)->where('type', 'claimant');
     }
 
-    public function appointmentInformation()
+    public function appointment()
     {
         return $this->hasOne(AppointmentInformation::class);
     }

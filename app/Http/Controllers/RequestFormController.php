@@ -4,18 +4,20 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Inertia\Inertia;
-use App\Models\Attachment;
 use Illuminate\Http\Request;
+use App\Jobs\ProcessFileUploads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreFormRequest;
-use Illuminate\Support\Facades\Storage;
 
 class RequestFormController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Admin/RequestForm/index');
+        $userData = Auth::user()->load('referralInformation', 'billToInformation', 'claimantInformation', 'physicianInformation', 'issuesAndItemsToAddress', 'claimantAttorney', 'defenseAttorney', 'appointment');
+        return Inertia::render('Admin/RequestForm/index', [
+            'userData' => $userData
+        ]);
     }
     public function create()
     {
@@ -48,19 +50,21 @@ class RequestFormController extends Controller
             // Save Issues and Items to Address
             $user->issuesAndItemsToAddress()->create($request->issue);
 
-            // Save Attorney Information
+            // Save Defense Attorney Information
             $user->attorneyInformation()->create($request->defenseAttorney);
+
+            // Save Claimant Attorney Information
             $user->attorneyInformation()->create($request->claimantAttorney);
 
             // Save Appointment Information
             $user->appointmentInformation()->create($request->appointments);
 
             DB::commit(); 
-            return to_route('request-forms.index')->with('success', 'Request form created successfully');
+            return to_route('request-forms.create')->with('Request form created successfully');
         } catch (Exception $e) {
             DB::rollBack();
             info( $e->getMessage());
-            return to_route('request-forms.index')->with('error', 'Something went wrong');
+            return to_route('request-forms.create')->with('Something went wrong');
         }
     }
 
@@ -74,21 +78,53 @@ class RequestFormController extends Controller
             $userId = Auth::user()->id;
 
             if ($request->hasFile('file')) {
+                $filePaths = [];
                 foreach ($request->file('file') as $file) {
-                    $uploadedFile = Storage::putFileAs('photos', $file, time() . '_' . $file->getClientOriginalName());
-                    Attachment::create([
-                        'file_path' => $uploadedFile,
-                        'user_id' => $userId,
-                        'file_name' => $file->getClientOriginalName(),
-                    ]);
+                    // Store the file temporarily
+                    $tempPath = $file->store('temp');
+                    $filePaths[] = [
+                        'path' => $tempPath,
+                        'original_name' => $file->getClientOriginalName(),
+                    ];
                 }
+
+                // Dispatch the job with file paths
+                ProcessFileUploads::dispatch($filePaths, $userId);
             }
 
-            // Return a success response
-            return response()->json([ 'message' => 'Files uploaded successfully', ], 200);
+            return response()->json('Files uploaded successfully');
 
         } catch (\Exception $e) {
-            return response()->json([ 'error' => $e->getMessage(), ], 500);
+            return response()->json($e->getMessage());
         }
     }
+
+
+    // public function fileUpload(Request $request)
+    // {
+    //     $request->validate([
+    //         'file' => 'required|array|max:10',
+    //     ]);
+
+    //     try {
+    //         $userId = Auth::user()->id;
+
+    //         if ($request->hasFile('file')) {
+    //             foreach ($request->file('file') as $file) {
+    //                 $uploadedFile = Storage::putFileAs('photos', $file, time() . '_' . $file->getClientOriginalName());
+    //                 Attachment::create([
+    //                     'file_path' => $uploadedFile,
+    //                     'user_id' => $userId,
+    //                     'file_name' => $file->getClientOriginalName(),
+    //                 ]);
+    //             }
+    //         }
+
+    //         // Return a success response
+    //         return response()->json([ 'message' => 'Files uploaded successfully', ], 200);
+
+    //     } catch (\Exception $e) {
+    //         return response()->json([ 'error' => $e->getMessage(), ], 500);
+    //     }
+    // }
 }

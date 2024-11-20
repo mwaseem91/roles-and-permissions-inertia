@@ -237,11 +237,11 @@
             <div class="dropdown-menu" :class="{ show: url.startsWith('/request-forms') }">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
-                  <Link class="dropdown-item" :href="route('request-forms.index')"  :class="{ active: url.startsWith('/request-forms') }" >
-                    Form Request
-                  </Link>
+                  <!-- <Link class="dropdown-item" :href="route('request-forms.index')"  :class="{ active: url.startsWith('/request-forms') }" >
+                    Create
+                  </Link> -->
                   <Link class="dropdown-item" :href="route('request-forms.create')"  :class="{ active: url.startsWith('/request-forms') }" >
-                    Form Request
+                    Create
                   </Link>
                 </div>
               </div>

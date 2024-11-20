@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ModuleController;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RequestFormController;
 
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('modules', ModuleController::class);
     Route::resource('request-forms', RequestFormController::class);
     Route::post('/request-forms/file-upload', [RequestFormController::class, 'fileUpload']);
+
 });
 
 Route::get('admin/form', function () {
