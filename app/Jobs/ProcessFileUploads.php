@@ -37,15 +37,14 @@ class ProcessFileUploads implements ShouldQueue
     public function handle()
     {
         foreach ($this->filePaths as $fileData) {
-            // Rehydrate the file
+          
             $tempPath = $fileData['path'];
             $originalName = $fileData['original_name'];
 
-            // Move the file to its final destination
-            $finalPath = Storage::putFileAs(
-                'files',
-                Storage::path($tempPath),
-                time() . '_' . $originalName
+            $finalPath = Storage::disk('public')->putFileAs(
+                'files', 
+                Storage::path($tempPath), 
+                time() . '_' . $originalName 
             );
 
             // Create the database record

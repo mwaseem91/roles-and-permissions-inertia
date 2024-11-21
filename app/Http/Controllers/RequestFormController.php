@@ -10,11 +10,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreFormRequest;
 
+use function PHPSTORM_META\type;
+
 class RequestFormController extends Controller
 {
     public function index()
     {
-        $userData = Auth::user()->load('referralInformation', 'billToInformation', 'claimantInformation', 'physicianInformation', 'issuesAndItemsToAddress', 'claimantAttorney', 'defenseAttorney', 'appointment');
+        $userData = Auth::user()
+            ->load('referralInformation', 'billToInformation',
+                    'claimantInformation', 'physicianInformation', 
+                    'issuesAndItemsToAddress', 'claimantAttorney', 
+                    'defenseAttorney', 'appointmentInformation','attachments'
+                );
+                
         return Inertia::render('Admin/RequestForm/index', [
             'userData' => $userData
         ]);
@@ -31,40 +39,57 @@ class RequestFormController extends Controller
             $user = Auth::user(); 
 
             // Save Referral Information
-            $user->referralInformation()->create($request->referralInfo);
+            $user->referralInformation()->updateOrCreate(['user_id' => $user->id], $request->referralInfo);
 
             // Save BillTo Information
             $billInfo =$request->billInfo['same_as_referral'] == true ? $request->referralInfo : $request->billInfo;
-            $user->billToInformation()->create($billInfo);
+            $user->billToInformation()->updateOrCreate(['user_id' => $user->id] ,$billInfo);
 
             // Save Claimant Information
-            $user->claimantInformation()->create($request->claimants);
-
-            // Save Physician Information
-            foreach ($request->physicians as $physician) {
-                if ( !empty($physician['last_name']) && !empty($physician['first_name'])) {
-                    $user->physicianInformation()->create($physician);
-                }
-            }
+            $user->claimantInformation()->updateOrCreate(['user_id' => $user->id], $request->claimants);
+            
+           // Save Physician Information
+           $this->savePhysicians($user, $request->physicians);
 
             // Save Issues and Items to Address
-            $user->issuesAndItemsToAddress()->create($request->issue);
+            $user->issuesAndItemsToAddress()->updateOrCreate(['user_id' => $user->id], $request->issue);
 
             // Save Defense Attorney Information
-            $user->attorneyInformation()->create($request->defenseAttorney);
+            $user->attorneyInformation()->updateOrCreate(['user_id' => $user->id ,'type'=>'defense'], $request->defenseAttorney);
 
             // Save Claimant Attorney Information
-            $user->attorneyInformation()->create($request->claimantAttorney);
+            $user->attorneyInformation()->updateOrCreate(['user_id' => $user->id ,'type'=>'claimant'], $request->claimantAttorney);
 
             // Save Appointment Information
-            $user->appointmentInformation()->create($request->appointments);
+            $user->appointmentInformation()->updateOrCreate(['user_id' => $user->id], $request->appointments);
 
             DB::commit(); 
-            return to_route('request-forms.create')->with('Request form created successfully');
+            return to_route('request-forms.index')->with(['success' => 'Request form created successfully']);
         } catch (Exception $e) {
             DB::rollBack();
             info( $e->getMessage());
-            return to_route('request-forms.create')->with('Something went wrong');
+            return to_route('request-forms.create')->with(['error' =>'Something went wrong']);
+        }
+    }
+
+   
+    // Saves the physician information
+    private function savePhysicians($user, $physicians)
+    {
+        foreach ($physicians as $physician) {
+            if (!empty($physician['last_name']) && !empty($physician['first_name'])) {
+                $user->physicianInformation()->updateOrCreate(
+                    [
+                        'user_id' => $user->id,
+                        'first_name' => $physician['first_name'],
+                        'last_name' => $physician['last_name'],
+                    ],
+                    [
+                        'first_name' => $physician['first_name'],
+                        'last_name' => $physician['last_name'],
+                    ]
+                );
+            }
         }
     }
 
@@ -79,8 +104,7 @@ class RequestFormController extends Controller
 
             if ($request->hasFile('file')) {
                 $filePaths = [];
-                foreach ($request->file('file') as $file) {
-                    // Store the file temporarily
+                foreach ($request->file('file') as $file) { 
                     $tempPath = $file->store('temp');
                     $filePaths[] = [
                         'path' => $tempPath,

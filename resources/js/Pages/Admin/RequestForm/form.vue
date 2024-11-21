@@ -24,37 +24,33 @@ const appointments = ref({});
 const errors = ref({}); 
 const uploadFile = ref(null);
 const invalidFieldModal = ref(null);
+const loader = ref(false);
 
-const toastr = useToastr();
 
-
-// Form submission handler
-function formSubmit() {
-   
-    router.post(
-        route('request-forms.store'),
-        { 
-            billInfo: billInfo.value, referralInfo: referralInfo.value ,
-            claimants: claimants.value , physicians: physicians.value , 
-            issue: issue.value , defenseAttorney: defenseAttorney.value , 
-            claimantAttorney: claimantAttorney.value ,appointments: appointments.value
-        }, 
-        {
-            onSuccess: () => {
-                toastr.success('Form submitted successfully');
+async function formSubmit() {
+    loader.value = true; 
+    try {
+        await router.post(
+            route('request-forms.store'),
+            { 
+                billInfo: billInfo.value, referralInfo: referralInfo.value,
+                claimants: claimants.value, physicians: physicians.value,
+                issue: issue.value, defenseAttorney: defenseAttorney.value,
+                claimantAttorney: claimantAttorney.value, appointments: appointments.value
             },
-            onError: (err) => {
-                console.error('Error:', err);
-                errors.value = err;
-                toastr.error('something went wrong');
-            }
-        }
-    );
+        );
 
-    if (uploadFile.value) {
-        uploadFile.value.uploadFiles();
+        // If there's a file to upload, handle it
+        if (uploadFile.value) {
+            await uploadFile.value.uploadFiles();
+        }
+    } catch (error) {
+        console.error('Submission Error:', error);
+    } finally {
+        loader.value = false;
     }
 }
+
 
  // Field mappings
  // Computed property for fieldMappings
@@ -127,9 +123,11 @@ function formSubmit() {
                     
 
                     <div class="card-footer text-end">
-                        <button type="button" @click.prevent="formSubmit" class="btn btn-primary">Submit</button>
+                        <button type="button" @click.prevent="formSubmit" class="btn btn-primary me-3">
+                            <span v-if="loader" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                            Submit
+                        </button>
                     </div>
-                    
                 </div>
             </div>
         </template>

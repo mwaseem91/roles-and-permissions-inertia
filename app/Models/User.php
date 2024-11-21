@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Attachment;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,6 +52,10 @@ class User extends Authenticatable
         return $this->hasOne(IssuesAndItemsToAddress::class);
     }
 
+    public function attorneyInformation()
+    {
+        return $this->hasOne(AttorneyInformation::class);
+    }
     public function defenseattorney()
     {
         return $this->hasOne(AttorneyInformation::class)->where('type', 'defense');
@@ -60,9 +65,14 @@ class User extends Authenticatable
         return $this->hasOne(AttorneyInformation::class)->where('type', 'claimant');
     }
 
-    public function appointment()
+    public function appointmentInformation()
     {
         return $this->hasOne(AppointmentInformation::class);
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
     }
     /**
      * The attributes that should be hidden for serialization.

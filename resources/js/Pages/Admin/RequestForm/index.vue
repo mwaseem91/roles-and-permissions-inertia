@@ -9,12 +9,16 @@ const props = defineProps({
 });
 
 
+function openFileInNewTab(filename) {
+  const fileUrl = `/storage/${filename}`;
+  window.open(fileUrl, '_blank');
+}
+
 </script>
 
 <template>
     <MasterLayout>
-        <template #content>
-
+        <template #content> 
             <Head title="Request Form" />
             <div class="m-3 col-lg-11">
                 <div class="card"> 
@@ -366,35 +370,35 @@ const props = defineProps({
                             <div class="row">
                                 <div class="col-md-4">
                                     <p><span>Specialty :</span>
-                                        {{ userData?.appointment?.specialty }}</p>
+                                        {{ userData?.appointment_information?.specialty }}</p>
                                 </div>
                                 <div class="col-md-4">
                                     <p><span>Other Specify:</span>
-                                        {{ userData?.appointment?.other_specialty }}</p>
+                                        {{ userData?.appointment_information?.other_specialty }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span>Provider:</span> {{ userData?.appointment?.provider}}</p>
+                                    <p><span>Provider:</span> {{ userData?.appointment_information?.provider}}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span>Location:</span> {{ userData?.appointment?.location }}</p>
+                                    <p><span>Location:</span> {{ userData?.appointment_information?.location }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span>Appointment Date to Take Place By:</span> {{ userData?.appointment?.appointment_date }}</p>
+                                    <p><span>Appointment Date to Take Place By:</span> {{ userData?.appointment_information?.appointment_date }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span>Time:</span> {{ userData?.appointment?.appointment_time }}</p>
+                                    <p><span>Time:</span> {{ userData?.appointment_information?.appointment_time }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span>Report Completed By:</span> {{ userData?.appointment?.report_completed_by }}</p>
+                                    <p><span>Report Completed By:</span> {{ userData?.appointment_information?.report_completed_by }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span>Reason For Report Rush Date:</span> {{ userData?.appointment?.	reason_report_rush_date }}</p>
+                                    <p><span>Reason For Report Rush Date:</span> {{ userData?.appointment_information?.	reason_report_rush_date }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span>X-Rays Approved:</span> {{ userData?.appointment?.x_rays_approved ===1? 'Yes':'No' }}</p>
+                                    <p><span>X-Rays Approved:</span> {{ userData?.appointment_information?.x_rays_approved ===1? 'Yes':'No' }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span>Special Instructions / Price Restrictions:</span> {{ userData?.appointment?.special_instructions }}</p>
+                                    <p><span>Special Instructions / Price Restrictions:</span> {{ userData?.appointment_information?.special_instructions }}</p>
                                 </div>
                             </div>
                         </div>
@@ -405,24 +409,46 @@ const props = defineProps({
                             <div class="row">
                                 <div class="col-md-4">
                                     <p><span> Copy to Claimant's Attorney:</span>
-                                        {{ userData?.appointment?.copy_to_claimant_attorney ===1? 'Yes':'No' }}</p>
+                                        {{ userData?.appointment_information?.copy_to_claimant_attorney ===1? 'Yes':'No' }}</p>
                                 </div>
                                 <div class="col-md-4">
                                     <p><span> Copy to Defense Attorney:</span>
-                                        {{ userData?.appointment?.copy_to_defense_attorney ===1? 'Yes':'No' }}</p>
+                                        {{ userData?.appointment_information?.copy_to_defense_attorney ===1? 'Yes':'No' }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span> Copy to Referring Party:</span>{{ userData?.appointment?.copy_to_referring_party ===1? 'Yes':'No' }}</p>
+                                    <p><span> Copy to Referring Party:</span>{{ userData?.appointment_information?.copy_to_referring_party ===1? 'Yes':'No' }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span> Copy to Billing Party:</span> {{ userData?.appointment?.copy_to_billing_party ===1? 'Yes':'No' }}</p>
+                                    <p><span> Copy to Billing Party:</span> {{ userData?.appointment_information?.copy_to_billing_party ===1? 'Yes':'No' }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span> Do Not Send Notifications:</span> {{ userData?.appointment?.do_not_send_notifications ===1? 'Yes':'No' }}</p>
+                                    <p><span> Do Not Send Notifications:</span> {{ userData?.appointment_information?.do_not_send_notifications ===1? 'Yes':'No' }}</p>
                                 </div>
                                
                             </div>
                         </div>
+                    </div>
+                    <!-- secttion 5  Appointment Information-->
+                    <div class="card-header well">
+                        <h3 class="card-title">Uploaded Files </h3>
+                    </div>
+                    <div class="p-3">
+                        <div class="card-body">
+                            <div class="row" v-for="(item ,index) in userData?.attachments" :key="item.id">
+                                <div class="col-md-1">
+                                    <p><span>{{index +1}}</span> </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><span>File Name :  </span> {{ item.file_name }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="pointer" @click="openFileInNewTab(item.file_path)">
+                                        view
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -452,5 +478,8 @@ const props = defineProps({
     border-color: #dfe6e9 !important;
     color: #0d0c0c !important;
     font-weight: bold;
+}
+.pointer {
+    cursor: pointer;
 }
 </style>
