@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('appointment_informations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('referral_id')->constrained()->onDelete('cascade')->nullable();
             $table->string('specialty')->nullable(); 
             $table->string('other_specialty')->nullable();
             $table->string('provider')->nullable();

@@ -1,8 +1,8 @@
 
 <script setup>
-import { ref , computed } from 'vue';
-import { Link ,router , Head} from '@inertiajs/vue3'  
-import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
+import { ref , computed ,defineProps } from 'vue'; 
+import { Link ,router , Head ,usePage} from '@inertiajs/vue3'  
+import MasterLayout from '@/Layouts/Frontend/MasterLayout.vue';
 import ReferrerAndBilling from '@/Components/ReferrerAndBilling.vue';
 import ClaimantAndPhysician from '@/Components/ClaimantAndPhysician.vue';
 import IssuesAndItems from '@/Components/IssuesAndItems.vue';
@@ -11,6 +11,11 @@ import AppointmentInformation from '@/Components/AppointmentInformation.vue';
 import FileUpload from '@/Components/FileUpload.vue'; 
 import InvalidFieldModal from '@/Components/Modal/InvalidFieldModal.vue';
 import { useToastr } from '@/toaster';
+
+
+const props = defineProps({
+    claimTypes: Array, 
+});
 
 // Reactive data
 const billInfo = ref({}); 
@@ -38,10 +43,23 @@ async function formSubmit() {
                 issue: issue.value, defenseAttorney: defenseAttorney.value,
                 claimantAttorney: claimantAttorney.value, appointments: appointments.value
             },
+            {
+                onSuccess: () => {
+                    const { response, success } = usePage().props.flash;
+
+                    if (success) {
+                        console.log(success);
+                        console.log('Referral ID:', response);
+                    }
+                },
+                onError: (err) => {
+                    errors.value = err;
+                }
+            }
         );
 
         // If there's a file to upload, handle it
-        if (uploadFile.value) {
+        if (5, uploadFile.value) {
             await uploadFile.value.uploadFiles();
         }
     } catch (error) {
@@ -52,7 +70,6 @@ async function formSubmit() {
 }
 
 
- // Field mappings
  // Computed property for fieldMappings
     const fieldMappings = computed(() => ({
         "Referring Company": referralInfo.value.referring_company,
@@ -99,14 +116,14 @@ async function formSubmit() {
     <MasterLayout>
         <template #content>
             <Head title="Request Form" />
-            <div class="m-3 col-lg-11">
-                <div class="card">
+            <div class="mb-5 col-lg-12">
+                <div class="card m-7">
                     <div class="card-header well">
                         <h3 class="card-title">Referrer and Billing Information</h3>
                     </div>
                     
                     <ReferrerAndBilling v-model:billInfo="billInfo" v-model:referralInfo="referralInfo" :errors="errors" />
-                    <ClaimantAndPhysician v-model:claimants="claimants" v-model:physicians ="physicians" :errors="errors" />
+                    <ClaimantAndPhysician v-model:claimants="claimants" v-model:physicians ="physicians" :claimTypes="claimTypes" :errors="errors" />
                     <IssuesAndItems  v-model:issue="issue" :errors="errors"/>
                     <AttorneyInformation v-model:defenseAttorney="defenseAttorney" v-model:claimantAttorney="claimantAttorney" :errors="errors" />
                     <AppointmentInformation v-model:appointments="appointments" :errors="errors" />

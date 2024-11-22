@@ -94,9 +94,7 @@
     color: white !important;
 }
 .sub-well {
-    background: #dfe6e9 !important;
-    border-color: #dfe6e9 !important;
-    color: #0d0c0c !important;
-    font-weight: bold;
+    background-color: #7C7C7A !important;
+    color: white !important;
 }
 </style>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Referral;
 use App\Models\Attachment;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -28,7 +29,7 @@ class User extends Authenticatable
 
     public function referralInformation()
     {
-        return $this->hasOne(ReferralInformation::class, 'user_id', 'id');
+        return $this->hasOne(Referral::class, 'user_id', 'id');
     }
 
 

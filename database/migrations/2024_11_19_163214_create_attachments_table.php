@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('referral_id')->constrained()->onDelete('cascade')->nullable();
             $table->string('file_name');
             $table->string('file_path');
             $table->timestamps();

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('referral_informations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('referral_id')->constrained()->onDelete('cascade')->nullable();
             $table->string('referring_company');
             $table->string('referring_source');
             $table->string('address1')->nullable();

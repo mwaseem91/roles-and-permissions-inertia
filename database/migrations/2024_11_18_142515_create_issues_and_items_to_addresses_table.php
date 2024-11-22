@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('issues_and_items_to_addresses', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('referral_id')->constrained()->onDelete('cascade')->nullable();
             $table->string('cover_letter')->nullable()->comment('Cover Letter Provided By')->nullable();
             $table->text('additional_information')->nullable();
             $table->id();

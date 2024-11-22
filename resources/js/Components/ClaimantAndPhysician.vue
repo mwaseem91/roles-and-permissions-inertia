@@ -109,8 +109,8 @@
                         </div>
                         <div class="mb-3 col-6">
                             <label class="form-label">Social Security Number</label>
-                            <input type="text" v-model="localClaimant.ssn" class="form-control" v-mask="'### ### ####'"
-                                placeholder="### ### ####" autocomplete="off" />
+                            <input type="text" v-model="localClaimant.ssn" class="form-control" v-mask="'####'"
+                                placeholder="####" autocomplete="off" />
                         </div>
                         <div class="mb-3 col-6">
                             <label class="form-label">Date of Birth</label>
@@ -263,14 +263,7 @@
                             <label class="form-label">Type of Claim</label>
                             <select v-model="localClaimant.claim_type" class="form-control form-select">
                                 <option selected="selected" value=""></option>
-                                <option value="1">Liability - Auto 3rd Party / Bodily Injury</option>
-                                <option value="2">Auto 1st Party / Personal Injury Protection-No Fault</option>
-                                <option value="3">Disability - Long Term</option>
-                                <option value="4">Disability - Short Term</option>
-                                <option value="5">Fit For Duty</option>
-                                <option value="6">General Liability</option>
-                                <option value="7">Workers Compensation</option>
-                                <option value="8">Federal (Longshore)</option>
+                               <option v-for="claimType in claimTypes" :key="claimType.id" :value="claimType.id">{{claimType.name}}</option>
                             </select>
                             <span v-if="errors['claimants.claim_type']" class="text-danger">{{errors['claimants.claim_type']}}</span>
                         </div>
@@ -378,7 +371,8 @@ import InputFieldComponent from '@/Components/General/InputFieldComponent.vue';
 const props = defineProps({
     claimants: Object,
     physician: Array,
-    errors: Object
+    errors: Object,
+    claimTypes: Array,
 });
 
 const emit = defineEmits(['update:claimants']);
@@ -428,9 +422,7 @@ watch(physicianDetails, (newVal) => {
     display: flex;
 }
 .sub-well {
-    background: #dfe6e9 !important;
-    border-color: #dfe6e9 !important;
-    color: #0d0c0c !important;
-    font-weight: bold;
+    background-color: #7C7C7A !important;
+    color: white !important;
 }
 </style>

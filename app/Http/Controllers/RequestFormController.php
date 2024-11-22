@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Inertia\Inertia;
+use App\Models\Referral;
+use App\Models\ClaimType;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessFileUploads;
+use function PHPSTORM_META\type;
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreFormRequest;
-
-use function PHPSTORM_META\type;
 
 class RequestFormController extends Controller
 {
@@ -29,42 +31,50 @@ class RequestFormController extends Controller
     }
     public function create()
     {
-        return Inertia::render('Admin/RequestForm/form');
+        $claimTypes= ClaimType::all();
+        return Inertia::render('Admin/RequestForm/form',
+        [
+            'claimTypes' => $claimTypes
+        ]);
     }
+
     public function store(StoreFormRequest $request)
     {
         
         DB::beginTransaction(); 
         try {
-            $user = Auth::user(); 
-
+          
             // Save Referral Information
-            $user->referralInformation()->updateOrCreate(['user_id' => $user->id], $request->referralInfo);
+            $referral = Referral::create($request->referralInfo);
 
             // Save BillTo Information
             $billInfo =$request->billInfo['same_as_referral'] == true ? $request->referralInfo : $request->billInfo;
-            $user->billToInformation()->updateOrCreate(['user_id' => $user->id] ,$billInfo);
+            $referral->billToInformation()->create($billInfo);
 
             // Save Claimant Information
-            $user->claimantInformation()->updateOrCreate(['user_id' => $user->id], $request->claimants);
+             $referral->claimantInformation()->create( $request->claimants);
             
-           // Save Physician Information
-           $this->savePhysicians($user, $request->physicians);
+            // Save Physician Information
+            $this->savePhysicians( $referral, $request->physicians);
 
             // Save Issues and Items to Address
-            $user->issuesAndItemsToAddress()->updateOrCreate(['user_id' => $user->id], $request->issue);
+            $referral->issuesAndItemsToAddress()->create( $request->issue);
 
             // Save Defense Attorney Information
-            $user->attorneyInformation()->updateOrCreate(['user_id' => $user->id ,'type'=>'defense'], $request->defenseAttorney);
+             $referral->attorneyInformation()->create($request->defenseAttorney);
 
             // Save Claimant Attorney Information
-            $user->attorneyInformation()->updateOrCreate(['user_id' => $user->id ,'type'=>'claimant'], $request->claimantAttorney);
+             $referral->attorneyInformation()->create($request->claimantAttorney);
 
             // Save Appointment Information
-            $user->appointmentInformation()->updateOrCreate(['user_id' => $user->id], $request->appointments);
+             $referral->appointmentInformation()->create($request->appointments);
 
             DB::commit(); 
-            return to_route('request-forms.index')->with(['success' => 'Request form created successfully']);
+            return back()->with([
+                'success' => 'Referral created successfully.',
+                'response' => $referral->id
+            ]);
+           
         } catch (Exception $e) {
             DB::rollBack();
             info( $e->getMessage());
@@ -72,23 +82,12 @@ class RequestFormController extends Controller
         }
     }
 
-   
     // Saves the physician information
-    private function savePhysicians($user, $physicians)
+    private function savePhysicians($referral, $physicians)
     {
         foreach ($physicians as $physician) {
             if (!empty($physician['last_name']) && !empty($physician['first_name'])) {
-                $user->physicianInformation()->updateOrCreate(
-                    [
-                        'user_id' => $user->id,
-                        'first_name' => $physician['first_name'],
-                        'last_name' => $physician['last_name'],
-                    ],
-                    [
-                        'first_name' => $physician['first_name'],
-                        'last_name' => $physician['last_name'],
-                    ]
-                );
+                $referral->physicianInformation()->create($physician);
             }
         }
     }

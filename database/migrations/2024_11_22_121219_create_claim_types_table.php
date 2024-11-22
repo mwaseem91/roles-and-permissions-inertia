@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('physician_informations', function (Blueprint $table) {
+        Schema::create('claim_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('referral_id')->constrained()->onDelete('cascade')->nullable();;
-            $table->string('first_name')->nullable();
-            $table->string('Last_name')->nullable();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('physician_informations');
+        Schema::dropIfExists('claim_types');
     }
 };

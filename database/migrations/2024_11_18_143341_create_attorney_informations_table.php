@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('attorney_informations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('referral_id')->constrained()->onDelete('cascade')->nullable();
             $table->enum('type', ['defense', 'claimant'])->default('defense');
             $table->string('attorney_name')->nullable();
             $table->string('firm_name')->nullable();
