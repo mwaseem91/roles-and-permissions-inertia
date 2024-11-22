@@ -261,7 +261,7 @@
                         </div>
                         <div class="mb-3 col-md-12">
                             <label class="form-label">Type of Claim</label>
-                            <select v-model="localClaimant.claim_type" class="form-control form-select">
+                            <select v-model="localClaimant.claim_type" class="form-control form-select" @change="claimType($event.target.value)">
                                 <option selected="selected" value=""></option>
                                <option v-for="claimType in claimTypes" :key="claimType.id" :value="claimType.id">{{claimType.name}}</option>
                             </select>
@@ -367,6 +367,10 @@
 <script setup>
 import { reactive, watch } from 'vue';
 import InputFieldComponent from '@/Components/General/InputFieldComponent.vue';
+import { useClaimStore } from "@/Stores/ClaimStore"; 
+
+
+const claimStore = useClaimStore();
 
 const props = defineProps({
     claimants: Object,
@@ -380,7 +384,10 @@ const emit = defineEmits(['update:claimants']);
 
 const localClaimant = reactive({ ...props.claimants });
 
-
+function claimType(id) {
+    claimStore.setClaimTypeId(id);
+    
+}
 
 watch(localClaimant, (newVal) => {
     emit('update:claimants', newVal);

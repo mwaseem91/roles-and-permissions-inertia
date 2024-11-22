@@ -5,6 +5,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import VueTheMask from 'vue-the-mask';
+import { createPinia } from 'pinia'
 
 
 import '../admin_scripts/libs/apexcharts/dist/apexcharts.min.js?1684106062';
@@ -15,7 +16,7 @@ import '../admin_scripts/js/tabler.min.js?1684106062';
 import '../admin_scripts/js/demo.min.js?1684106062';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
-
+const pinia = createPinia()
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
@@ -30,6 +31,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue)
             .use(VueTheMask) 
+            .use(pinia)
             .mount(el);
     },
     progress: {

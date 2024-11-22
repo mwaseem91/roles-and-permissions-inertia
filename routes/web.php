@@ -25,7 +25,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/', [RequestFormController::class, 'create'])->name('request-forms.create');
 Route::post('/request-forms/store', [RequestFormController::class, 'store'])->name('request-forms.store');
-Route::post('/request-forms/file-upload', [RequestFormController::class, 'fileUpload']);
 
 Route::get('admin/form', function () {
     return Inertia::render('Admin/form');

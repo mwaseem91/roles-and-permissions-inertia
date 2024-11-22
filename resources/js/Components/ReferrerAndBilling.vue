@@ -258,13 +258,12 @@ import { reactive, watch } from 'vue';
 import InputFieldComponent from '@/Components/General/InputFieldComponent.vue';
 import { error } from 'toastr';
 
-// Define props and emits for parent-child communication
 const props = defineProps({
-    billInfo: Object, // Parent data
+    billInfo: Object, 
     referralInfo: Object,
-    errors: Object // Validation errors
+    errors: Object 
 });
-const emit = defineEmits(['update:billInfo']); // Emit updates to parent
+const emit = defineEmits(['update:billInfo']); 
 
 // Create a reactive local copy of billInfo
 const localBillInfo = reactive({ ...props.billInfo });

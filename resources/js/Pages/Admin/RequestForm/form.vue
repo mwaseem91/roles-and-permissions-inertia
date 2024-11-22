@@ -1,7 +1,7 @@
 
 <script setup>
-import { ref , computed ,defineProps } from 'vue'; 
-import { Link ,router , Head ,usePage} from '@inertiajs/vue3'  
+import { ref ,defineProps } from 'vue'; 
+import {router , Head } from '@inertiajs/vue3'  
 import MasterLayout from '@/Layouts/Frontend/MasterLayout.vue';
 import ReferrerAndBilling from '@/Components/ReferrerAndBilling.vue';
 import ClaimantAndPhysician from '@/Components/ClaimantAndPhysician.vue';
@@ -10,12 +10,13 @@ import AttorneyInformation from '@/Components/AttorneyInformation.vue';
 import AppointmentInformation from '@/Components/AppointmentInformation.vue';
 import FileUpload from '@/Components/FileUpload.vue'; 
 import InvalidFieldModal from '@/Components/Modal/InvalidFieldModal.vue';
-import { useToastr } from '@/toaster';
+import { useClaimStore } from "@/Stores/ClaimStore"; 
 
 
 const props = defineProps({
     claimTypes: Array, 
 });
+const claimStore = useClaimStore();
 
 // Reactive data
 const billInfo = ref({}); 
@@ -27,17 +28,20 @@ const defenseAttorney = ref({});
 const claimantAttorney = ref({}); 
 const appointments = ref({}); 
 const errors = ref({}); 
-const uploadFile = ref(null);
 const invalidFieldModal = ref(null);
 const loader = ref(false);
+const dropzoneRef = ref(null);
 
 
 async function formSubmit() {
     loader.value = true; 
+    const files = dropzoneRef.value.dropzoneFiles;
+    
     try {
         await router.post(
             route('request-forms.store'),
             { 
+                files: files,
                 billInfo: billInfo.value, referralInfo: referralInfo.value,
                 claimants: claimants.value, physicians: physicians.value,
                 issue: issue.value, defenseAttorney: defenseAttorney.value,
@@ -45,12 +49,7 @@ async function formSubmit() {
             },
             {
                 onSuccess: () => {
-                    const { response, success } = usePage().props.flash;
-
-                    if (success) {
-                        console.log(success);
-                        console.log('Referral ID:', response);
-                    }
+                  
                 },
                 onError: (err) => {
                     errors.value = err;
@@ -58,10 +57,6 @@ async function formSubmit() {
             }
         );
 
-        // If there's a file to upload, handle it
-        if (5, uploadFile.value) {
-            await uploadFile.value.uploadFiles();
-        }
     } catch (error) {
         console.error('Submission Error:', error);
     } finally {
@@ -70,46 +65,6 @@ async function formSubmit() {
 }
 
 
- // Computed property for fieldMappings
-    const fieldMappings = computed(() => ({
-        "Referring Company": referralInfo.value.referring_company,
-        "Referring Source": referralInfo.value.referring_source, 
-        "Referring Phone": referralInfo.value.phone,
-        "Referring Email": referralInfo.value.email,
-        "Bill To Company Name": billInfo.value.referring_company,
-        "Bill To Referring Source": billInfo.value.referring_source,
-        "Bill To Phone": billInfo.value.phone,
-        "Bill To Email": billInfo.value.email,
-        "Claimant Last Name": claimants.value.first_name,
-        "Claimant First Name": claimants.value.first_name,
-        "Date of Birth": claimants.value.dob,
-        "Language": claimants.value.language,
-        "Claim Number": issue.value.claim_number,
-        "Injury Description": issue.value.injury_description,
-        "Jurisdiction": issue.value.jurisdiction,
-        "Claim Type": issue.value.service_type,
-        "Other Service": issue.value.other_service,
-        "Specialty or Other Specialty": issue.value.specialty,
-    }));
-
-    // Computed property to get invalid fields
-    const invalidFields = computed(() => {
-    return Object.entries(fieldMappings.value)
-        .filter(([_, value]) => !value) 
-        .map(([fieldName]) => fieldName); 
-    });
-
-    // Method to handle button click and show invalid fields
-    const showInvalidFieldModal = () => {
-        console.log(referralInfo.value);
-        
-        console.log(invalidFields.value);
-        
-        if (invalidFieldModal.value) {
-            invalidFieldModal.value.show();
-        }
-    };
-  
 </script>
 
 <template>
@@ -121,14 +76,13 @@ async function formSubmit() {
                     <div class="card-header well">
                         <h3 class="card-title">Referrer and Billing Information</h3>
                     </div>
-                    
                     <ReferrerAndBilling v-model:billInfo="billInfo" v-model:referralInfo="referralInfo" :errors="errors" />
                     <ClaimantAndPhysician v-model:claimants="claimants" v-model:physicians ="physicians" :claimTypes="claimTypes" :errors="errors" />
                     <IssuesAndItems  v-model:issue="issue" :errors="errors"/>
                     <AttorneyInformation v-model:defenseAttorney="defenseAttorney" v-model:claimantAttorney="claimantAttorney" :errors="errors" />
                     <AppointmentInformation v-model:appointments="appointments" :errors="errors" />
-                    <FileUpload ref="uploadFile"  :fieldMappings="fieldMappings"/> 
-                    <InvalidFieldModal ref="invalidFieldModal" :invalidFields="invalidFields"/> 
+                    <FileUpload ref="dropzoneRef"  :fieldMappings="fieldMappings"/> 
+                    <!-- <InvalidFieldModal ref="invalidFieldModal" :invalidFields="invalidFields"/>  -->
 
                     
                      <div class="alert alert-info referralFormSSL">

@@ -40,8 +40,9 @@ import { ref, onMounted, onBeforeUnmount, defineExpose } from 'vue';
 import Dropzone from 'dropzone';
 
 const dropzoneElement = ref(null);
-let dropzoneInstance = null;
+const dropzoneFiles = ref([]);
 
+// Initialize Dropzone
 onMounted(() => {
     const dropzoneOptions = {
         url: '/request-forms/file-upload', 
@@ -55,21 +56,20 @@ onMounted(() => {
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
-
         init: function () {
-            dropzoneInstance = this;
             this.on('addedfile', function (file) {
-                console.log('File added:',);
+                console.log('File added:', file);
+                dropzoneFiles.value.push(file); // Add file to the list
             });
             this.on('success', function (file, response) {
                 console.log('Upload successful');
             });
             this.on('error', function (file, errorMessage) {
-                console.error('Upload failed',);
+                console.error('Upload failed', errorMessage);
             });
-             // Triggered when a file is removed
-             this.on('removedfile', function (file) {
+            this.on('removedfile', function (file) {
                 console.log('File removed:', file);
+                dropzoneFiles.value = dropzoneFiles.value.filter(f => f !== file); 
             });
         },
     };
@@ -77,23 +77,18 @@ onMounted(() => {
     new Dropzone(dropzoneElement.value, dropzoneOptions);
 });
 
+// Clean up on unmount
 onBeforeUnmount(() => {
     Dropzone.forElement(dropzoneElement.value)?.destroy();
 });
 
-// Method to manually trigger the file upload
-const uploadFiles = () => {
-    if (dropzoneInstance && dropzoneInstance.files.length > 0) {
-        dropzoneInstance.processQueue();
-    } else {
-        console.warn('No files to upload');
-    }
-};
-
+// Expose the files array to the parent component
 defineExpose({
-    uploadFiles,
+    dropzoneFiles,
 });
 </script>
+
+
 
 <style>
 @import 'dropzone/dist/dropzone.css';

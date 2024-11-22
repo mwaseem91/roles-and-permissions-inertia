@@ -36,6 +36,7 @@ class StoreFormRequest extends FormRequest
             'claimants.jurisdiction' => 'required',
             'claimants.service_type' => 'required',
             'appointments.specialty' => 'required',
+            'files' => 'nullable|array|max:10',
         ];
 
         // Conditional rules

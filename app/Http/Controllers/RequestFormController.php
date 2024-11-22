@@ -6,79 +6,92 @@ use Exception;
 use Inertia\Inertia;
 use App\Models\Referral;
 use App\Models\ClaimType;
+use App\Models\Attachment;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessFileUploads;
 use function PHPSTORM_META\type;
-use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreFormRequest;
+use Illuminate\Support\Facades\Storage;
 
 class RequestFormController extends Controller
 {
     public function index()
     {
-        $userData = Auth::user()
-            ->load('referralInformation', 'billToInformation',
-                    'claimantInformation', 'physicianInformation', 
-                    'issuesAndItemsToAddress', 'claimantAttorney', 
-                    'defenseAttorney', 'appointmentInformation','attachments'
-                );
-                
+        $userData = Referral::with(
+                'referralInformation',
+                'billToInformation',
+                'claimantInformation',
+                'physicianInformation',
+                'issuesAndItemsToAddress',
+                'claimantAttorney',
+                'defenseAttorney',
+                'appointmentInformation',
+                'attachments'
+            );
+
         return Inertia::render('Admin/RequestForm/index', [
             'userData' => $userData
         ]);
     }
     public function create()
     {
-        $claimTypes= ClaimType::all();
-        return Inertia::render('Admin/RequestForm/form',
-        [
-            'claimTypes' => $claimTypes
-        ]);
+        $claimTypes = ClaimType::all();
+        return Inertia::render(
+            'Admin/RequestForm/form',
+            [
+                'claimTypes' => $claimTypes
+            ]
+        );
     }
 
     public function store(StoreFormRequest $request)
     {
-        
-        DB::beginTransaction(); 
+
+        DB::beginTransaction();
         try {
-          
+
             // Save Referral Information
             $referral = Referral::create($request->referralInfo);
 
             // Save BillTo Information
-            $billInfo =$request->billInfo['same_as_referral'] == true ? $request->referralInfo : $request->billInfo;
+            $billInfo = $request->billInfo['same_as_referral'] == true ? $request->referralInfo : $request->billInfo;
             $referral->billToInformation()->create($billInfo);
 
             // Save Claimant Information
-             $referral->claimantInformation()->create( $request->claimants);
-            
+            $referral->claimantInformation()->create($request->claimants);
+
             // Save Physician Information
-            $this->savePhysicians( $referral, $request->physicians);
+            $this->savePhysicians($referral, $request->physicians);
 
             // Save Issues and Items to Address
-            $referral->issuesAndItemsToAddress()->create( $request->issue);
+            $referral->issuesAndItemsToAddress()->create($request->issue);
 
             // Save Defense Attorney Information
-             $referral->attorneyInformation()->create($request->defenseAttorney);
+            $referral->attorneyInformation()->create($request->defenseAttorney);
 
             // Save Claimant Attorney Information
-             $referral->attorneyInformation()->create($request->claimantAttorney);
+            $referral->attorneyInformation()->create($request->claimantAttorney);
 
             // Save Appointment Information
-             $referral->appointmentInformation()->create($request->appointments);
+            $referral->appointmentInformation()->create($request->appointments);
 
-            DB::commit(); 
+            // Save Attachments
+            if ($request->hasFile('files')) {
+                $this->fileUpload($referral->id, $request->file('files'));
+            }
+
+            DB::commit();
             return back()->with([
                 'success' => 'Referral created successfully.',
-                'response' => $referral->id
+               
             ]);
-           
         } catch (Exception $e) {
             DB::rollBack();
-            info( $e->getMessage());
-            return to_route('request-forms.create')->with(['error' =>'Something went wrong']);
+            info($e->getMessage());
+            return to_route('request-forms.create')->with(['error' => 'Something went wrong']);
         }
     }
 
@@ -92,62 +105,25 @@ class RequestFormController extends Controller
         }
     }
 
-    public function fileUpload(Request $request)
+    public function fileUpload($referralId, $files)
     {
-        $request->validate([
-            'file' => 'required|array|max:10',
-        ]);
-
         try {
-            $userId = Auth::user()->id;
-
-            if ($request->hasFile('file')) {
-                $filePaths = [];
-                foreach ($request->file('file') as $file) { 
-                    $tempPath = $file->store('temp');
-                    $filePaths[] = [
-                        'path' => $tempPath,
-                        'original_name' => $file->getClientOriginalName(),
-                    ];
+            foreach ($files as $file) {
+                if ($file instanceof \Illuminate\Http\UploadedFile) {
+                    $uploadedFile = Storage::disk('public')->putFileAs('files', $file,
+                        time() . '_' . $file->getClientOriginalName()
+                    );
+    
+                    Attachment::create([
+                        'file_path' => $uploadedFile,
+                        'referral_id' => $referralId,
+                        'file_name' => $file->getClientOriginalName(),
+                    ]);
                 }
-
-                // Dispatch the job with file paths
-                ProcessFileUploads::dispatch($filePaths, $userId);
             }
-
-            return response()->json('Files uploaded successfully');
-
         } catch (\Exception $e) {
-            return response()->json($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
-
-
-    // public function fileUpload(Request $request)
-    // {
-    //     $request->validate([
-    //         'file' => 'required|array|max:10',
-    //     ]);
-
-    //     try {
-    //         $userId = Auth::user()->id;
-
-    //         if ($request->hasFile('file')) {
-    //             foreach ($request->file('file') as $file) {
-    //                 $uploadedFile = Storage::putFileAs('photos', $file, time() . '_' . $file->getClientOriginalName());
-    //                 Attachment::create([
-    //                     'file_path' => $uploadedFile,
-    //                     'user_id' => $userId,
-    //                     'file_name' => $file->getClientOriginalName(),
-    //                 ]);
-    //             }
-    //         }
-
-    //         // Return a success response
-    //         return response()->json([ 'message' => 'Files uploaded successfully', ], 200);
-
-    //     } catch (\Exception $e) {
-    //         return response()->json([ 'error' => $e->getMessage(), ], 500);
-    //     }
-    // }
+    
 }
