@@ -4,47 +4,62 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Inertia\Inertia;
+use App\Models\State;
 use App\Models\Referral;
 use App\Models\ClaimType;
+use App\Models\Specialty;
 use App\Models\Attachment;
+use App\Models\ServiceType;
 use Illuminate\Http\Request;
-use App\Jobs\ProcessFileUploads;
-use function PHPSTORM_META\type;
-
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StoreFormRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreFormRequest; 
 
 class RequestFormController extends Controller
 {
     public function index()
     {
-        $userData = Referral::with(
-                'referralInformation',
-                'billToInformation',
-                'claimantInformation',
-                'physicianInformation',
-                'issuesAndItemsToAddress',
-                'claimantAttorney',
-                'defenseAttorney',
-                'appointmentInformation',
-                'attachments'
-            );
-
+        $referrals = Referral::all();
+    
         return Inertia::render('Admin/RequestForm/index', [
-            'userData' => $userData
+            'referrals' => $referrals,
         ]);
     }
+
     public function create()
     {
         $claimTypes = ClaimType::all();
+        $states = State::all();
+        $serviceTypes= ServiceType::all();
+        $specialties = Specialty::all();
         return Inertia::render(
             'Admin/RequestForm/form',
             [
-                'claimTypes' => $claimTypes
+                'claimTypes' => $claimTypes,
+                'states' => $states,
+                'serviceTypes' => $serviceTypes,
+                'specialties' => $specialties,
             ]
         );
+    }
+
+    public function show($id)  {
+        $referral = Referral::with([
+            'billToInformation',
+            'claimantInformation.service',
+            'claimantInformation.claim',
+            'physicianInformation',
+            'issuesAndItemsToAddress',
+            'claimantAttorney',
+            'defenseAttorney',
+            'appointmentInformation.specialty',
+            'attachments',
+        ])->find($id);
+
+    return Inertia::render('Admin/RequestForm/show', [
+        'referral' => $referral
+    ]);
     }
 
     public function store(StoreFormRequest $request)
@@ -123,6 +138,38 @@ class RequestFormController extends Controller
             }
         } catch (\Exception $e) {
             throw new Exception($e->getMessage());
+        }
+    }
+
+    public function changeStatus(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $referral = Referral::findOrFail($request->id);
+            $referral->status = $request->status;
+            $referral->save();
+
+            DB::commit();
+            return to_route('request-forms.index')->with('success', 'Status changed successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return to_route('request-forms.index')->with('error', 'Something went wrong');
+        }
+    }
+    public function destroy($id): RedirectResponse
+    {
+        DB::beginTransaction();
+
+        try {
+            $role = Referral::findOrFail($id);
+            $role->delete();
+
+            DB::commit();
+            return to_route('request-forms.index')->with('success', 'Referral deleted successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return to_route('request-forms.index')->with('error', 'Something went wrong');
         }
     }
     

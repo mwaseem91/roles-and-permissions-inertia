@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('fax')->nullable();
             $table->string('email');
+            $table->enum('status', ['Pending', 'In Progress', 'Completed', 'Rejected'])->default('Pending'); 
             $table->timestamps();
         });
     }

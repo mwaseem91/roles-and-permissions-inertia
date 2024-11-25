@@ -24,10 +24,12 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/', [RequestFormController::class, 'create'])->name('request-forms.create');
+Route::get('/request-forms', [RequestFormController::class, 'index'])->name('request-forms.index');
+Route::get('/request-forms/{id}', [RequestFormController::class, 'show'])->name('request-forms.show');
 Route::post('/request-forms/store', [RequestFormController::class, 'store'])->name('request-forms.store');
+Route::delete('/request-forms/destroy/{id}', [RequestFormController::class, 'destroy'])->name('form-requests.destroy');
+Route::post('/request-forms/change-status', [RequestFormController::class, 'changeStatus'])->name('form-requests.change-status');
 
-Route::get('admin/form', function () {
-    return Inertia::render('Admin/form');
-})->name('form');
+
 
 require __DIR__.'/auth.php';

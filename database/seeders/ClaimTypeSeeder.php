@@ -13,19 +13,22 @@ class ClaimTypeSeeder extends Seeder
      */
     public function run(): void
     {
+
         $claimTypes = [
-            'Liability - Auto 3rd Party / Bodily Injury',
-            'Auto 1st Party / Personal Injury Protection-No Fault',
-            'Disability - Long Term',
-            'Disability - Short Term',
-            'Fit For Duty',
-            'General Liability',
-            'Workers Compensation',
-            'Federal (Longshore)'
+            ['name' => 'Liability - Auto 3rd Party / Bodily Injury'],
+            ['name' => 'Auto 1st Party / Personal Injury Protection-No Fault'],
+            ['name' => 'Disability - Long Term'],
+            ['name' => 'Disability - Short Term'],
+            ['name' => 'Fit For Duty'],
+            ['name' => 'General Liability'],
+            ['name' => 'Workers Compensation'],
+            ['name' => 'Federal (Longshore)']
         ];
 
-        foreach ($claimTypes as $type) {
-            ClaimType::create(['name' => $type]);
-        }
+        // Truncate the claim_types table
+        ClaimType::truncate();
+
+        // Insert claim types into the database
+        ClaimType::insert($claimTypes);
     }
 }

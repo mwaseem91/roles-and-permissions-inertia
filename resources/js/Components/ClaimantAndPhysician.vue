@@ -26,73 +26,9 @@
                             <label class="form-label">State</label>
                             <select v-model="localClaimant.state" class="form-control form-select">
                                 <option selected="selected" value="U"></option>
-                            <option value="AL">AL</option>
-                            <option value="AK">AK</option>
-                            <option value="AZ">AZ</option>
-                            <option value="AR">AR</option>
-                            <option value="CA">CA</option>
-                            <option value="CO">CO</option>
-                            <option value="CT">CT</option>
-                            <option value="DE">DE</option>
-                            <option value="DC">DC</option>
-                            <option value="FL">FL</option>
-                            <option value="GA">GA</option>
-                            <option value="HI">HI</option>
-                            <option value="ID">ID</option>
-                            <option value="IL">IL</option>
-                            <option value="IN">IN</option>
-                            <option value="IA">IA</option>
-                            <option value="KS">KS</option>
-                            <option value="KY">KY</option>
-                            <option value="LA">LA</option>
-                            <option value="ME">ME</option>
-                            <option value="MD">MD</option>
-                            <option value="MA">MA</option>
-                            <option value="MI">MI</option>
-                            <option value="MN">MN</option>
-                            <option value="MS">MS</option>
-                            <option value="MO">MO</option>
-                            <option value="MT">MT</option>
-                            <option value="NE">NE</option>
-                            <option value="NV">NV</option>
-                            <option value="NH">NH</option>
-                            <option value="NJ">NJ</option>
-                            <option value="NM">NM</option>
-                            <option value="NY">NY</option>
-                            <option value="NC">NC</option>
-                            <option value="ND">ND</option>
-                            <option value="OH">OH</option>
-                            <option value="OK">OK</option>
-                            <option value="OR">OR</option>
-                            <option value="PA">PA</option>
-                            <option value="RI">RI</option>
-                            <option value="SC">SC</option>
-                            <option value="SD">SD</option>
-                            <option value="TN">TN</option>
-                            <option value="TX">TX</option>
-                            <option value="UT">UT</option>
-                            <option value="VT">VT</option>
-                            <option value="VA">VA</option>
-                            <option value="WA">WA</option>
-                            <option value="WV">WV</option>
-                            <option value="WI">WI</option>
-                            <option value="WY">WY</option>
-                            <option value="AB">AB</option>
-                            <option value="BC">BC</option>
-                            <option value="MB">MB</option>
-                            <option value="NB">NB</option>
-                            <option value="NF">NF</option>
-                            <option value="NWT">NWT</option>
-                            <option value="NS">NS</option>
-                            <option value="ON">ON</option>
-                            <option value="PEI">PEI</option>
-                            <option value="PQ">PQ</option>
-                            <option value="SK">SK</option>
-                            <option value="YUK">YUK</option>
-                            <option value="FLS">FLS</option>
-                            <option value="VI">VI</option>
-                            <option value="FED">FED</option>
-                            <option value="AE">AE</option>
+                                <option v-for="state in states" :key="state.code" :value="state.code">
+                                    {{ state.code }}
+                                </option>
                             </select>
                         </div>
                         <InputFieldComponent label="ZIP Code" placeholder="ZIP Code" type="text"
@@ -271,14 +207,9 @@
                             <label class="form-label">Type of Service</label>
                             <select v-model="localClaimant.service_type" class="form-control form-select">
                                 <option selected="selected" value=""></option>
-                                <option value="1">Independent Medical Evaluation (IME)</option>
-                                <option value="2">Permanancy Evaluation</option>
-                                <option value="3">Fit for Duty Evaluation</option>
-                                <option value="4" disabled="disabled">Medical Evaluation (State of DE only)</option>
-                                <option value="5">Impairment Rating Evaluation (IRE)</option>
-                                <option value="6">Review Services</option>
-                                <option value="9">Medical Records Prepping and Nurse Clinical Review</option>
-                                <option value="7">Medical Records Prepping Only</option>
+                                <option v-for="serviceType in serviceTypes" :key="serviceType.id" :value="serviceType.id">
+                                {{ serviceType.name }}
+                            </option>
                                 <option value="other">Other</option>
                             </select>
                             <span v-if="errors['claimants.service_type']" class="text-danger">{{errors['claimants.service_type']}}</span>
@@ -377,6 +308,8 @@ const props = defineProps({
     physician: Array,
     errors: Object,
     claimTypes: Array,
+    states: Array,
+    serviceTypes: Array
 });
 
 const emit = defineEmits(['update:claimants']);

@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\StateSeeder;
 use Database\Seeders\ClaimTypeSeeder;
+use Database\Seeders\ServiceTypeSeeder;
+use Database\Seeders\SpecialtiesSeeder;
 use Database\Seeders\CreateAdminUserSeeder;
 use Database\Seeders\PermissionTableSeeder;
 
@@ -18,6 +21,9 @@ class DatabaseSeeder extends Seeder
             PermissionTableSeeder::class,
             CreateAdminUserSeeder::class,
             ClaimTypeSeeder::class,
+            ServiceTypeSeeder::class,
+            StateSeeder::class,
+            SpecialtiesSeeder::class,
            
         ]);
     }

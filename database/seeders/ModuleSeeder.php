@@ -30,10 +30,14 @@ class ModuleSeeder extends Seeder
                 'id' => '4',
                 'name' => 'User'
             ],
+            [
+                'id' => '5',
+                'name' => 'Form Request'
+            ],
             
            
         ];
-
+        Module::truncate();
         // Store All Module in Database
         foreach ($module as $item) {
             Module::create($item);

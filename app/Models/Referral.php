@@ -10,6 +10,8 @@ class Referral extends Model
     protected $guarded = [];
     protected $table = 'referrals';
 
+
+
     public function billToInformation()
     {
         return $this->hasOne(BillToInformation::class);
