@@ -5,7 +5,7 @@
         </div>
         <div class="p-2 row row-cards">
             <!-- Additional Information -->
-            <div class="col-6">
+            <div class=" col-12 col-md-6">
                 <div class="card">
                     <div class="card-header sub-well">
                         <h3 class="card-title">Issues to Be Addressed</h3>
@@ -21,60 +21,60 @@
 
                             <label class="form-check me-3" v-if="claimTypeId == 1 || claimTypeId == 2  || claimTypeId == 7">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.injuryCausalRelationship">
+                                    v-model="localIssue.injury_causal_relationship">
                                 <span class="form-label">Causal relationship between injury and current
                                     complaints?</span>
                             </label>
 
                             <label class="form-check me-3" v-if="claimTypeId == 2 || claimTypeId == 7">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.explainCauseOfComplaints">
+                                    v-model="localIssue.explain_cause_of_complaints">
                                 <span class="form-label">Please explain how the accident would have caused the patient's
                                     complaints.</span>
                             </label>
 
                             <label class="form-check me-3" v-if="claimTypeId == 2">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.activityRestrictions">
+                                    v-model="localIssue.activity_restrictions">
                                 <span class="form-label">Does the claimant have any activity restrictions?</span>
                             </label>
 
                             <label class="form-check me-3" v-if="claimTypeId == 1  || claimTypeId == 2  || claimTypeId == 7 || claimTypeId == 8">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.isCurrentTreatmentNecessary">
+                                    v-model="localIssue.is_current_treatment_necessary">
                                 <span class="form-label">Is current treatment reasonable and necessary?</span>
                             </label>
 
                             <label class="form-check me-3" v-if="claimTypeId == 1 || claimTypeId == 2 || claimTypeId == 7 || claimTypeId == 8">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.furtherTreatmentNeeded">
+                                    v-model="localIssue.further_treatment_needed">
                                 <span class="form-label">Is further treatment needed? If so, what kind, for what length,
                                     and at what frequency?</span>
                             </label>
                             <label class="form-check me-3" v-if="claimTypeId == 6 || claimTypeId == 8">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.isCausalRelationshipExplained">
+                                    v-model="localIssue.is_causal_relationship_explained">
                                 <span class="form-label">Causal relationship between injury and current complaints? Please explain how the accident would have caused the patients' complaints</span>
                             </label>
 
                             <!-- General Liability -->
                             <label class="form-check me-3" v-if="claimTypeId == 1 || claimTypeId == 6 || claimTypeId == 8">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.sustainedPermanentInjury">
+                                    v-model="localIssue.sustained_permanent_injury">
                                 <span class="form-label">Did the claimant sustain any permanent injury as a result of
                                     this accident? If not, please indicate this in your report.</span>
                             </label>
                             <!-- Work Compensation -->
                             <label class="form-check me-3" v-if="claimTypeId == 7">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.returnToWorkNoRestrictions">
+                                    v-model="localIssue.return_to_work_no_restrictions">
                                 <span class="form-label">Can claimant return to work at this time with no
                                     restrictions?</span>
                             </label>
 
                             <label class="form-check me-3"  v-if=" claimTypeId == 7">
                                 <input class="form-check-input" type="checkbox"
-                                    v-model="localIssue.physicalCapabilities">
+                                    v-model="localIssue.physical_capabilities">
                                 <span class="form-label">What are claimant's physical capabilities?</span>
                             </label>
                         </div>
@@ -94,7 +94,7 @@
             <!--End Additional Information -->
 
             <!-- Additional Information -->
-            <div class="col-6">
+            <div class=" col-12 col-md-6">
                 <div class="card ">
                     <div class="card-header sub-well">
                         <h3 class="card-title">Additional Information</h3>

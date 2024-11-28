@@ -1,8 +1,5 @@
 <script setup>
 import { computed, watch } from 'vue';
-import AdminSideBar from '@/Layouts/Admin/Includes/Sidebar.vue';
-import AdminNavBar from '@/Layouts/Admin/Includes/Navbar.vue';
-import AdminFooter from '@/Layouts/Admin/Includes/Footer.vue';
 
 import '../../../admin_scripts/css/tabler.min.css';
 import '../../../admin_scripts/css/tabler-flags.min.css';
@@ -12,6 +9,7 @@ import '../../../admin_scripts/css/demo.min.css';
 
 import { usePage } from '@inertiajs/vue3';
 import { useToastr } from '@/toaster';
+import { Head } from '@inertiajs/vue3';
 
 // Get page and toastr instances
 const page = usePage();

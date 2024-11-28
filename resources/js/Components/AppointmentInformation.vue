@@ -6,7 +6,7 @@
         </div>
         <div class="p-2 row row-cards">
 
-            <div class="col-6">
+            <div class=" col-12 col-md-6">
                 <div class="card">
                     <div class="card-header sub-well">
                         <h3 class="card-title">Appointment Information
@@ -15,7 +15,7 @@
                     <div class="card-body row">
 
                         <div class="mb-3 col-12">
-                            <label class="form-label">Specialty</label>
+                            <label class="form-label required">Specialty</label>
                             <select class="form-control form-select" v-model="localappointments.specialty">
                                 <option selected="selected" value=""></option>
                                 <option v-for="specialty in specialties" :key="specialty.id" :value="specialty.id">{{specialty.name}}</option>
@@ -26,7 +26,7 @@
 
                         <InputFieldComponent type="text" label="If other, please specify" placeholder="Enter Name"
                             classes="col-12 mb-3" v-model="localappointments.other_specialty" required="true"
-                            :error="errors['claimants.other_specialty'] ?? ''" />
+                            :error="errors['appointments.other_specialty'] ?? ''"  labelClasses="required" />
 
                         <InputFieldComponent label="Provider" placeholder="Enter Provider" type="text"
                             classes="col-12 mb-3" v-model="localappointments.provider" />
@@ -68,7 +68,7 @@
                 </div>
             </div>
 
-            <div class="col-6">
+            <div class=" col-12 col-md-6">
                 <div class="card">
                     <div class="card-header sub-well">
                         <h3 class="card-title">Notification of Appointment</h3>

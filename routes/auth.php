@@ -3,7 +3,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/login', [AdminAuthController::class, 'index'])->name('admin.login');
+Route::get('/login', [AdminAuthController::class, 'index'])->name('login');
 Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login');
 
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');

@@ -20,11 +20,10 @@ class RequestFormController extends Controller
 {
     public function index()
     {
-        $referrals = Referral::all();
-    
+        $referrals = Referral::latest()->paginate(10);
         return Inertia::render('Admin/RequestForm/index', [
             'referrals' => $referrals,
-        ]);
+        ]);  
     }
 
     public function create()
@@ -44,7 +43,8 @@ class RequestFormController extends Controller
         );
     }
 
-    public function show($id)  {
+    public function show($id)  
+    {
         $referral = Referral::with([
             'billToInformation',
             'claimantInformation.service',
@@ -57,57 +57,64 @@ class RequestFormController extends Controller
             'attachments',
         ])->find($id);
 
-    return Inertia::render('Admin/RequestForm/show', [
-        'referral' => $referral
-    ]);
+        return Inertia::render('Admin/RequestForm/show', [
+            'referral' => $referral
+        ]);
     }
 
     public function store(StoreFormRequest $request)
     {
-
+       
         DB::beginTransaction();
         try {
-
             // Save Referral Information
             $referral = Referral::create($request->referralInfo);
 
             // Save BillTo Information
             $billInfo = $request->billInfo['same_as_referral'] == true ? $request->referralInfo : $request->billInfo;
             $referral->billToInformation()->create($billInfo);
-
+          
             // Save Claimant Information
             $referral->claimantInformation()->create($request->claimants);
-
+          
             // Save Physician Information
-            $this->savePhysicians($referral, $request->physicians);
+            if (!empty($request->physicians)) {
+                $this->savePhysicians($referral, $request->physicians);
+            }
 
             // Save Issues and Items to Address
-            $referral->issuesAndItemsToAddress()->create($request->issue);
-
+            if (!empty($request->issue)) {
+                $referral->issuesAndItemsToAddress()->create($request->issue);
+            }
+       
             // Save Defense Attorney Information
             $referral->attorneyInformation()->create($request->defenseAttorney);
-
+          
             // Save Claimant Attorney Information
             $referral->attorneyInformation()->create($request->claimantAttorney);
-
+           
             // Save Appointment Information
             $referral->appointmentInformation()->create($request->appointments);
-
+          
             // Save Attachments
             if ($request->hasFile('files')) {
                 $this->fileUpload($referral->id, $request->file('files'));
             }
 
             DB::commit();
-            return back()->with([
-                'success' => 'Referral created successfully.',
-               
-            ]);
+
+            return Inertia::render('Admin/RequestForm/response');
+
         } catch (Exception $e) {
             DB::rollBack();
             info($e->getMessage());
             return to_route('request-forms.create')->with(['error' => 'Something went wrong']);
         }
+    }
+
+    public function response()
+    {
+        return Inertia::render('Admin/RequestForm/response');
     }
 
     // Saves the physician information
@@ -124,7 +131,7 @@ class RequestFormController extends Controller
     {
         try {
             foreach ($files as $file) {
-                if ($file instanceof \Illuminate\Http\UploadedFile) {
+                if ($file) {
                     $uploadedFile = Storage::disk('public')->putFileAs('files', $file,
                         time() . '_' . $file->getClientOriginalName()
                     );

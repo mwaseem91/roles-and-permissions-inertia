@@ -5,7 +5,7 @@
         </div>
         <div class="p-2 row row-cards">
 
-            <div class="col-6">
+            <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-header sub-well">
                         <h3 class="card-title">Claimant Details</h3>
@@ -13,16 +13,22 @@
                     <div class="card-body row">
                         <InputFieldComponent label="Last Name" placeholder="Enter Last Name" type="text"
                             v-model="localClaimant.last_name" :error="errors['claimants.last_name'] ?? ''"
-                            classes="mb-3 col-6" />
+                            classes="mb-3 col-12 col-md-6" labelClasses="required"  />
+
                         <InputFieldComponent label="First Name" placeholder="Enter First Name" type="text"
-                            v-model="localClaimant.first_name" :error="errors['claimants.first_name'] ?? ''" classes="mb-3 col-6" />
+                            v-model="localClaimant.first_name" :error="errors['claimants.first_name'] ?? ''"
+                             classes="mb-3  col-12 col-md-6" labelClasses="required" />
+
                         <InputFieldComponent label="Address" placeholder="Address 1" type="text"
                             v-model="localClaimant.address1" classes="col-12" />
+
                         <InputFieldComponent placeholder="Address 2" type="text" v-model="localClaimant.address2"
                             classes="col-12 mb-3" />
+
                         <InputFieldComponent label="City" placeholder="Enter City" type="text" v-model="localClaimant.city"
-                            classes="mb-3 col-6" />
-                        <div class="mb-3 col-3">
+                            classes="mb-3  col-12 col-md-6" />
+
+                        <div class="mb-3  col-12 col-md-3">
                             <label class="form-label">State</label>
                             <select v-model="localClaimant.state" class="form-control form-select">
                                 <option selected="selected" value="U"></option>
@@ -31,25 +37,27 @@
                                 </option>
                             </select>
                         </div>
+                        
                         <InputFieldComponent label="ZIP Code" placeholder="ZIP Code" type="text"
-                            v-model="localClaimant.zip_code" classes="mb-3 col-3" />
-                        <div class="mb-3 col-6">
+                            v-model="localClaimant.zip_code" classes="mb-3  col-12 col-md-3" />
+
+                        <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Home Phone Number</label>
                             <input type="text" v-model="localClaimant.home_phone" class="form-control" v-mask="'### ### ####'"
                                 placeholder="### ### ####" autocomplete="off" />
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Work Phone Number</label>
                             <input type="text" v-model="localClaimant.work_phone" class="form-control" v-mask="'### ### ####'"
                                 placeholder="### ### ####" autocomplete="off" />
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Social Security Number</label>
                             <input type="text" v-model="localClaimant.ssn" class="form-control" v-mask="'####'"
                                 placeholder="####" autocomplete="off" />
                         </div>
-                        <div class="mb-3 col-6">
-                            <label class="form-label">Date of Birth</label>
+                        <div class="mb-3  col-12 col-md-6">
+                            <label class="form-label required">Date of Birth</label>
                             <input type="date" v-model="localClaimant.dob"
                                 class="form-control" autocomplete="off" />
                             <span v-if="errors['claimants.dob']" class="text-danger">{{errors['claimants.dob']}}</span>
@@ -65,8 +73,8 @@
                             v-model="localClaimant.employer" classes="mb-3 col-12" />
                         <InputFieldComponent label="Occupation" placeholder="Occupation" type="text"
                             v-model="localClaimant.occupation" classes="mb-3 col-12" />
-                        <div class="mb-3 col-6">
-                            <label class="form-label">Language</label>
+                        <div class="mb-3 col-12 col-md-6">
+                            <label class="form-label required">Language</label>
                             <select v-model="localClaimant.language" class="form-control form-select" >
                                 <option value="english">English</option>
                                 <option value="spanish">Spanish</option>
@@ -77,20 +85,22 @@
                         </div>
                         <InputFieldComponent label="Other Language"
                             :disabled="localClaimant.language === 'other' ? false : true" v-model="localClaimant.other_language"
-                            type="text" classes="mb-3 col-6" :error="errors['claimants.other_language'] ?? ''"/>
+                            type="text" classes="mb-3 col-12 col-md-6" :error="errors['claimants.other_language'] ?? ''"/>
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-body row mt-4">
-                        <InputFieldComponent label="Claim Number" placeholder="Claim Number" type="text"
+                        <InputFieldComponent label="Claim Number" placeholder="Claim Number" type="text" labelClasses="required" 
                             v-model="localClaimant.claim_number" classes="mb-3 col-12"  :error="errors['claimants.claim_number'] ?? ''"/>
-                        <InputFieldComponent label="Date of Accident/ Injury" type="date"
+                       
+                            <InputFieldComponent label="Date of Accident/ Injury" type="date"
                             v-model="localClaimant.accident_date" classes="mb-3 col-12" />
+
                         <div class="col-md-12">
                             <div class="mb-3 mb-0">
-                                <label class="form-label">Injury Description / Nature of Injury</label>
+                                <label class="form-label required">Injury Description / Nature of Injury</label>
                                 <textarea rows="5" class="form-control" v-model="localClaimant.injury_description"
                                     placeholder="Here can be your description"></textarea>
                                     <span v-if="errors['claimants.injury_description']" class="text-danger">{{errors['claimants.injury_description']}}</span>
@@ -123,7 +133,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="form-label">Jurisdiction</label>
+                                <label class="form-label required">Jurisdiction</label>
                                 <select v-model="localClaimant.jurisdiction" class="form-control form-select">
                                     <option selected="selected" value=""></option>
                                     <option value="53">AB</option>
@@ -196,15 +206,16 @@
                             </div>
                         </div>
                         <div class="mb-3 col-md-12">
-                            <label class="form-label">Type of Claim</label>
+                            <label class="form-label required">Type of Claim</label>
                             <select v-model="localClaimant.claim_type" class="form-control form-select" @change="claimType($event.target.value)">
                                 <option selected="selected" value=""></option>
                                <option v-for="claimType in claimTypes" :key="claimType.id" :value="claimType.id">{{claimType.name}}</option>
                             </select>
                             <span v-if="errors['claimants.claim_type']" class="text-danger">{{errors['claimants.claim_type']}}</span>
                         </div>
+
                         <div class="mb-3 col-md-12">
-                            <label class="form-label">Type of Service</label>
+                            <label class="form-label required">Type of Service</label>
                             <select v-model="localClaimant.service_type" class="form-control form-select">
                                 <option selected="selected" value=""></option>
                                 <option v-for="serviceType in serviceTypes" :key="serviceType.id" :value="serviceType.id">
@@ -241,7 +252,7 @@
             </div>
 
             <!-- Treating Physician -->
-            <div class="col-6">
+            <div class=" col-12 col-md-6">
                 <div class="card">
                     <div class="card-header sub-well d-flex align-items-center justify-content-between">
                         <h3 class="card-title">Treating Physician(s)</h3>
@@ -265,7 +276,7 @@
             <!--End Treating Physician -->
 
             <!-- Other Needs -->
-            <div class="col-6">
+            <div class=" col-12 col-md-6">
                 <div class="card ">
                     <div class="card-header sub-well">
                         <h3 class="card-title">Other Needs</h3>

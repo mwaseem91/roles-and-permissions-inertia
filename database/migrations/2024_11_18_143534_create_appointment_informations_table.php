@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('appointment_informations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('referral_id')->constrained()->onDelete('cascade')->nullable();
-            $table->string('specialty')->nullable(); 
-            $table->string('other_specialty')->nullable();
-            $table->string('provider')->nullable();
-            $table->string('location')->nullable();
+            $table->text('specialty')->nullable(); 
+            $table->text('other_specialty')->nullable();
+            $table->text('provider')->nullable();
+            $table->text('location')->nullable();
             $table->date('appointment_date')->nullable(); 
             $table->text('appointment_time')->nullable(); 
             $table->date('report_completed_by')->nullable(); 

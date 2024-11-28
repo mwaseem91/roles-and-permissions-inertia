@@ -12,6 +12,7 @@ import '../../../admin_scripts/css/demo.min.css';
 
 import { usePage } from '@inertiajs/vue3';
 import { useToastr } from '@/toaster';
+import { Head } from '@inertiajs/vue3';
 
 // Get page and toastr instances
 const page = usePage();

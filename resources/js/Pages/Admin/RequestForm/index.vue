@@ -3,16 +3,18 @@ import { ref } from 'vue';
 import { Link, router, Head } from '@inertiajs/vue3'
 import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
+import Pagination from '@/Components/General/Pagination.vue';
 import { usePermissions } from '@/Composables/permissions';
-
+import moment from 'moment';
 const { hasPermission } = usePermissions();
 
 const props = defineProps({
-    referrals: Array
+    referrals: Object
 });
 
 const idToDelete = ref(null);
 const ConfirmationModal = ref(null);
+const turnTime = ref('');
 
 const showDeleteModal = (id) => {
     idToDelete.value = id;
@@ -32,6 +34,31 @@ const cancelDelete = () => {
 const changeStatus = (id, status) => {
     router.post(route('form-requests.change-status', { id: id, status: status }));
 };
+
+const turnaroundTime = (createdAt, updatedAt) => { 
+    const duration = moment.duration(moment(updatedAt).diff(moment(createdAt)));
+
+    // Extract the years, months, days, hours, and minutes from the duration
+    const years = duration.years();
+    const months = duration.months();
+    const days = duration.days();
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+
+    let timeString = '';
+
+    if (years > 0) timeString += `${years} years `;
+    if (months > 0) timeString += `${months} months `;
+    if (days > 0) timeString += `${days} days `;
+    if (hours > 0) timeString += `${hours} hours `;
+    if (minutes > 0) timeString += `${minutes} minutes`;
+
+    return timeString.trim() || 'Just now';
+};
+
+
+
+
 
 </script>
 
@@ -63,7 +90,9 @@ const changeStatus = (id, status) => {
                                     <div class="card">
                                         <div class="card-body">
                                             <div id="table-default">
+                                                <div class="table-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
                                                 <table class="table">
+                                                  
                                                     <thead>
                                                         <tr>
                                                             <th><button class="table-sort">Sr #</button></th>
@@ -78,7 +107,7 @@ const changeStatus = (id, status) => {
                                                             <th><button class="table-sort desc"
                                                                     data-sort="sort-city">fax</button></th>
                                                             <th><button class="table-sort desc"
-                                                                    data-sort="sort-city">City</button></th>
+                                                                    data-sort="sort-city">turnaround Time</button></th>
                                                             <th><button class="table-sort desc"
                                                                     data-sort="sort-city">Status</button></th>
                                                             <th><button class="table-sort"
@@ -86,7 +115,7 @@ const changeStatus = (id, status) => {
                                                         </tr>
                                                     </thead>
                                                     <tbody class="table-tbody">
-                                                        <tr v-for="(referral, index) in props.referrals"
+                                                        <tr v-for="(referral, index) in props.referrals.data"
                                                             :key="referral.id">
                                                             <td class="sort-name">{{ index + 1 }}</td>
                                                             <td class="sort-name">{{ referral?.referring_company }}</td>
@@ -94,7 +123,8 @@ const changeStatus = (id, status) => {
                                                             <td class="sort-city">{{ referral.email }}</td>
                                                             <td class="sort-city">{{ referral.phone }}</td>
                                                             <td class="sort-city">{{ referral.fax }}</td>
-                                                            <td class="sort-city">{{ referral.city }}</td>
+                                                            <td class="sort-city">{{ referral.status === 'Completed' ? turnaroundTime(referral.created_at, referral.updated_at) : '  -- ' }}</td>
+                                                            
                                                             <td class="">
                                                                 <span class="dropdown">
                                                                     <button class="btn dropdown-toggle align-text-top " style="width: 120px !important;" 
@@ -140,7 +170,11 @@ const changeStatus = (id, status) => {
                                                 </table>
                                             </div>
                                         </div>
+                                            
+                                        </div>
+                                        <Pagination :pagination="referrals" />
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -182,4 +216,21 @@ width-120{
 .pointer {
     cursor: pointer;
 }
+
+
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    min-width: 1200px;  
+}
+
+th, td {
+    white-space: nowrap; 
+}
+
 </style>

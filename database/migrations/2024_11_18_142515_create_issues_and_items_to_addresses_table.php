@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('sustained_permanent_injury')->default(0); 
             $table->boolean('return_to_work_no_restrictions')->default(0); 
             $table->boolean('physical_capabilities')->default(0); 
-            $table->string('cover_letter')->nullable()->comment('Cover Letter Provided By')->nullable();
+            $table->text('cover_letter')->nullable()->comment('Cover Letter Provided By')->nullable();
             $table->text('additional_information')->nullable();
            
             $table->timestamps();

@@ -21,11 +21,27 @@ class StoreFormRequest extends FormRequest
      */
     public function rules()
     {
+       
+        // Base rules
         $rules = [
+            'referralInfo'  => 'required',
+            'billInfo'  => 'required',
+            'claimants'  => 'required',
+            'defenseAttorney' => 'required',
+            'claimantAttorney' => 'required',
+            'appointments' => 'required',
+            'files' => 'nullable|array|max:10',
+            // Referral information
             'referralInfo.referring_company' => 'required',
             'referralInfo.referring_source' => 'required',
             'referralInfo.phone' => 'required',
             'referralInfo.email' => 'required|email',
+            'referralInfo.address1' => 'nullable',
+            'referralInfo.address2' => 'nullable',
+            'referralInfo.city' => 'nullable',
+            'referralInfo.state' => 'nullable',
+            'referralInfo.zip_code' => 'nullable',
+            'referralInfo.fax' => 'nullable',
 
             'claimants.first_name' => 'required',
             'claimants.last_name' => 'required',
@@ -35,8 +51,9 @@ class StoreFormRequest extends FormRequest
             'claimants.injury_description' => 'required',
             'claimants.jurisdiction' => 'required',
             'claimants.service_type' => 'required',
+
             'appointments.specialty' => 'required',
-            'files' => 'nullable|array|max:10',
+            
         ];
 
         // Conditional rules
@@ -59,9 +76,7 @@ class StoreFormRequest extends FormRequest
             $conditionalRules['claimants.other_claim_type'] = 'required|string';
         }
 
-        if ($this->input('claimants.specialty') === 'other') {
-            $conditionalRules['claimants.other_specialty'] = 'required|string';
-        }
+       
 
         if ($this->input('billInfo.same_as_referral') == false) {
             $conditionalRules = array_merge($conditionalRules, [
@@ -69,6 +84,12 @@ class StoreFormRequest extends FormRequest
                 'billInfo.referring_source' => 'required|string|max:255',
                 'billInfo.phone' => 'required',
                 'billInfo.email' => 'required|email',
+                'billInfo.address1' => 'nullable',
+                'billInfo.address2' => 'nullable',
+                'billInfo.city' => 'nullable',
+                'billInfo.state' => 'nullable',
+                'billInfo.zip_code' => 'nullable',
+                'billInfo.fax' => 'nullable',
             ]);
         }
 

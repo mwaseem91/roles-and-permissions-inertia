@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('physician_informations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('referral_id')->constrained()->onDelete('cascade')->nullable();;
-            $table->string('first_name')->nullable();
-            $table->string('Last_name')->nullable();
+            $table->text('first_name')->nullable();
+            $table->text('last_name')->nullable();
             $table->timestamps();
         });
     }

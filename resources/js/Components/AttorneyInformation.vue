@@ -6,7 +6,7 @@
         </div>
     <div class="p-2 row row-cards">
         
-        <div class="col-6">
+        <div class=" col-12 col-md-6">
             <div class="card">
                 <div class="card-header sub-well">
                     <h3 class="card-title">Defense Attorney Information</h3>
@@ -67,7 +67,7 @@
             </div>
         </div>
         
-        <div class="col-6">
+        <div class=" col-12 col-md-6">
             <div class="card">
                 <div class="card-header sub-well">
                     <h3 class="card-title">

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\StateSeeder;
+use Database\Seeders\ModuleSeeder;
 use Database\Seeders\ClaimTypeSeeder;
 use Database\Seeders\ServiceTypeSeeder;
 use Database\Seeders\SpecialtiesSeeder;
@@ -18,6 +19,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            ModuleSeeder::class,
             PermissionTableSeeder::class,
             CreateAdminUserSeeder::class,
             ClaimTypeSeeder::class,

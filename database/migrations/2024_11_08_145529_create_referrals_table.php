@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('referrals', function (Blueprint $table) {
             $table->id();
-            $table->string('referring_company');
-            $table->string('referring_source');
-            $table->string('address1')->nullable();
-            $table->string('address2')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
-            $table->string('zip_code')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('fax')->nullable();
-            $table->string('email');
+            $table->text('referring_company');
+            $table->text('referring_source');
+            $table->text('address1')->nullable();
+            $table->text('address2')->nullable();
+            $table->text('city')->nullable();
+            $table->text('state')->nullable();
+            $table->text('zip_code')->nullable();
+            $table->text('phone')->nullable();
+            $table->text('fax')->nullable();
+            $table->text('email');
             $table->enum('status', ['Pending', 'In Progress', 'Completed', 'Rejected'])->default('Pending'); 
             $table->timestamps();
         });

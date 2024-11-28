@@ -38,6 +38,9 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, defineExpose } from 'vue';
 import Dropzone from 'dropzone';
+import { useToastr } from '@/toaster';
+const toastr = useToastr();
+
 
 const dropzoneElement = ref(null);
 const dropzoneFiles = ref([]);
@@ -65,7 +68,7 @@ onMounted(() => {
                 console.log('Upload successful');
             });
             this.on('error', function (file, errorMessage) {
-                console.error('Upload failed', errorMessage);
+                this.removeFile(file);
             });
             this.on('removedfile', function (file) {
                 console.log('File removed:', file);
