@@ -8,9 +8,9 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RequestFormController;
 
+Route::middleware('auth')->prefix('admin')->group(function () { 
 
-Route::middleware('auth')->group(function () {
-    Route::get('admin/dashboard', function () {
+    Route::get('/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
 

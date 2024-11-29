@@ -18,14 +18,14 @@ function submit(event) {
     errors.value = {};
 
     if (props.module) {
-        router.put(`/modules/${props.module.id}`, form, {
+        router.put(`/admin/modules/${props.module.id}`, form, {
             onError: (err) => {
                 errors.value = err;
             }
         });
         
     } else {
-        router.post('/modules', form, {
+        router.post('/admin/modules', form, {
             onError: (err) => {
                 errors.value = err;
             }
@@ -52,7 +52,7 @@ function submit(event) {
                                 <!-- Page title actions -->
                                 <div class="col-auto ms-auto d-print-none">
                                     <div class="btn-list">
-                                        <Link href="/modules" class="btn btn-primary">
+                                        <Link href="/admin/modules" class="btn btn-primary">
                                         <!-- Back Arrow SVG Icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"

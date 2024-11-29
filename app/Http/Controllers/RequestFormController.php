@@ -4,12 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Inertia\Inertia;
-use App\Models\State;
-use App\Models\Referral;
-use App\Models\ClaimType;
-use App\Models\Specialty;
-use App\Models\Attachment;
-use App\Models\ServiceType;
+use App\Models\{State, Referral , ClaimType, Specialty, Attachment, ServiceType};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
@@ -21,7 +16,7 @@ class RequestFormController extends Controller
     public function index()
     {
         $referrals = Referral::latest()->paginate(10);
-        return Inertia::render('Admin/RequestForm/index', [
+        return Inertia::render('Frontend/RequestForm/index', [
             'referrals' => $referrals,
         ]);  
     }
@@ -103,7 +98,7 @@ class RequestFormController extends Controller
 
             DB::commit();
 
-            return Inertia::render('Admin/RequestForm/response');
+            return Inertia::render('Frontend/RequestForm/response');
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -114,7 +109,7 @@ class RequestFormController extends Controller
 
     public function response()
     {
-        return Inertia::render('Admin/RequestForm/response');
+        return Inertia::render('Frontend/RequestForm/response');
     }
 
     // Saves the physician information

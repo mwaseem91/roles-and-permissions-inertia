@@ -16,22 +16,14 @@ class ModuleSeeder extends Seeder
         $module = [
             [
                 'id' => '1',
-                'name' => 'Module'
-            ],
-            [
-                'id' => '2',
-                'name' => 'Permission'
-            ],
-            [
-                'id' => '3',
                 'name' => 'Role'
             ],
             [
-                'id' => '4',
+                'id' => '2',
                 'name' => 'User'
             ],
             [
-                'id' => '5',
+                'id' => '3',
                 'name' => 'Form Request'
             ],
             

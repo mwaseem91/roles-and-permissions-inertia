@@ -73,9 +73,9 @@ onMounted(() => {
                                         </h2>
                                     </div>
                                     <!-- Page title actions -->
-                                    <div class="col-auto ms-auto d-print-none">
+                                    <div v-if="hasPermission('user-create')" class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <Link  href="/users/create" class="btn btn-primary "> 
+                                            <Link  :href="route('users.create')" class="btn btn-primary "> 
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                                 Create User
                                             </Link>
@@ -113,16 +113,14 @@ onMounted(() => {
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <a href="#" class="me-3" @click.prevent="editRole(user.id)">
+                                                    <a href="#" v-if="hasPermission('user-edit')" class="me-3" @click.prevent="editRole(user.id)">
                                                         <i class="fa fa-edit" aria-hidden="true"></i>
                                                     </a>
-                                                    <a href="#"   @click.prevent="showDeleteModal(user.id)" >
+                                                    <a href="#"  v-if="hasPermission('user-delete')"  @click.prevent="showDeleteModal(user.id)" >
                                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                                     </a>
-                                                </td>
-                                                
+                                                </td> 
                                             </tr>
-                                            
                                         </tbody>
                                     </table>
                                     </div>

@@ -131,7 +131,7 @@ const turnaroundTime = (createdAt, updatedAt) => {
                                                                         data-bs-boundary="viewport"
                                                                         data-bs-toggle="dropdown"
                                                                         aria-expanded="false">{{ referral.status }}</button>
-                                                                    <div class="dropdown-menu dropdown-menu-end"
+                                                                    <div v-if="hasPermission('request-form-edit')"  class="dropdown-menu dropdown-menu-end" 
                                                                         style="">
                                                                         <a class="dropdown-item" href="#"
                                                                             @click.prevent="changeStatus(referral.id, 'Pending')">
@@ -153,12 +153,12 @@ const turnaroundTime = (createdAt, updatedAt) => {
                                                                 </span>
                                                             </td>
                                                             <td>
-                                                                <Link :href="route('request-forms.show', referral.id)"
+                                                                <Link v-if="hasPermission('request-form-show')" :href="route('request-forms.show', referral.id)"
                                                                     class="me-3">
                                                                 <i class="fa fa-eye" aria-hidden="true"></i>
                                                                 </Link>
 
-                                                                <a href="#"
+                                                                <a v-if="hasPermission('request-form-delete')" href="#" 
                                                                     @click.prevent="showDeleteModal(referral.id)">
                                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                                 </a>

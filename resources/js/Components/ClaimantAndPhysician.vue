@@ -20,41 +20,49 @@
                              classes="mb-3  col-12 col-md-6" labelClasses="required" />
 
                         <InputFieldComponent label="Address" placeholder="Address 1" type="text"
-                            v-model="localClaimant.address1" classes="col-12" />
+                            v-model="localClaimant.address1" classes="col-12" 
+                            :error="errors['claimants.address1'] ?? ''"/>
 
                         <InputFieldComponent placeholder="Address 2" type="text" v-model="localClaimant.address2"
-                            classes="col-12 mb-3" />
+                            classes="col-12 mb-3" :error="errors['claimants.address2'] ?? ''"/>
 
                         <InputFieldComponent label="City" placeholder="Enter City" type="text" v-model="localClaimant.city"
-                            classes="mb-3  col-12 col-md-6" />
+                            classes="mb-3  col-12 col-md-6" :error="errors['claimants.city'] ?? ''"/>
 
                         <div class="mb-3  col-12 col-md-3">
                             <label class="form-label">State</label>
                             <select v-model="localClaimant.state" class="form-control form-select">
-                                <option selected="selected" value="U"></option>
+                                <option selected="selected" value=""></option>
                                 <option v-for="state in states" :key="state.code" :value="state.code">
                                     {{ state.code }}
                                 </option>
                             </select>
+                            <span v-if="errors['claimants.state']" class="text-danger">{{errors['claimants.state']}}</span>
                         </div>
                         
                         <InputFieldComponent label="ZIP Code" placeholder="ZIP Code" type="text"
-                            v-model="localClaimant.zip_code" classes="mb-3  col-12 col-md-3" />
+                            v-model="localClaimant.zip_code" classes="mb-3  col-12 col-md-3"  :error="errors['claimants.zip_code'] ?? ''"/>
 
                         <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Home Phone Number</label>
                             <input type="text" v-model="localClaimant.home_phone" class="form-control" v-mask="'### ### ####'"
-                                placeholder="### ### ####" autocomplete="off" />
+                                placeholder="### ### ####" autocomplete="off" :error="errors['claimants.home_phone'] ?? ''"/>
+
+                                <span v-if="errors['claimants.home_phone']" class="text-danger">{{errors['claimants.home_phone']}}</span>
                         </div>
                         <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Work Phone Number</label>
                             <input type="text" v-model="localClaimant.work_phone" class="form-control" v-mask="'### ### ####'"
                                 placeholder="### ### ####" autocomplete="off" />
+
+                                <span v-if="errors['claimants.work_phone']" class="text-danger">{{errors['claimants.work_phone']}}</span>
                         </div>
                         <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Social Security Number</label>
                             <input type="text" v-model="localClaimant.ssn" class="form-control" v-mask="'####'"
-                                placeholder="####" autocomplete="off" />
+                                placeholder="####" autocomplete="off" :error="errors['claimants.ssn'] ?? ''"/>
+
+                                <span v-if="errors['claimants.ssn']" class="text-danger">{{errors['claimants.ssn']}}</span>
                         </div>
                         <div class="mb-3  col-12 col-md-6">
                             <label class="form-label required">Date of Birth</label>
@@ -68,11 +76,14 @@
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
+                            <span v-if="errors['claimants.gender']" class="text-danger">{{errors['claimants.gender']}}</span>
                         </div>
                         <InputFieldComponent label="Employer" placeholder="Employer" type="text"
-                            v-model="localClaimant.employer" classes="mb-3 col-12" />
+                            v-model="localClaimant.employer" classes="mb-3 col-12"  :error="errors['claimants.employer'] ?? ''"/>
+
                         <InputFieldComponent label="Occupation" placeholder="Occupation" type="text"
-                            v-model="localClaimant.occupation" classes="mb-3 col-12" />
+                            v-model="localClaimant.occupation" classes="mb-3 col-12" :error="errors['claimants.occupation'] ?? ''"/>
+
                         <div class="mb-3 col-12 col-md-6">
                             <label class="form-label required">Language</label>
                             <select v-model="localClaimant.language" class="form-control form-select" >
@@ -95,15 +106,16 @@
                         <InputFieldComponent label="Claim Number" placeholder="Claim Number" type="text" labelClasses="required" 
                             v-model="localClaimant.claim_number" classes="mb-3 col-12"  :error="errors['claimants.claim_number'] ?? ''"/>
                        
-                            <InputFieldComponent label="Date of Accident/ Injury" type="date"
-                            v-model="localClaimant.accident_date" classes="mb-3 col-12" />
+                        <InputFieldComponent label="Date of Accident/ Injury" type="date" v-model="localClaimant.accident_date" 
+                            classes="mb-3 col-12"   :error="errors['claimants.accident_date'] ?? ''"/>
 
                         <div class="col-md-12">
                             <div class="mb-3 mb-0">
                                 <label class="form-label required">Injury Description / Nature of Injury</label>
                                 <textarea rows="5" class="form-control" v-model="localClaimant.injury_description"
                                     placeholder="Here can be your description"></textarea>
-                                    <span v-if="errors['claimants.injury_description']" class="text-danger">{{errors['claimants.injury_description']}}</span>
+
+                                <span v-if="errors['claimants.injury_description']" class="text-danger">{{errors['claimants.injury_description']}}</span>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -111,6 +123,7 @@
                                 <label class="form-label">Background of Injury</label>
                                 <textarea rows="5" class="form-control" v-model="localClaimant.injury_background"
                                     placeholder="Here can be your description"></textarea>
+                                <span v-if="errors['claimants.injury_background']" class="text-danger">{{errors['claimants.injury_background']}}</span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -136,71 +149,72 @@
                                 <label class="form-label required">Jurisdiction</label>
                                 <select v-model="localClaimant.jurisdiction" class="form-control form-select">
                                     <option selected="selected" value=""></option>
-                                    <option value="53">AB</option>
-                                    <option value="66">VI</option>
-                                    <option value="1">AL</option>
-                                    <option value="2">AK</option>
-                                    <option value="3">AZ</option>
-                                    <option value="4">AR</option>
-                                    <option value="5">CA</option>
-                                    <option value="6">CO</option>
-                                    <option value="7">CT</option>
-                                    <option value="8">DE</option>
-                                    <option value="9">DC</option>
-                                    <option value="10">FL</option>
-                                    <option value="11">GA</option>
-                                    <option value="12">HI</option>
-                                    <option value="13">ID</option>
-                                    <option value="14">IL</option>
-                                    <option value="17">KS</option>
-                                    <option value="18">KY</option>
-                                    <option value="19">LA</option>
-                                    <option value="20">ME</option>
-                                    <option value="21">MD</option>
-                                    <option value="22">MA</option>
-                                    <option value="23">MI</option>
-                                    <option value="24">MN</option>
-                                    <option value="25">MS</option>
-                                    <option value="26">MO</option>
-                                    <option value="27">MT</option>
-                                    <option value="28">NE</option>
-                                    <option value="29">NV</option>
-                                    <option value="30">NH</option>
-                                    <option value="31">NJ</option>
-                                    <option value="32">NM</option>
-                                    <option value="33">NY</option>
-                                    <option value="34">NC</option>
-                                    <option value="35">ND</option>
-                                    <option value="36">OH</option>
-                                    <option value="37">OK</option>
-                                    <option value="38">OR</option>
-                                    <option value="39">PA</option>
-                                    <option value="40">PR</option>
-                                    <option value="41">RI</option>
-                                    <option value="42">SC</option>
-                                    <option value="43">SD</option>
-                                    <option value="44">TN</option>
-                                    <option value="45">TX</option>
-                                    <option value="46">UT</option>
-                                    <option value="47">VT</option>
-                                    <option value="48">VA</option>
-                                    <option value="49">WA</option>
-                                    <option value="50">WV</option>
-                                    <option value="51">WI</option>
-                                    <option value="52">WY</option>
-                                    <option value="54">BC</option>
-                                    <option value="55">MB</option>
-                                    <option value="56">NB</option>
-                                    <option value="57">NF</option>
-                                    <option value="58">NWT</option>
-                                    <option value="59">NS</option>
-                                    <option value="60">ON</option>
-                                    <option value="61">PEI</option>
-                                    <option value="62">PQ</option>
-                                    <option value="63">SK</option>
-                                    <option value="64">YUK</option>
-                                    <option value="65">FLS</option>
-                                    <option value="67">FED</option>
+                                    <option value="AB">AB</option>
+                                    <option value="VI">VI</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AK">AK</option>
+                                    <option value="AZ">AZ</option>
+                                    <option value="AR">AR</option>
+                                    <option value="CA">CA</option>
+                                    <option value="CO">CO</option>
+                                    <option value="CT">CT</option>
+                                    <option value="DE">DE</option>
+                                    <option value="DC">DC</option>
+                                    <option value="FL">FL</option>
+                                    <option value="GA">GA</option>
+                                    <option value="HI">HI</option>
+                                    <option value="ID">ID</option>
+                                    <option value="IL">IL</option>
+                                    <option value="KS">KS</option>
+                                    <option value="KY">KY</option>
+                                    <option value="LA">LA</option>
+                                    <option value="ME">ME</option>
+                                    <option value="MD">MD</option>
+                                    <option value="MA">MA</option>
+                                    <option value="MI">MI</option>
+                                    <option value="MN">MN</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MO">MO</option>
+                                    <option value="MT">MT</option>
+                                    <option value="NE">NE</option>
+                                    <option value="NV">NV</option>
+                                    <option value="NH">NH</option>
+                                    <option value="NJ">NJ</option>
+                                    <option value="NM">NM</option>
+                                    <option value="NY">NY</option>
+                                    <option value="NC">NC</option>
+                                    <option value="ND">ND</option>
+                                    <option value="OH">OH</option>
+                                    <option value="OK">OK</option>
+                                    <option value="OR">OR</option>
+                                    <option value="PA">PA</option>
+                                    <option value="PR">PR</option>
+                                    <option value="RI">RI</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SD">SD</option>
+                                    <option value="TN">TN</option>
+                                    <option value="TX">TX</option>
+                                    <option value="UT">UT</option>
+                                    <option value="VT">VT</option>
+                                    <option value="VA">VA</option>
+                                    <option value="WA">WA</option>
+                                    <option value="WV">WV</option>
+                                    <option value="WI">WI</option>
+                                    <option value="WY">WY</option>
+                                    <option value="BC">BC</option>
+                                    <option value="MB">MB</option>
+                                    <option value="NB">NB</option>
+                                    <option value="NF">NF</option>
+                                    <option value="NWT">NWT</option>
+                                    <option value="NS">NS</option>
+                                    <option value="ON">ON</option>
+                                    <option value="PEI">PEI</option>
+                                    <option value="PQ">PQ</option>
+                                    <option value="SK">SK</option>
+                                    <option value="YUK">YUK</option>
+                                    <option value="FLS">FLS</option>
+                                    <option value="FED">FED</option>
+
                                 </select>
                                 <span v-if="errors['claimants.jurisdiction']" class="text-danger">{{errors['claimants.jurisdiction']}}</span>
                             </div>
@@ -225,12 +239,15 @@
                             </select>
                             <span v-if="errors['claimants.service_type']" class="text-danger">{{errors['claimants.service_type']}}</span>
                         </div>
+
                         <InputFieldComponent label="If Other, please specify"
                             :disabled="localClaimant.service_type == 'other' ? false : true"
                             :error="errors['claimants.other_claim_type'] ?? ''"
                             v-model="localClaimant.other_claim_type" type="text" classes="mb-3 col-12" />
+
                         <InputFieldComponent label="Insured/Carrier" v-model="localClaimant.insured_carrier" type="text"
                             classes="mb-3 col-12" />
+                            
                         <div class="mb-3 col-md-12" v-if="localClaimant.service_type == 5">
                             <div class="display-flex">
                                 <label class="form-check me-3">
@@ -310,6 +327,7 @@
 import { reactive, watch } from 'vue';
 import InputFieldComponent from '@/Components/General/InputFieldComponent.vue';
 import { useClaimStore } from "@/Stores/ClaimStore"; 
+import { error } from 'toastr';
 
 
 const claimStore = useClaimStore();

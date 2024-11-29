@@ -12,9 +12,7 @@
     <MasterLayout>
       <template #content>
      <!-- Page body -->
-      <div class="page-body">
-        <button v-if="hasRole('Admin')"> Admin Dashboard</button>
-        <button v-if="hasRole('Writer')">Writer Dashboard</button> 
+      <div class="page-body"> 
           <div class="container-xl">
             <div class="row row-deck row-cards">
               <div class="col-sm-6 col-lg-3">

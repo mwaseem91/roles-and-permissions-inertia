@@ -32,26 +32,6 @@ const cancelDelete = () => {
   idToDelete.value = null; 
 };
 
-onMounted(() => {
-  nextTick(() => {
-    const table = document.getElementById('table-default');
-
-    if (table) {
-      const list = new List('table-default', {
-        sortClass: 'table-sort',
-        listClass: 'table-tbody',
-        valueNames: [
-          'sort-name', 'sort-type', 'sort-city', 'sort-score',
-          { attr: 'data-date', name: 'sort-date' },
-          { attr: 'data-progress', name: 'sort-progress' },
-          'sort-quantity'
-        ]
-      });
-    } else {
-      console.warn("Element with id 'table-default' not found.");
-    }
-  });
-});
 </script>
 
 
@@ -77,7 +57,7 @@ onMounted(() => {
                                     <!-- Page title actions -->
                                     <div class="col-auto ms-auto d-print-none">
                                         <div class="btn-list">
-                                            <Link  href="/permissions/create" class="btn btn-primary "> 
+                                            <Link  :href="route('permissions.create')" class="btn btn-primary "> 
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                                 Create Permission
                                             </Link>

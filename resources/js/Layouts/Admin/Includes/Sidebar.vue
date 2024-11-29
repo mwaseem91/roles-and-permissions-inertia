@@ -1,7 +1,8 @@
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3';
-import { usePermissions } from '@/Composables/permissions';
-const { hasRole } = usePermissions();
+import { Link, usePage  } from '@inertiajs/vue3';
+import { usePermissions } from '@/Composables/permissions';  
+
+const { hasRole , hasPermission} = usePermissions();
 const { url } = usePage();
 
 </script>
@@ -113,13 +114,13 @@ const { url } = usePage();
                   Module
                 </span>
               </a>
-              <div class="dropdown-menu" :class="{ show: url.startsWith('/modules') }">
+              <div class="dropdown-menu" :class="{ show: url.startsWith('/admin/modules') }">
                 <div class="dropdown-menu-columns">
                   <div class="dropdown-menu-column">
-                    <Link class="dropdown-item active" href="/modules">
+                    <Link class="dropdown-item active" :href="route('modules.index')">
                     Modules
                     </Link>
-                    <Link class="dropdown-item" href="/modules/create">
+                    <Link class="dropdown-item" :href="route('modules.create')">
                     Create
                     </Link>
                   </div>
@@ -144,13 +145,13 @@ const { url } = usePage();
                   Permissions
                 </span>
               </a>
-              <div class="dropdown-menu" :class="{ show: url.startsWith('/permissions') }">
+              <div class="dropdown-menu" :class="{ show: url.startsWith('/admin/permissions') }">
                 <div class="dropdown-menu-columns">
                   <div class="dropdown-menu-column">
-                    <Link class="dropdown-item" href="/permissions">
+                    <Link class="dropdown-item" :href="route('permissions.index')">
                     Permissions
                     </Link>
-                    <Link class="dropdown-item" href="/permissions/create">
+                    <Link class="dropdown-item" :href="route('permissions.create')">
                     Create
                     </Link>
                   </div>
@@ -175,13 +176,13 @@ const { url } = usePage();
                   Roles
                 </span>
               </a>
-              <div class="dropdown-menu" :class="{ show: url.startsWith('/roles') }">
+              <div class="dropdown-menu" :class="{ show: url.startsWith('/admin/roles') }">
                 <div class="dropdown-menu-columns">
                   <div class="dropdown-menu-column">
-                    <Link class="dropdown-item" href="/roles">
+                    <Link class="dropdown-item" :href="route('roles.index')">
                     Roles
                     </Link>
-                    <Link class="dropdown-item" href="/roles/create">
+                    <Link class="dropdown-item" :href="route('roles.create')">
                     Create
                     </Link>
                   </div>
@@ -189,7 +190,7 @@ const { url } = usePage();
               </div>
             </li>
 
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" v-if="hasPermission('user-view') ">
               <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown"
                 data-bs-auto-close="false" role="button" aria-expanded="false">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -207,21 +208,21 @@ const { url } = usePage();
                   User Management
                 </span>
               </a>
-              <div class="dropdown-menu" :class="{ show: url.startsWith('/users') }">
+              <div class="dropdown-menu" :class="{ show: url.startsWith('/admin/users') }">
                 <div class="dropdown-menu-columns">
                   <div class="dropdown-menu-column">
-                    <Link class="dropdown-item" href="/users">
-                    Users
+                    <Link class="dropdown-item" :href="route('users.index')">
+                      Users
                     </Link>
-                    <Link class="dropdown-item" href="/users/create">
-                    Create
+                    <Link class="dropdown-item" :href="route('users.create')" v-if="hasPermission('user-create') ">
+                      Create
                     </Link>
                   </div>
                 </div>
               </div>
             </li>
           </div>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" v-if="hasPermission('request-form-view')">
             <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false"
               role="button" aria-expanded="false">
               <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -239,15 +240,15 @@ const { url } = usePage();
                 Form Request
               </span>
             </a>
-            <div class="dropdown-menu" :class="{ show: url.startsWith('/request-forms') }">
+            <div class="dropdown-menu" :class="{ show: url.startsWith('/admin/request-forms') }">
               <div class="dropdown-menu-columns">
                 <div class="dropdown-menu-column">
                   <Link class="dropdown-item" :href="route('request-forms.index')"
-                    :class="{ active: url.startsWith('/request-forms') }">
+                    :class="{ active: url.startsWith('/admin/request-forms') }">
                   view
                   </Link>
                   <!-- <Link class="dropdown-item" :href="route('request-forms.create')"
-                    :class="{ active: url.startsWith('/request-forms') }">
+                    :class="{ active: url.startsWith('/admin/request-forms') }">
                   Create
                   </Link> -->
                 </div>

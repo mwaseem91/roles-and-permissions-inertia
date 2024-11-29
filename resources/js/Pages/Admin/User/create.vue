@@ -2,6 +2,7 @@
 import { defineProps, reactive, onMounted, ref } from 'vue';
 import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
 import { router, Link ,Head } from '@inertiajs/vue3';
+const { hasPermission } = usePermissions();
 
 const props = defineProps({
     roles: Array,
@@ -24,14 +25,14 @@ function submit(event) {
 
     if (props.user) {
         // Update existing user
-        router.put(`/users/${props.user.id}`, data, {
+        router.put(`/admin/users/${props.user.id}`, data, {
             onError: (err) => {
                 errors.value = err;
             },
         });
     } else {
         // Create new user
-        router.post('/users', data, {
+        router.post('/admin/users', data, {
             onError: (err) => {
                 errors.value = err;
             },
@@ -58,7 +59,7 @@ function submit(event) {
                                 <!-- Page title actions -->
                                 <div class="col-auto ms-auto d-print-none">
                                     <div class="btn-list">
-                                        <Link href="/users" class="btn btn-primary">
+                                        <Link href="/admin/users" class="btn btn-primary">
                                             <!-- Back Arrow SVG Icon -->
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -125,9 +126,14 @@ function submit(event) {
                                 </div>
                             </div>
                             <!-- Submit Button -->
-                            <div class="card-footer text-end">
+                            <div class="card-footer text-end" v-if="!props.user && hasPermission('user-create')">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ props.user ? 'Update User' : 'Create User' }}
+                                   Create User
+                                </button>
+                            </div>
+                            <div class="card-footer text-end"  v-if="props.user && hasPermission('user-update')" >
+                                <button type="submit" class="btn btn-primary">
+                                   Update User
                                 </button>
                             </div>
                         </form>

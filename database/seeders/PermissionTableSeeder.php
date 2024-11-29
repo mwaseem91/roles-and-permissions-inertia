@@ -14,22 +14,29 @@ class PermissionTableSeeder extends Seeder
      */
     public function run(): void
     {
+       
+        // Define permissions
         $permissions = [
+            ['name' => 'role-view', 'module_id' => 1],
+            ['name' => 'role-create', 'module_id' => 1],
+            ['name' => 'role-edit', 'module_id' => 1],
+            ['name' => 'role-show', 'module_id' => 1],
+            ['name' => 'role-update', 'module_id' => 1],
+            ['name' => 'role-delete', 'module_id' => 1],
 
-            'Role-index',
-            'Role-create',
-            'Role-edit',
-            'Role-show',
-            'Role-delete',
+            ['name' => 'user-view', 'module_id' =>2],
+            ['name' => 'user-create', 'module_id' =>2],
+            ['name' => 'user-edit', 'module_id' =>2],
+            ['name' => 'user-show', 'module_id' =>2],
+            ['name' => 'user-update', 'module_id' =>2],
+            ['name' => 'user-delete', 'module_id' =>2],
 
-            'Request-form-index',
-            'Request-form-create',
-            'Request-form-edit',
-            'Request-form-show',
-            'Request-form-delete',
-
-
-
+            ['name' => 'request-form-view', 'module_id' => 3],
+            ['name' => 'request-form-create', 'module_id' => 3],
+            ['name' => 'request-form-edit', 'module_id' => 3],
+            ['name' => 'request-form-show', 'module_id' => 3],
+            ['name' => 'request-form-update', 'module_id' => 3],
+            ['name' => 'request-form-delete', 'module_id' => 3],
         ];
 
         // Disable foreign key checks
@@ -43,7 +50,7 @@ class PermissionTableSeeder extends Seeder
 
         // Insert permissions
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::create($permission);
         }
     }
 }
