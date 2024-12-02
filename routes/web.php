@@ -18,12 +18,15 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('permissions', PermissionController::class);
-    Route::resource('modules', ModuleController::class);
+    Route::resource('modules', ModuleController::class)->except(['show']);
+    Route::get('modules/audit', [ModuleController::class, 'viewAudit'])->name('modules.audit');
    
     Route::delete('/request-forms/destroy/{id}', [RequestFormController::class, 'destroy'])->name('form-requests.destroy');
     Route::post('/request-forms/change-status', [RequestFormController::class, 'changeStatus'])->name('form-requests.change-status');
     Route::get('/request-forms', [RequestFormController::class, 'index'])->name('request-forms.index');
     Route::get('/request-forms/{id}', [RequestFormController::class, 'show'])->name('request-forms.show');
+    Route::get('/request-form/audit', [RequestFormController::class, 'viewAudit'])->name('request-form.audit');
+
 });
 
 

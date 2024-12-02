@@ -90,7 +90,7 @@ const fieldMappings = computed(() => {
     if (claimants.value.language === 'other') {
         mappings["Other Language"] = claimants.value.other_language;
     }
-    if (claimants.value.service_type === 'other') {
+    if (claimants.value.service_type == 9) {
         mappings["Specify Other Service"] = claimants.value.other_claim_type;
     }
     if (billInfo.value.same_as_referral == null || billInfo.value.same_as_referral == false) {
@@ -149,23 +149,43 @@ const showInvalidFieldModal = () => {
                         <h3 class="card-title">Referrer and Billing Information</h3>
                     </div>
 
-                    <ReferrerAndBilling v-model:billInfo="billInfo" v-model:referralInfo="referralInfo" :errors="errors"
+                    <ReferrerAndBilling 
+                        v-model:billInfo="billInfo" 
+                        v-model:referralInfo="referralInfo" 
+                        :errors="errors"
                         :states="states" />
 
-                    <ClaimantAndPhysician v-model:claimants="claimants" v-model:physicians="physicians"
-                        :claimTypes="claimTypes" :states="states" :serviceTypes="serviceTypes" :errors="errors" />
-
-                    <IssuesAndItems v-model:issue="issue" :errors="errors" />
-
-                    <AttorneyInformation v-model:defenseAttorney="defenseAttorney"
-                        v-model:claimantAttorney="claimantAttorney" :states="states" :errors="errors" />
-
-                    <AppointmentInformation v-model:appointments="appointments" :specialties="specialties"
+                    <ClaimantAndPhysician 
+                        v-model:claimants="claimants" 
+                        v-model:physicians="physicians"
+                        :claimTypes="claimTypes" 
+                        :states="states" 
+                        :serviceTypes="serviceTypes" 
                         :errors="errors" />
 
-                    <FileUpload ref="dropzoneRef" :fieldMappings="fieldMappings" />
+                    <IssuesAndItems 
+                        v-model:issue="issue" 
+                        :errors="errors" />
+
+                    <AttorneyInformation 
+                        v-model:defenseAttorney="defenseAttorney"
+                        v-model:claimantAttorney="claimantAttorney" 
+                        :states="states" 
+                        :errors="errors" />
+
+                    <AppointmentInformation 
+                        v-model:appointments="appointments" 
+                        :specialties="specialties"
+                        :errors="errors" />
+
+                    <FileUpload 
+                        ref="dropzoneRef" 
+                        :fieldMappings="fieldMappings" 
+                        :errors="errors"/>
                     
-                    <InvalidFieldModal ref="invalidFieldModal" :invalidFields="invalidFields" />
+                    <InvalidFieldModal 
+                        ref="invalidFieldModal" 
+                        :invalidFields="invalidFields" />
 
 
                     <div class="alert alert-info referralFormSSL">
@@ -178,7 +198,7 @@ const showInvalidFieldModal = () => {
                     </div>
 
                     <div class="card-footer text-end">
-                        <div class="col-sm-12 mt-3 text-center">
+                        <div class="col-sm-12 mt-3 mb-3 text-center">
                             <h3>Form Information Confirmation</h3>
                             <div class="checkbox">
                                 <span title="click the checkbox to enable submitting the form" style="color:Red;">

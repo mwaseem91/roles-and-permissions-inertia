@@ -46,7 +46,7 @@
                         <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Home Phone Number</label>
                             <input type="text" v-model="localClaimant.home_phone" class="form-control" v-mask="'### ### ####'"
-                                placeholder="### ### ####" autocomplete="off" :error="errors['claimants.home_phone'] ?? ''"/>
+                                placeholder="### ### ####" autocomplete="off" />
 
                                 <span v-if="errors['claimants.home_phone']" class="text-danger">{{errors['claimants.home_phone']}}</span>
                         </div>
@@ -60,7 +60,7 @@
                         <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Social Security Number</label>
                             <input type="text" v-model="localClaimant.ssn" class="form-control" v-mask="'####'"
-                                placeholder="####" autocomplete="off" :error="errors['claimants.ssn'] ?? ''"/>
+                                placeholder="####" autocomplete="off" />
 
                                 <span v-if="errors['claimants.ssn']" class="text-danger">{{errors['claimants.ssn']}}</span>
                         </div>
@@ -76,7 +76,7 @@
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                             </select>
-                            <span v-if="errors['claimants.gender']" class="text-danger">{{errors['claimants.gender']}}</span>
+                            <span v-if="errors['claimants.gender']" class="text-danger">{{ errors['claimants.gender'] }}</span>
                         </div>
                         <InputFieldComponent label="Employer" placeholder="Employer" type="text"
                             v-model="localClaimant.employer" classes="mb-3 col-12"  :error="errors['claimants.employer'] ?? ''"/>
@@ -133,6 +133,7 @@
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>
                                 </select>
+                                <span v-if="errors['claimants.currently_working']" class="text-danger">{{errors['claimants.currently_working']}}</span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -142,6 +143,7 @@
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>
                                 </select>
+                                <span v-if="errors['claimants.claim_accepted']" class="text-danger">{{errors['claimants.claim_accepted']}}</span>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -235,18 +237,17 @@
                                 <option v-for="serviceType in serviceTypes" :key="serviceType.id" :value="serviceType.id">
                                 {{ serviceType.name }}
                             </option>
-                                <option value="other">Other</option>
                             </select>
                             <span v-if="errors['claimants.service_type']" class="text-danger">{{errors['claimants.service_type']}}</span>
                         </div>
 
                         <InputFieldComponent label="If Other, please specify"
-                            :disabled="localClaimant.service_type == 'other' ? false : true"
-                            :error="errors['claimants.other_claim_type'] ?? ''"
-                            v-model="localClaimant.other_claim_type" type="text" classes="mb-3 col-12" />
+                            :disabled="localClaimant.service_type == '9' ? false : true"
+                            v-model="localClaimant.other_claim_type" type="text" classes="mb-3 col-12" 
+                            :error="errors['claimants.other_claim_type'] ?? ''"/>
 
                         <InputFieldComponent label="Insured/Carrier" v-model="localClaimant.insured_carrier" type="text"
-                            classes="mb-3 col-12" />
+                            classes="mb-3 col-12" :error="errors['claimants.insured_carrier'] ?? ''"/>
                             
                         <div class="mb-3 col-md-12" v-if="localClaimant.service_type == 5">
                             <div class="display-flex">
@@ -263,6 +264,9 @@
                                     <span class="form-label">AMA 6th Edition</span>
                                 </label>
                             </div>
+                            <span v-if="errors['claimants.ama_4th']" class="text-danger">{{errors['claimants.ama_4th']}}</span>
+                            <span v-if="errors['claimants.ama_5th']" class="text-danger">{{errors['claimants.ama_5th']}}</span>
+                            <span v-if="errors['claimants.ama_6th']" class="text-danger">{{errors['claimants.ama_6th']}}</span>
                         </div>
                     </div>
                 </div>
@@ -287,6 +291,7 @@
                                     v-model="localphysician.first_name" classes="mb-3 col-6" />
                             </div>
                         </div>
+                        <span v-if="errors['physicians']" class="text-danger">{{errors['physicians']}}</span>
                     </div>
                 </div>
             </div>

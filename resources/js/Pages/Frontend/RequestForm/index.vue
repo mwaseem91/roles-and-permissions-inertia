@@ -65,7 +65,6 @@ const turnaroundTime = (createdAt, updatedAt) => {
 <template>
     <MasterLayout>
         <template #content>
-
             <Head title="Form Requests" />
             <div class="col-lg-11">
                 <div class="row row-cards">
@@ -73,7 +72,7 @@ const turnaroundTime = (createdAt, updatedAt) => {
 
                         <div class="page-wrapper">
                             <!-- Page header -->
-                            <div class="page-header d-print-none">
+                           <div class="page-header d-print-none">
                                 <div class="container-xl">
                                     <div class="row g-2 align-items-center">
                                         <div class="col">
@@ -81,6 +80,16 @@ const turnaroundTime = (createdAt, updatedAt) => {
                                                 Form Requests
                                             </h2>
                                         </div>
+                                        <!-- Page title actions -->
+                                        <div class="col-auto ms-auto d-print-none">
+                                            <div class="btn-list">
+                                                <Link :href="route('request-form.audit')" class="btn btn-primary "> 
+                                                    <i class="fa fa-eye me-2" aria-hidden="true"></i>
+                                                    View Audits
+                                                </Link>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -155,7 +164,7 @@ const turnaroundTime = (createdAt, updatedAt) => {
                                                             <td>
                                                                 <Link v-if="hasPermission('request-form-show')" :href="route('request-forms.show', referral.id)"
                                                                     class="me-3">
-                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                    <i class="fa fa-eye" aria-hidden="true"></i>
                                                                 </Link>
 
                                                                 <a v-if="hasPermission('request-form-delete')" href="#" 

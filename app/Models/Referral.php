@@ -2,29 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\ModelWithAudit;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class Referral extends Model
+class Referral extends  ModelWithAudit
 {
-
+    use SoftDeletes;
     protected $table = 'referrals';
 
     
-    protected $fillable = [
-        'referring_company',
-        'referring_source',
-        'address1',
-        'address2',
-        'city',
-        'state',
-        'zip_code',
-        'phone',
-        'fax',
-        'email',
-        'status',
-    ];
+    protected $guarded = [];
 
 
 

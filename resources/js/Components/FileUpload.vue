@@ -9,6 +9,7 @@
                     <div class="mb-3">
                         <label class="form-label">Select Files</label>
                         <form ref="dropzoneElement" class="dropzone"></form>
+                        <span v-if="errors['files']" class="text-danger">{{errors['files']}}</span>
                         <table>
                             <tbody>
                                 <tr>
@@ -88,6 +89,10 @@ onBeforeUnmount(() => {
 // Expose the files array to the parent component
 defineExpose({
     dropzoneFiles,
+});
+
+const props = defineProps({
+    errors: Object 
 });
 </script>
 

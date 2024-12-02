@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('modules', function (Blueprint $table) {
+        Schema::create('referrals_audits', function (Blueprint $table) {
             $table->id();
-            $table->string('name');       
+            $table->string('name')->nullable();
+            $table->integer('model_id')->nullable();
+            $table->string('action')->nullable();
+            $table->string('audit_by')->nullable();
+            $table->string('audit_at')->nullable();
             $table->timestamps();
         });
-
-        
     }
 
     /**
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('modules');
+        Schema::dropIfExists('referral_audits');
     }
 };

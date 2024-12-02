@@ -5,13 +5,9 @@
     import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
 
     const props = defineProps({
-    modules: Array
+        auditlogs: Array
     });
 
-
-    function editModule(id) {
-    router.get(route('modules.edit', id));
-    }
 
     const moduleIdToDelete = ref(null);
 
@@ -33,27 +29,6 @@
         moduleIdToDelete.value = null; 
     };
 
-
-    onMounted(() => {
-    nextTick(() => {
-        const table = document.getElementById('table-default');
-
-        if (table) {
-        const list = new List('table-default', {
-            sortClass: 'table-sort',
-            listClass: 'table-tbody',
-            valueNames: [
-            'sort-name', 'sort-type', 'sort-city', 'sort-score',
-            { attr: 'data-date', name: 'sort-date' },
-            { attr: 'data-progress', name: 'sort-progress' },
-            'sort-quantity'
-            ]
-        });
-        } else {
-        console.warn("Element with id 'table-default' not found.");
-        }
-    });
-    });
 
 </script>
 
@@ -77,20 +52,20 @@
                                         <!-- Page title actions -->
                                         <div class="col-auto ms-auto d-print-none">
                                             <div class="btn-list">
-                                                <Link :href="route('modules.audit')" class="btn btn-primary "> 
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                                                    View Audits
+                                                <Link :href="route('modules.create')" class="btn btn-danger">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                        <path d="M4 7l16 0" />
+                                                        <path d="M10 11l0 6" />
+                                                        <path d="M14 11l0 6" />
+                                                        <path d="M5 7l1 -2h12l1 2" />
+                                                        <path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2v-12h-12v12" />
+                                                    </svg>
+                                                    Delete All
                                                 </Link>
                                             </div>
                                         </div>
-                                        <div class="col-auto ms-auto d-print-none">
-                                            <div class="btn-list">
-                                                <Link :href="route('modules.create')" class="btn btn-primary "> 
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                                                    Create Module
-                                                </Link>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -104,25 +79,18 @@
                                         <thead>
                                         <tr>
                                             <th><button class="table-sort" data-sort="">Sr</button></th>
-                                            <th><button class="table-sort" data-sort="sort-name">Name</button></th> 
-                                            <th><button class="table-sort" data-sort="sort-progress">Action</button></th>
+                                            <th><button class="table-sort" data-sort="">User</button></th>
+                                            <th><button class="table-sort" data-sort="sort-name">action</button></th> 
+                                            <th><button class="table-sort" data-sort="sort-name">info</button></th> 
                                         </tr>
                                         </thead>
                                         <tbody class="table-tbody">
-                                            <tr v-for="(module, index) in props.modules" :key="module.id">
+                                            <tr v-for="(module ,index) in props.auditlogs.data" :key="module.id">
                                                 <td >{{ index + 1 }}</td>
-                                                <td class="sort-name">{{ module.name }}</td> 
-                                                <td>
-                                                    <a href="#" class="me-3" @click.prevent="editModule(module.id)">
-                                                        <i class="fa fa-edit" aria-hidden="true"></i>
-                                                    </a>
-                                                    <!-- <a href="#"  @click.prevent="deleteModule(module.id)" >
-                                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                                    </a> -->
-                                                    <a href="#" @click.prevent="showDeleteModal(module.id)">
-                                                     <i class="fa fa-trash" aria-hidden="true"></i>
-                                                    </a>
-                                                </td>
+                                                <td class="sort-name">{{ module.audit_by }}</td> 
+                                                <td class="sort-name">{{ module.action }}</td> 
+                                                <td class="sort-name">admin is {{ module.action }} the module</td> 
+                                                
                                             </tr>
                                             
                                         </tbody>

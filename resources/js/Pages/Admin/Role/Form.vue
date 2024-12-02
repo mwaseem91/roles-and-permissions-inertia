@@ -1,8 +1,7 @@
 <script setup>
 import { defineProps, reactive, ref, onMounted } from 'vue';
 import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
-import { router ,Link , Head} from '@inertiajs/vue3'; 
-const { hasPermission } = usePermissions();
+import { router ,Link , Head} from '@inertiajs/vue3';
 
 const props = defineProps({
   permissions: Array,

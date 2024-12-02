@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Inertia\Inertia;
-use App\Models\{State, Referral , ClaimType, Specialty, Attachment, ServiceType};
 use Illuminate\Http\Request;
+use App\Models\ReferralsAudit;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreFormRequest; 
+use App\Models\{State, Referral , ClaimType, Specialty, Attachment, ServiceType};
 
 class RequestFormController extends Controller
 {
@@ -59,7 +60,6 @@ class RequestFormController extends Controller
 
     public function store(StoreFormRequest $request)
     {
-       
         DB::beginTransaction();
         try {
             // Save Referral Information
@@ -159,6 +159,7 @@ class RequestFormController extends Controller
             return to_route('request-forms.index')->with('error', 'Something went wrong');
         }
     }
+
     public function destroy($id): RedirectResponse
     {
         DB::beginTransaction();
@@ -172,6 +173,20 @@ class RequestFormController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             return to_route('request-forms.index')->with('error', 'Something went wrong');
+        }
+    }
+
+    public function viewAudit()
+    {
+        
+        try {
+            $auditlogs = ReferralsAudit::with('user')->latest()->paginate(10);
+            
+            return Inertia::render('Admin/RequestForm/audit', [
+                'auditlogs' => $auditlogs
+            ]);
+        } catch (Exception $e) {
+            return to_route('modules.index')->with('error', 'Failed to load modules');
         }
     }
     

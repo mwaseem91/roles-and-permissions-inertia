@@ -29,25 +29,30 @@
                             :error="errors['appointments.other_specialty'] ?? ''"  labelClasses="required" />
 
                         <InputFieldComponent label="Provider" placeholder="Enter Provider" type="text"
-                            classes="col-12 mb-3" v-model="localappointments.provider" />
+                            classes="col-12 mb-3" v-model="localappointments.provider"
+                            :error="errors['appointments.provider'] ?? ''"  />
 
                         <InputFieldComponent label="Location" placeholder="Location " type="text" classes="col-12 mb-3"
-                            v-model="localappointments.location" />
+                            v-model="localappointments.location" :error="errors['appointments.location'] ?? ''"  />
 
                         <InputFieldComponent label="Appointment Date to Take Place By" type="date" classes="col-7 mb-3"
-                            v-model="localappointments.appointment_date" />
+                            v-model="localappointments.appointment_date" :error="errors['appointments.appointment_date'] ?? ''" />
+
                         <InputFieldComponent label="Time" type="time" classes="col-5 mb-3"
-                            v-model="localappointments.appointment_time" />
+                            v-model="localappointments.appointment_time" :error="errors['appointments.appointment_time'] ?? ''" />
 
                         <InputFieldComponent label="Report Completed By" type="date" classes="col-12 mb-3"
-                            v-model="localappointments.report_completed_by" />
+                            v-model="localappointments.report_completed_by" :error="errors['appointments.report_completed_by'] ?? ''"/>
+
                         <div class="col-md-12" v-show="localappointments.report_completed_by != null">
                             <div class="mb-3 mb-0">
                                 <label class="form-label">Reason For Report Rush Date</label>
                                 <textarea rows="5" class="form-control"  v-model="localappointments.reason_report_rush_date"
                                     placeholder="Here can be your description"></textarea>
+                                <span v-if="errors['appointments.reason_report_rush_date']" class="text-danger">{{errors['appointments.reason_report_rush_date']}}</span>
                             </div>
                         </div>
+
                         <div class="mb-3 col-12">
                             <label class="form-label">X-Rays Approved</label>
                             <select class="form-control form-select" v-model="localappointments.x_rays_approved">
@@ -55,15 +60,19 @@
                                 <option  value="1">Yes</option>
                                 <option value="0"> No</option>
                             </select>
+                            <span v-if="errors['appointments.x_rays_approved']" class="text-danger">{{errors['appointments.x_rays_approved']}}</span>
                         </div>
 
                         <div class="col-md-12">
                             <div class="mb-3 mb-0">
                                 <label class="form-label">Special Instructions / Price Restrictions</label>
                                 <textarea rows="5" class="form-control"  v-model="localappointments.special_instructions"
-                                    placeholder="Here can be your description"></textarea>
+                                    placeholder="Here can be your description">
+                                </textarea>
+                                <span v-if="errors['appointments.special_instructions']" class="text-danger">{{errors['appointments.special_instructions']}}</span>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>

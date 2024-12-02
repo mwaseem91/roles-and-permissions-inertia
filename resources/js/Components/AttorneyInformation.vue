@@ -13,20 +13,20 @@
                 </div>
                 <div class="card-body row">
                    
-                    <InputFieldComponent type="text" label="Attorney Name" placeholder="Enter Name"
-                        classes="col-12 mb-3" v-model="localDefenseAttorney.attorney_name" />
+                    <InputFieldComponent type="text" label="Attorney Name" placeholder="Enter Name" classes="col-12 mb-3" 
+                        v-model="localDefenseAttorney.attorney_name" :error="errors['defenseAttorney.attorney_name'] ?? ''"/>
 
-                    <InputFieldComponent label="Firm Name" placeholder="Enter Firm Name" type="text"
-                        classes="col-12 mb-3" v-model="localDefenseAttorney.firm_name" />
+                    <InputFieldComponent label="Firm Name" placeholder="Enter Firm Name" type="text" classes="col-12 mb-3" 
+                        v-model="localDefenseAttorney.firm_name" :error="errors['defenseAttorney.firm_name'] ?? ''"/>
                     
                     <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
-                        v-model="localDefenseAttorney.address1" />
+                        v-model="localDefenseAttorney.address1" :error="errors['defenseAttorney.address1'] ?? ''"/>
 
                     <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3" 
-                        v-model="localDefenseAttorney.address2" />
+                        v-model="localDefenseAttorney.address2" :error="errors['defenseAttorney.address2'] ?? ''"/>
 
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-6" 
-                        v-model="localDefenseAttorney.city" />
+                        v-model="localDefenseAttorney.city" :error="errors['defenseAttorney.city'] ?? ''"/>
                     
                     <div class="mb-3 col-3">
                         <label class="form-label">State</label>
@@ -36,24 +36,31 @@
                                 {{ state.code }}
                             </option>
                         </select>
+                        <span v-if="errors['defenseAttorney.state']" class="text-danger">{{errors['defenseAttorney.state']}}</span>
                     </div>
                     
                     <div class="mb-3 col-3">
                         <label class="form-label">ZIP Code</label>
-                        <input type="text" name="input-mask" class="form-control" 
-                            placeholder="Zip Code" autocomplete="off" v-model="localDefenseAttorney.zip_code">
+                        <input type="number" name="input-mask" class="form-control" placeholder="Zip Code" autocomplete="off" 
+                            v-model="localDefenseAttorney.zip_code" >
+
+                        <span v-if="errors['defenseAttorney.zip_code']" class="text-danger">{{errors['defenseAttorney.zip_code']}}</span>
                     </div>
 
                     <div class="mb-3 col-6">
                         <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####" 
-                            autocomplete="off" v-model="localDefenseAttorney.phone">
+                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"  autocomplete="off"
+                             v-model="localDefenseAttorney.phone" >
+
+                        <span v-if="errors['defenseAttorney.phone']" class="text-danger">{{errors['defenseAttorney.phone']}}</span>
                     </div>
 
                     <div class="mb-3 col-6">
                         <label class="form-label">Fax</label>
-                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"
-                            placeholder="### ### ####" autocomplete="off" v-model="localDefenseAttorney.fax">
+                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"  placeholder="### ### ####"
+                             autocomplete="off" v-model="localDefenseAttorney.fax">
+
+                        <span v-if="errors['defenseAttorney.fax']" class="text-danger">{{errors['defenseAttorney.fax']}}</span>
                     </div>
 
                     <div class="mb-3 col-12">
@@ -62,6 +69,7 @@
                             <option value="1">Yes</option>
                             <option value="0">No</option>
                         </select>
+                        <span v-if="errors['defenseAttorney.contact_for_input']" class="text-danger">{{errors['defenseAttorney.contact_for_input']}}</span>
                     </div>
                 </div>
             </div>
@@ -76,20 +84,20 @@
                 </div>
                 <div class="card-body row">
                    
-                    <InputFieldComponent type="text" label="Attorney Name" placeholder="Enter Name"  
-                        classes="col-12 mb-3" v-model="localClaimantAttorney.attorney_name" />
+                    <InputFieldComponent type="text" label="Attorney Name" placeholder="Enter Name"  classes="col-12 mb-3" 
+                    v-model="localClaimantAttorney.attorney_name"  :error="errors['claimantAttorney.attorney_name'] ?? ''"/>
 
-                    <InputFieldComponent label="Firm Name" placeholder="Enter Firm Name" type="text"  
-                        classes="col-12 mb-3" v-model="localClaimantAttorney.firm_name" />
+                    <InputFieldComponent label="Firm Name" placeholder="Enter Firm Name" type="text" classes="col-12 mb-3" 
+                        v-model="localClaimantAttorney.firm_name" :error="errors['claimantAttorney.firm_name'] ?? ''"/>
 
                     <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"  
-                        v-model="localClaimantAttorney.address1" />
+                        v-model="localClaimantAttorney.address1" :error="errors['claimantAttorney.address1'] ?? ''"/>
 
                     <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"   
-                        v-model="localClaimantAttorney.address2" />
+                        v-model="localClaimantAttorney.address2" :error="errors['claimantAttorney.address2'] ?? ''"/>
 
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-6"   
-                        v-model="localClaimantAttorney.city" />
+                        v-model="localClaimantAttorney.city" :error="errors['claimantAttorney.city'] ?? ''"/>
 
                     <div class="mb-3 col-3">
                         <label class="form-label">State</label>
@@ -99,21 +107,26 @@
                                 {{ state.code }}
                             </option>
                         </select>
+                        <span v-if="errors['claimantAttorney.state']" class="text-danger">{{errors['claimantAttorney.state']}}</span>
                     </div>
 
-                    <InputFieldComponent label="Zip Code" placeholder="Zip Code" type="text" classes="mb-3 col-3"   
-                        v-model="localClaimantAttorney.zip_code" />
+                    <InputFieldComponent label="Zip Code" placeholder="Zip Code" type="number" classes="mb-3 col-3"   
+                        v-model="localClaimantAttorney.zip_code" :error="errors['claimantAttorney.zip_code'] ?? ''"/>
 
                     <div class="mb-3 col-6">
                         <label class="form-label">Phone</label>
                         <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"  
                             autocomplete="off" v-model="localClaimantAttorney.phone">
+
+                        <span v-if="errors['claimantAttorney.phone']" class="text-danger">{{errors['claimantAttorney.phone']}}</span>
                     </div>
 
                     <div class="mb-3  col-6">
                         <label class="form-label">Fax</label>
                         <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"  
                             placeholder="### ### ####" autocomplete="off" v-model="localClaimantAttorney.fax">
+
+                        <span v-if="errors['claimantAttorney.fax']" class="text-danger">{{errors['claimantAttorney.fax']}}</span>
                     </div>                    
                 </div>
             </div>
@@ -132,9 +145,9 @@
     claimantAttorney: Object, 
     defenseAttorney: Object,
     states: Array,
-    errors: Object // Validation errors
+    errors: Object 
   });
-  const emit = defineEmits(['update:claimantAttorney']); // Emit updates to parent
+  const emit = defineEmits(['update:claimantAttorney']); 
   
   // Create a reactive local copy of ClaimantAttorney
   const localClaimantAttorney = reactive({ ...props.claimantAttorney });
@@ -158,7 +171,7 @@
     Object.assign(localDefenseAttorney, newVal);
   });
 
-// by default set attorney type
+
   onMounted(() => {
     localDefenseAttorney.type = 'defense';
     localClaimantAttorney.type = 'claimant';

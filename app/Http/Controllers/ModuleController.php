@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Module;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ModuleRequest;
+use App\Models\ModulesAudit;
 
 class ModuleController extends Controller
 {
@@ -36,6 +38,7 @@ class ModuleController extends Controller
             Module::create(['name' => $request->name]);
             return to_route('modules.index')->with('success', 'Module created successfully');
         } catch (Exception $e) {
+            info($e->getMessage());
             return back()->with('error', 'Failed to create module');
         }
     }
@@ -49,6 +52,7 @@ class ModuleController extends Controller
                 'module' => $module
             ]);
         } catch (Exception $e) {
+            info($e->getMessage());
             return to_route('modules.index')->with('error', 'Failed to load module edit page');
         }
     }
@@ -61,6 +65,7 @@ class ModuleController extends Controller
 
             return to_route('modules.index')->with('success', 'Module updated successfully');
         } catch (Exception $e) {
+            info($e->getMessage());
             return back()->with('error', 'Failed to update module');
         }
     }
@@ -73,7 +78,22 @@ class ModuleController extends Controller
 
             return to_route('modules.index')->with('success', 'Module deleted successfully');
         } catch (Exception $e) {
+            info($e->getMessage());
             return to_route('modules.index')->with('error', 'Failed to delete module');
+        }
+    }
+
+
+    public function viewAudit()
+    {
+        
+        try {
+            $auditlogs = ModulesAudit::latest()->paginate(10);
+            return Inertia::render('Admin/Module/audit', [
+                'auditlogs' => $auditlogs
+            ]);
+        } catch (Exception $e) {
+            return to_route('modules.index')->with('error', 'Failed to load modules');
         }
     }
 }

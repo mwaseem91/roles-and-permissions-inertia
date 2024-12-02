@@ -8,7 +8,8 @@
                 </div>
                 <div class="card-body row">
                     <InputFieldComponent type="text" label="Referring Company" placeholder="Enter Name"
-                        classes="col-12 mb-3 " labelClasses="required" v-model="localReferralInfo.referring_company" :error="errors['referralInfo.referring_company'] ?? ''" />
+                        classes="col-12 mb-3 " labelClasses="required" v-model="localReferralInfo.referring_company" 
+                        :error="errors['referralInfo.referring_company'] ?? ''" />
 
                     <InputFieldComponent label="Referring Source" placeholder="Enter Referring Source" type="text" labelClasses="required" 
                         classes="col-12 mb-3" v-model="localReferralInfo.referring_source" 
@@ -19,10 +20,10 @@
                         :error="errors['referralInfo.address1'] ?? ''"/>
 
                     <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"
-                        v-model="localReferralInfo.address2" />
+                        v-model="localReferralInfo.address2"  :error="errors['referralInfo.address1'] ?? ''"/>
 
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-12 col-md-6"
-                        v-model="localReferralInfo.city" />
+                        v-model="localReferralInfo.city"  :error="errors['referralInfo.city'] ?? ''"/>
 
                     <div class="mb-3 col-12 col-md-3">
                         <label class="form-label">State</label>
@@ -37,9 +38,10 @@
 
                     <div class="mb-3 col-12 col-md-3">
                         <label class="form-label">ZIP Code</label>
-                        <input type="number" class="form-control"
-                            placeholder="Zip Code" autocomplete="off" v-model="localReferralInfo.zip_code"
-                            :error="errors['referralInfo.zip_code'] ?? ''"/>
+                        <input type="number" class="form-control" maxlength="10"
+                            placeholder="Zip Code" autocomplete="off" v-model="localReferralInfo.zip_code" />
+
+                        <span v-if="errors['referralInfo.zip_code']" class="text-danger">{{ errors['referralInfo.zip_code'] }}</span>
                     </div>
 
                     <div class="mb-3 col-12">
@@ -125,6 +127,7 @@
                         <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"
                             :disabled="localBillInfo.same_as_referral" placeholder="### ### ####" autocomplete="off"
                             v-model="localBillInfo.fax">
+                            
                         <span v-if="errors['billInfo.fax']" class="text-danger">{{errors['billInfo.fax']}}</span>
                     </div>
 

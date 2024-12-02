@@ -86,6 +86,8 @@
                                 <option value="Attorney">Attorney</option>
                                 <option value="No Cover Letter">No Cover Letter</option>
                             </select>
+
+                            <span v-if="errors['issue.cover_letter']" class="text-danger">{{errors['issue.cover_letter']}}</span>
                         </div>
                     </div>
 
@@ -105,6 +107,7 @@
                                 <textarea rows="7" class="form-control" v-model="localIssue.additional_information"
                                     placeholder="Here can be your description"></textarea>
                             </div>
+                            <span v-if="errors['issue.additional_information']" class="text-danger">{{errors['issue.additional_information']}}</span>
                         </div>
                     </div>
                 </div>

@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\PermissionRegistrar;
+use App\Models\ModelWithAudit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Str;
 
-class Module extends Model
+class Module extends ModelWithAudit
 {
     use HasFactory;
 
@@ -18,7 +15,6 @@ class Module extends Model
      *  Boot Function
      */
            
-
     public function permission()
     {
         return $this->hasMany(\Spatie\Permission\Models\Permission::class,'module_id','id');

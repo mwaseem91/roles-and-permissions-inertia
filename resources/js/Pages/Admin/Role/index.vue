@@ -3,7 +3,8 @@ import { defineProps ,onMounted ,nextTick ,ref} from 'vue';
 import {router, Link,Head } from '@inertiajs/vue3'
 import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue'; 
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
-
+import { usePermissions } from '@/Composables/permissions';
+const { hasPermission } = usePermissions();
 
 const props = defineProps({
   roles: Array

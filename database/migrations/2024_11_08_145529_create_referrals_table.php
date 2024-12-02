@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('referrals', function (Blueprint $table) {
+        Schema::create('referrals', function (Blueprint $table) 
+        {
             $table->id();
             $table->text('referring_company');
             $table->text('referring_source');
@@ -24,8 +25,11 @@ return new class extends Migration
             $table->text('fax')->nullable();
             $table->text('email');
             $table->enum('status', ['Pending', 'In Progress', 'Completed', 'Rejected'])->default('Pending'); 
+            $table->softDeletes(); 
             $table->timestamps();
         });
+
+       
     }
 
     /**

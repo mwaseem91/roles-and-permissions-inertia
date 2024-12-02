@@ -23,6 +23,7 @@ class ServiceTypeSeeder extends Seeder
             ['name' => 'Review Services'],
             ['name' => 'Medical Records Prepping and Nurse Clinical Review'],
             ['name' => 'Medical Records Prepping Only'],
+            ['name' => 'Other'],
         ];
 
        ServiceType::truncate();
