@@ -1,5 +1,6 @@
 <script setup>
 import { ref, defineProps, computed } from 'vue';
+
 import { router } from '@inertiajs/vue3'
 import { Head } from '@inertiajs/vue3';
 import MasterLayout from '@/Layouts/Frontend/MasterLayout.vue';
@@ -10,7 +11,6 @@ import AttorneyInformation from '@/Components/AttorneyInformation.vue';
 import AppointmentInformation from '@/Components/AppointmentInformation.vue';
 import FileUpload from '@/Components/FileUpload.vue';
 import InvalidFieldModal from '@/Components/Modal/InvalidFieldModal.vue';
-import { useClaimStore } from "@/Stores/ClaimStore";
 
 
 const props = defineProps({
@@ -19,7 +19,6 @@ const props = defineProps({
     specialties: Array,
     serviceTypes: Array,
 });
-const claimStore = useClaimStore();
 
 // Reactive data
 const billInfo = ref({});
@@ -32,13 +31,13 @@ const claimantAttorney = ref({});
 const appointments = ref({});
 const errors = ref({});
 const invalidFieldModal = ref(null);
-const loader = ref(false);
+const isLoading = ref(false);
 const dropzoneRef = ref(null);
 const isChecked = ref(false);
 
 
 async function formSubmit() {
-    loader.value = true;
+    isLoading.value = true; 
     const files = dropzoneRef.value.dropzoneFiles;
 
     try {
@@ -53,20 +52,22 @@ async function formSubmit() {
             },
             {
                 onSuccess: () => {
+                    isLoading.value = false;
 
                 },
                 onError: (err) => {
                     errors.value = err;
+                    isLoading.value = false;
                 }
             }
         );
 
     } catch (error) {
         console.error('Submission Error:', error);
-    } finally {
-        loader.value = false;
     }
 }
+
+
 
 // Computed property for fieldMappings validation
 const fieldMappings = computed(() => {
@@ -130,14 +131,14 @@ const showInvalidFieldModal = () => {
 
             <Head title="Request Form" />
             <div class="mb-5 col-lg-12">
-
+                
                 <div class="card m-7">
                     <div class="card-header">
                         <h1 class="card-title">Request Form</h1>
 
                     </div>
 
-                    <div class=" m-3">
+                    <div class="m-3">
                         Please complete the online service request below and click the “OK” button at the bottom to
                         transmit the information to the appropriate party at Leidos QTC.
                         Once submitted, you will receive an automated response which will include all the referral
@@ -210,8 +211,8 @@ const showInvalidFieldModal = () => {
                                 <br>
                             </div>
                         </div>
-                        <button type="button" @click.prevent="formSubmit" :disabled="!isChecked" class="btn btn-primary me-3">
-                            <span v-if="loader" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                        <button type="button" @click.prevent="formSubmit" :disabled="!isChecked || isLoading" class="btn btn-primary me-3">
+                            <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
                             Submit
                         </button>
                     </div>

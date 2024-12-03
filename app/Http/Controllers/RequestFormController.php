@@ -17,7 +17,7 @@ class RequestFormController extends Controller
     public function index()
     {
         $referrals = Referral::latest()->paginate(10);
-        return Inertia::render('Frontend/RequestForm/index', [
+        return Inertia::render('Admin/RequestForm/index', [
             'referrals' => $referrals,
         ]);  
     }
@@ -28,8 +28,9 @@ class RequestFormController extends Controller
         $states = State::all();
         $serviceTypes= ServiceType::all();
         $specialties = Specialty::all();
+        
         return Inertia::render(
-            'Admin/RequestForm/form',
+            'Frontend/RequestForm/form',
             [
                 'claimTypes' => $claimTypes,
                 'states' => $states,
