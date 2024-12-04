@@ -66,5 +66,10 @@ defineProps({
   </div>
 </template>
 <style>
-
+.footer {
+   position: fixed;
+   left: 20%;
+   bottom: 0;
+   width: 75%;
+}
 </style>

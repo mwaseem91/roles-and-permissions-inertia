@@ -117,6 +117,8 @@ const turnaroundTime = (createdAt, updatedAt) => {
                                                                     data-sort="sort-city">fax</button></th>
                                                             <th><button class="table-sort desc"
                                                                     data-sort="sort-city">turnaround Time</button></th>
+                                                            <th><button class="table-sort"
+                                                                        data-sort="sort-score">Assigned</button></th>
                                                             <th><button class="table-sort desc"
                                                                     data-sort="sort-city">Status</button></th>
                                                             <th><button class="table-sort"
@@ -133,7 +135,7 @@ const turnaroundTime = (createdAt, updatedAt) => {
                                                             <td class="sort-city">{{ referral.phone }}</td>
                                                             <td class="sort-city">{{ referral.fax }}</td>
                                                             <td class="sort-city">{{ referral.status === 'Completed' ? turnaroundTime(referral.created_at, referral.updated_at) : '  -- ' }}</td>
-                                                            
+                                                            <td class="sort-city">{{ referral?.user?.name ?? '  -- ' }}</td>
                                                             <td class="">
                                                                 <span class="dropdown">
                                                                     <button class="btn dropdown-toggle align-text-top " style="width: 120px !important;" 
@@ -165,6 +167,10 @@ const turnaroundTime = (createdAt, updatedAt) => {
                                                                 <Link v-if="hasPermission('request-form-show')" :href="route('request-forms.show', referral.id)"
                                                                     class="me-3">
                                                                     <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                </Link>
+                                                                <Link v-if="hasPermission('request-form-assign')" :href="route('request-form.assigned', referral.id)"
+                                                                    class="me-3">
+                                                                    <i class="fa fa-add-users" aria-hidden="true"></i>
                                                                 </Link>
 
                                                                 <a v-if="hasPermission('request-form-delete')" href="#" 

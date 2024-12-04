@@ -35,6 +35,7 @@ class PermissionTableSeeder extends Seeder
             ['name' => 'request-form-create', 'module_id' => 3],
             ['name' => 'request-form-edit', 'module_id' => 3],
             ['name' => 'request-form-show', 'module_id' => 3],
+            ['name' => 'request-form-assign', 'module_id' => 3],
             ['name' => 'request-form-update', 'module_id' => 3],
             ['name' => 'request-form-delete', 'module_id' => 3],
         ];

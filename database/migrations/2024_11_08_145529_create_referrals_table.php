@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('referrals', function (Blueprint $table) 
         {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
             $table->text('referring_company');
             $table->text('referring_source');
             $table->text('address1')->nullable();

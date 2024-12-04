@@ -2,6 +2,7 @@
 import { defineProps, reactive, onMounted, ref } from 'vue';
 import MasterLayout from '@/Layouts/Admin/AdminMasterLayout.vue';
 import { router, Link ,Head } from '@inertiajs/vue3';
+import { usePermissions } from '@/Composables/permissions';
 const { hasPermission } = usePermissions();
 
 const props = defineProps({

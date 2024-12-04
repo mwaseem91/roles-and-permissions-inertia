@@ -7,16 +7,26 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\ReferralsAudit;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreFormRequest; 
-use App\Models\{State, Referral , ClaimType, Specialty, Attachment, ServiceType};
+use App\Models\{State, Referral , ClaimType, Specialty, Attachment, ServiceType, User};
 
 class RequestFormController extends Controller
 {
     public function index()
     {
-        $referrals = Referral::latest()->paginate(10);
+        $user = Auth::user();
+
+        if ($user->hasRole('Attorney')) {
+            $referrals = Referral::with('user')->where('user_id',  $user->id)->latest()->paginate(10);
+           
+        }
+        if ( $user->hasRole('Admin')) {
+            $referrals = Referral::with('user')->latest()->paginate(10);
+        }
+        
         return Inertia::render('Admin/RequestForm/index', [
             'referrals' => $referrals,
         ]);  
@@ -43,6 +53,7 @@ class RequestFormController extends Controller
     public function show($id)  
     {
         $referral = Referral::with([
+            'user',
             'billToInformation',
             'claimantInformation.service',
             'claimantInformation.claim',
@@ -188,6 +199,35 @@ class RequestFormController extends Controller
             ]);
         } catch (Exception $e) {
             return to_route('modules.index')->with('error', 'Failed to load modules');
+        }
+    }
+
+    public function RequestFormAssigned($id)
+    {
+        
+        try {
+            $referral = Referral::find($id);
+            $users = User::role('Attorney')->get();
+            return Inertia::render('Admin/RequestForm/assignedTo', [
+                'users' => $users,
+                'referred_id' => $id,
+                'user_id' => $referral->user_id,
+            ]);
+        } catch (Exception $e) {
+            return to_route('request-forms.index')->with('error', 'Failed to load modules');
+        }
+    }
+
+    public function RequestFormAssignedSubmit(Request $request)
+    {
+       
+        try {
+            $referral = Referral::find($request->id);
+            $referral->user_id = $request->user_id;
+            $referral->save();
+           return redirect()->route('request-forms.index')->with('success', 'Referral assigned successfully');
+        } catch (Exception $e) {
+            return back()->with('error', 'Something went wrong');
         }
     }
     
