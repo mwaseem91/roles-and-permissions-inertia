@@ -4,23 +4,33 @@
         <div class="col-12 col-md-6">
             <div class="card">
                 <div class="card-header sub-well">
-                    <h3 class="card-title">Referral Party Information</h3>
+                    <h3 class="card-title">Referral Information</h3>
                 </div>
                 <div class="card-body row">
-                    <InputFieldComponent type="text" label="Referring Company" placeholder="Enter Name"
+                    <InputFieldComponent type="text" label="Referring Company Name" placeholder="Enter Company Name"
                         classes="col-12 mb-3 " labelClasses="required" v-model="localReferralInfo.referring_company" 
                         :error="errors['referralInfo.referring_company'] ?? ''" />
 
-                    <InputFieldComponent label="Referring Source" placeholder="Enter Referring Source" type="text" labelClasses="required" 
+                    <InputFieldComponent label="Referring Source Name" placeholder="Enter Referring Source Name" type="text" labelClasses="required" 
                         classes="col-12 mb-3" v-model="localReferralInfo.referring_source" 
                         :error="errors['referralInfo.referring_source'] ?? ''" />
 
-                    <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
-                        v-model="localReferralInfo.address1" 
-                        :error="errors['referralInfo.address1'] ?? ''"/>
+                    <InputFieldComponent label="Email" placeholder="abc@gmail.co" type="email" classes="col-12 mb-3" labelClasses="required" 
+                        v-model="localReferralInfo.email" :error="errors['referralInfo.email'] ?? ''" />
 
-                    <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"
-                        v-model="localReferralInfo.address2"  :error="errors['referralInfo.address1'] ?? ''"/>
+                    <div class="mb-3 col-12">
+                        <label class="form-label required">Phone Number</label>
+                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"
+                            autocomplete="off" v-model="localReferralInfo.phone">
+                        <span v-if="errors['referralInfo.phone']" class="text-danger">{{ errors['referralInfo.phone'] }}</span>
+                    </div>
+
+                    <div class="mb-3 col-12">
+                        <label class="form-label">Fax Number</label>
+                        <input type="text" class="form-control" v-mask="'### ### ####'"
+                            placeholder="### ### ####" autocomplete="off" v-model="localReferralInfo.fax">
+                            <span v-if="errors['referralInfo.fax']" class="text-danger">{{ errors['referralInfo.fax'] }}</span>
+                    </div>
 
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-12 col-md-6"
                         v-model="localReferralInfo.city"  :error="errors['referralInfo.city'] ?? ''"/>
@@ -44,22 +54,20 @@
                         <span v-if="errors['referralInfo.zip_code']" class="text-danger">{{ errors['referralInfo.zip_code'] }}</span>
                     </div>
 
-                    <div class="mb-3 col-12">
-                        <label class="form-label required">Phone</label>
-                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"
-                            autocomplete="off" v-model="localReferralInfo.phone">
-                        <span v-if="errors['referralInfo.phone']" class="text-danger">{{ errors['referralInfo.phone'] }}</span>
-                    </div>
+                    <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
+                        v-model="localReferralInfo.address1" 
+                        :error="errors['referralInfo.address1'] ?? ''"/>
 
-                    <div class="mb-3 col-12">
-                        <label class="form-label">Fax</label>
-                        <input type="text" class="form-control" v-mask="'### ### ####'"
-                            placeholder="### ### ####" autocomplete="off" v-model="localReferralInfo.fax">
-                            <span v-if="errors['referralInfo.fax']" class="text-danger">{{ errors['referralInfo.fax'] }}</span>
-                    </div>
+                    <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"
+                        v-model="localReferralInfo.address2"  :error="errors['referralInfo.address1'] ?? ''"/>
 
-                    <InputFieldComponent label="Email" placeholder="abc@gmail.co" type="email" classes="col-12 mb-3" labelClasses="required" 
-                        v-model="localReferralInfo.email" :error="errors['referralInfo.email'] ?? ''" />
+                    
+
+                    
+
+                   
+
+                    
                 </div>
             </div>
         </div>
@@ -67,7 +75,7 @@
         <div class="col-12 col-md-6">
             <div class="card">
                 <div class="card-header sub-well">
-                    <h3 class="card-title">Bill To Information</h3>
+                    <h3 class="card-title">Bill Information</h3>
                 </div>
                 <div class="card-body row">
                     <div class="mb-3 col-12">
@@ -87,13 +95,25 @@
                         :disabled="localBillInfo.same_as_referral" classes="col-12 mb-3" labelClasses="required" 
                         v-model="localBillInfo.referring_company" :error="errors['billInfo.referring_company'] ?? ''"/>
 
-                    <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
-                        :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.address1" 
-                        :error="errors['billInfo.address1'] ?? ''"/>
+                    <InputFieldComponent label="Email" placeholder="abc@gmail.co" type="email" classes="col-12 mb-3"
+                        :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.email"  labelClasses="required" 
+                        :error="errors['billInfo.email'] ?? ''"/>
 
-                    <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"
-                        :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.address2" 
-                        :error="errors['billInfo.address2'] ?? ''"/>
+                    <div class="mb-3 col-12">
+                        <label class="form-label required">Phone Number</label>
+                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"
+                            :disabled="localBillInfo.same_as_referral" autocomplete="off" v-model="localBillInfo.phone">
+                        <span v-if="errors['billInfo.phone']" class="text-danger">{{errors['billInfo.phone']}}</span>
+                    </div>
+
+                    <div class="mb-3  col-12">
+                        <label class="form-label">Fax Number</label>
+                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"
+                            :disabled="localBillInfo.same_as_referral" placeholder="### ### ####" autocomplete="off"
+                            v-model="localBillInfo.fax">
+                            
+                        <span v-if="errors['billInfo.fax']" class="text-danger">{{errors['billInfo.fax']}}</span>
+                    </div>
 
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-12 col-md-6"
                         :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.city" 
@@ -115,25 +135,14 @@
                         :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.zip_code" 
                         :error="errors['billInfo.zip_code'] ?? ''"/>
 
-                    <div class="mb-3 col-12">
-                        <label class="form-label required">Phone</label>
-                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"
-                            :disabled="localBillInfo.same_as_referral" autocomplete="off" v-model="localBillInfo.phone">
-                        <span v-if="errors['billInfo.phone']" class="text-danger">{{errors['billInfo.phone']}}</span>
-                    </div>
 
-                    <div class="mb-3  col-12">
-                        <label class="form-label">Fax</label>
-                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"
-                            :disabled="localBillInfo.same_as_referral" placeholder="### ### ####" autocomplete="off"
-                            v-model="localBillInfo.fax">
-                            
-                        <span v-if="errors['billInfo.fax']" class="text-danger">{{errors['billInfo.fax']}}</span>
-                    </div>
+                    <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
+                        :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.address1" 
+                        :error="errors['billInfo.address1'] ?? ''"/>
 
-                    <InputFieldComponent label="Email" placeholder="abc@gmail.co" type="email" classes="col-12 mb-3"
-                        :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.email"  labelClasses="required" 
-                        :error="errors['billInfo.email'] ?? ''"/>
+                    <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"
+                        :disabled="localBillInfo.same_as_referral" v-model="localBillInfo.address2" 
+                        :error="errors['billInfo.address2'] ?? ''"/>
                 </div>
             </div>
         </div>
@@ -180,13 +189,13 @@ watch(() => props.referralInfo, (newVal) => {
 
 
 <style scoped>
-.well{
+/* .well{
     background-color: #901588 !important;
     color: white !important;
 }
 .sub-well {
     background-color: #7C7C7A !important;
     color: white !important;
-}
+} */
 
 </style>

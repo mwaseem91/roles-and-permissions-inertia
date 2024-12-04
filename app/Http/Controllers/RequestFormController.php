@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreFormRequest; 
+use App\Notifications\ReferralStatusChanged;
+use Illuminate\Support\Facades\Notification;
 use App\Models\{State, Referral , ClaimType, Specialty, Attachment, ServiceType, User};
 
 class RequestFormController extends Controller
@@ -158,19 +160,36 @@ class RequestFormController extends Controller
     public function changeStatus(Request $request)
     {
         DB::beginTransaction();
-
-        try {
-            $referral = Referral::findOrFail($request->id);
+    
+        try { 
+            $referral = Referral::findOrFail($request->id); 
             $referral->status = $request->status;
             $referral->save();
+     
+            $admin = User::role('Admin')->first(); 
+
+            $attorneyMail = Auth::user()->email; 
+            $adminMail = $admin->email; 
+            $referralEmail = $referral->user->email;
+     
+            $mails = [
+                $attorneyMail,
+                $adminMail,
+                $referralEmail,
+            ];
+    
+            Notification::route('mail',$mails)
+            ->notify(new ReferralStatusChanged($referral));
 
             DB::commit();
+            
             return to_route('request-forms.index')->with('success', 'Status changed successfully');
         } catch (Exception $e) {
             DB::rollBack();
             return to_route('request-forms.index')->with('error', 'Something went wrong');
         }
     }
+    
 
     public function destroy($id): RedirectResponse
     {

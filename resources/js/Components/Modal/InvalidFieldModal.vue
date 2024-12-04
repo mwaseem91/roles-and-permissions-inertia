@@ -4,7 +4,7 @@
       <div class="modal-content">
         <div class="modal-body">
           <div class="pb-1"> <strong> WARNING: </strong>
-            There are missing/malformed values! Please correct the fields listed below and try again.
+            There are missing fields! Please correct the fields listed below and try again.
           </div>
 
           <div>

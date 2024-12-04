@@ -139,15 +139,14 @@ const showInvalidFieldModal = () => {
                     </div>
 
                     <div class="m-3">
-                        Please complete the online service request below and click the “OK” button at the bottom to
-                        transmit the information to the appropriate party at Leidos QTC.
-                        Once submitted, you will receive an automated response which will include all the referral
-                        information provided.
+                        Please fill out the online service request form below and click the "Submit" button to send the information
+                        to the Quantum Core. After submission, you will receive an automated confirmation email containing all
+                        the referral details you provided.
 
                     </div>
 
                     <div class="card-header well">
-                        <h3 class="card-title">Referrer and Billing Information</h3>
+                        <h3 class="card-title">Referrer And Billing Information</h3>
                     </div>
 
                     <ReferrerAndBilling 
@@ -236,7 +235,7 @@ const showInvalidFieldModal = () => {
 </template>
 
 
-<style scoped>
+<style >
 .alert-info {
     background-color: #e2e3e5 !important;
     border-color: #e2e3e5 !important;
@@ -244,7 +243,11 @@ const showInvalidFieldModal = () => {
 }
 
 .well {
-    background-color: #901588 !important;
+    background-color:hsla(11,100%,62.2%,1)!important;
+    color: white !important;
+}
+.sub-well {
+    background-color: hsl(43.62deg 100% 62.2% / 98%) !important;
     color: white !important;
 }
 

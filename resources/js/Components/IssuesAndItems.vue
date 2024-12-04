@@ -1,14 +1,14 @@
 <template>
     <div class="card mt-3">
         <div class="card-header well">
-            <h3 class="card-title">Issues and Items to Address</h3>
+            <h3 class="card-title">Issues and Items to Address Information</h3>
         </div>
         <div class="p-2 row row-cards">
             <!-- Additional Information -->
             <div class=" col-12 col-md-6">
                 <div class="card">
                     <div class="card-header sub-well">
-                        <h3 class="card-title">Issues to Be Addressed</h3>
+                        <h3 class="card-title">Issues to Be Addresse Information</h3>
                     </div>
                     <div class="alert alert-warning m-1 text-center" style="line-height:2">
                         <i class="fa fa-exclamation-triangle fa-2x pull-left me-2" aria-hidden="true"></i>
@@ -165,13 +165,5 @@ watch(() => props.issue, (newVal) => {
     border-color: #faebcc;
 }
 
-.well {
-    background-color: #901588 !important;
-    color: white !important;
-}
 
-.sub-well {
-    background-color: #7C7C7A !important;
-    color: white !important;
-}
 </style>

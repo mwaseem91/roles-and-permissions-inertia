@@ -8,42 +8,18 @@
             <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-header sub-well">
-                        <h3 class="card-title">Claimant Details</h3>
+                        <h3 class="card-title">Claimant Information</h3>
                     </div>
                     <div class="card-body row">
-                        <InputFieldComponent label="Last Name" placeholder="Enter Last Name" type="text"
-                            v-model="localClaimant.last_name" :error="errors['claimants.last_name'] ?? ''"
-                            classes="mb-3 col-12 col-md-6" labelClasses="required"  />
-
+                        
                         <InputFieldComponent label="First Name" placeholder="Enter First Name" type="text"
                             v-model="localClaimant.first_name" :error="errors['claimants.first_name'] ?? ''"
                              classes="mb-3  col-12 col-md-6" labelClasses="required" />
 
-                        <InputFieldComponent label="Address" placeholder="Address 1" type="text"
-                            v-model="localClaimant.address1" classes="col-12" 
-                            :error="errors['claimants.address1'] ?? ''"/>
-
-                        <InputFieldComponent placeholder="Address 2" type="text" v-model="localClaimant.address2"
-                            classes="col-12 mb-3" :error="errors['claimants.address2'] ?? ''"/>
-
-                        <InputFieldComponent label="City" placeholder="Enter City" type="text" v-model="localClaimant.city"
-                            classes="mb-3  col-12 col-md-6" :error="errors['claimants.city'] ?? ''"/>
-
-                        <div class="mb-3  col-12 col-md-3">
-                            <label class="form-label">State</label>
-                            <select v-model="localClaimant.state" class="form-control form-select">
-                                <option selected="selected" value=""></option>
-                                <option v-for="state in states" :key="state.code" :value="state.code">
-                                    {{ state.code }}
-                                </option>
-                            </select>
-                            <span v-if="errors['claimants.state']" class="text-danger">{{errors['claimants.state']}}</span>
-                        </div>
-                        
-                        <InputFieldComponent label="ZIP Code" placeholder="ZIP Code" type="text"
-                            v-model="localClaimant.zip_code" classes="mb-3  col-12 col-md-3"  :error="errors['claimants.zip_code'] ?? ''"/>
-
-                        <div class="mb-3  col-12 col-md-6">
+                        <InputFieldComponent label="Last Name" placeholder="Enter Last Name" type="text"
+                            v-model="localClaimant.last_name" :error="errors['claimants.last_name'] ?? ''"
+                            classes="mb-3 col-12 col-md-6" labelClasses="required"  />
+                            <div class="mb-3  col-12 col-md-6">
                             <label class="form-label">Home Phone Number</label>
                             <input type="text" v-model="localClaimant.home_phone" class="form-control" v-mask="'### ### ####'"
                                 placeholder="### ### ####" autocomplete="off" />
@@ -70,6 +46,30 @@
                                 class="form-control" autocomplete="off" />
                             <span v-if="errors['claimants.dob']" class="text-danger">{{errors['claimants.dob']}}</span>
                         </div>
+
+                        <InputFieldComponent label="City" placeholder="Enter City" type="text" v-model="localClaimant.city"
+                            classes="mb-3  col-12 col-md-6" :error="errors['claimants.city'] ?? ''"/>
+
+                        <div class="mb-3  col-12 col-md-3">
+                            <label class="form-label">State</label>
+                            <select v-model="localClaimant.state" class="form-control form-select">
+                                <option selected="selected" value=""></option>
+                                <option v-for="state in states" :key="state.code" :value="state.code">
+                                    {{ state.code }}
+                                </option>
+                            </select>
+                            <span v-if="errors['claimants.state']" class="text-danger">{{errors['claimants.state']}}</span>
+                        </div>
+                        
+                        <InputFieldComponent label="ZIP Code" placeholder="ZIP Code" type="text"
+                            v-model="localClaimant.zip_code" classes="mb-3  col-12 col-md-3"  :error="errors['claimants.zip_code'] ?? ''"/>
+
+                            <InputFieldComponent label="Address" placeholder="Address 1" type="text"
+                            v-model="localClaimant.address1" classes="col-12" 
+                            :error="errors['claimants.address1'] ?? ''"/>
+
+                        <InputFieldComponent placeholder="Address 2" type="text" v-model="localClaimant.address2"
+                            classes="col-12 mb-3" :error="errors['claimants.address2'] ?? ''"/>
                         <div class="mb-3 col-12">
                             <label class="form-label">Gender</label>
                             <select v-model="localClaimant.gender" class="form-control form-select">
@@ -94,38 +94,24 @@
                             </select>
                             <span v-if="errors['claimants.language']" class="text-danger">{{errors['claimants.language']}}</span>
                         </div>
+
                         <InputFieldComponent label="Other Language"
                             :disabled="localClaimant.language === 'other' ? false : true" v-model="localClaimant.other_language"
                             type="text" classes="mb-3 col-12 col-md-6" :error="errors['claimants.other_language'] ?? ''"/>
+                        
+                        <InputFieldComponent label="Claim Number" placeholder="Claim Number" type="text" labelClasses="required" 
+                            v-model="localClaimant.claim_number" classes="mb-3 col-12"  :error="errors['claimants.claim_number'] ?? ''"/>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-body row mt-4">
-                        <InputFieldComponent label="Claim Number" placeholder="Claim Number" type="text" labelClasses="required" 
-                            v-model="localClaimant.claim_number" classes="mb-3 col-12"  :error="errors['claimants.claim_number'] ?? ''"/>
+                        
                        
                         <InputFieldComponent label="Date of Accident/ Injury" type="date" v-model="localClaimant.accident_date" 
                             classes="mb-3 col-12"   :error="errors['claimants.accident_date'] ?? ''"/>
 
-                        <div class="col-md-12">
-                            <div class="mb-3 mb-0">
-                                <label class="form-label required">Injury Description / Nature of Injury</label>
-                                <textarea rows="5" class="form-control" v-model="localClaimant.injury_description"
-                                    placeholder="Here can be your description"></textarea>
-
-                                <span v-if="errors['claimants.injury_description']" class="text-danger">{{errors['claimants.injury_description']}}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="mb-3 mb-0">
-                                <label class="form-label">Background of Injury</label>
-                                <textarea rows="5" class="form-control" v-model="localClaimant.injury_background"
-                                    placeholder="Here can be your description"></textarea>
-                                <span v-if="errors['claimants.injury_background']" class="text-danger">{{errors['claimants.injury_background']}}</span>
-                            </div>
-                        </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Currently Working</label>
@@ -136,6 +122,7 @@
                                 <span v-if="errors['claimants.currently_working']" class="text-danger">{{errors['claimants.currently_working']}}</span>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Claim Accepted</label>
@@ -146,6 +133,26 @@
                                 <span v-if="errors['claimants.claim_accepted']" class="text-danger">{{errors['claimants.claim_accepted']}}</span>
                             </div>
                         </div>
+
+                        <div class="col-md-12">
+                            <div class="mb-3 mb-0">
+                                <label class="form-label required">Injury Description / Nature of Injury</label>
+                                <textarea rows="5" class="form-control" v-model="localClaimant.injury_description"
+                                    placeholder="Here can be your description"></textarea>
+
+                                <span v-if="errors['claimants.injury_description']" class="text-danger">{{errors['claimants.injury_description']}}</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="mb-3 mb-0">
+                                <label class="form-label">Background of Injury</label>
+                                <textarea rows="5" class="form-control" v-model="localClaimant.injury_background"
+                                    placeholder="Here can be your description"></textarea>
+                                <span v-if="errors['claimants.injury_background']" class="text-danger">{{errors['claimants.injury_background']}}</span>
+                            </div>
+                        </div>
+                        
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label required">Jurisdiction</label>
@@ -221,6 +228,7 @@
                                 <span v-if="errors['claimants.jurisdiction']" class="text-danger">{{errors['claimants.jurisdiction']}}</span>
                             </div>
                         </div>
+
                         <div class="mb-3 col-md-12">
                             <label class="form-label required">Type of Claim</label>
                             <select v-model="localClaimant.claim_type" class="form-control form-select" @change="claimType($event.target.value)">
@@ -276,23 +284,25 @@
             <div class=" col-12 col-md-6">
                 <div class="card">
                     <div class="card-header sub-well d-flex align-items-center justify-content-between">
-                        <h3 class="card-title">Treating Physician(s)</h3>
+                        <h3 class="card-title">Treating Physician(s) Information</h3>
                         <button class="btn btn-primary float-start" type="button" @click="addClaimant"
                             :disabled="physicianDetails.length == 10">
-                            <i class="fas fa-plus me-2"></i> Add Treating Physician
+                            <i class="fas fa-plus me-2"></i> Add More
                         </button>
                     </div>
+
                     <div class="card-body row">
                         <div v-for="(localphysician, index) in physicianDetails" :key="index" class="col-12 mb-3">
                             <div class="row">
-                                <InputFieldComponent label="Last Name" placeholder="Enter Last Name" type="text"
-                                    v-model="localphysician.last_name" classes="mb-3 col-6" />
                                 <InputFieldComponent label="First Name" placeholder="Enter First Name" type="text"
                                     v-model="localphysician.first_name" classes="mb-3 col-6" />
+                                <InputFieldComponent label="Last Name" placeholder="Enter Last Name" type="text"
+                                    v-model="localphysician.last_name" classes="mb-3 col-6" />
                             </div>
                         </div>
                         <span v-if="errors['physicians']" class="text-danger">{{errors['physicians']}}</span>
                     </div>
+
                 </div>
             </div>
             <!--End Treating Physician -->
@@ -301,18 +311,18 @@
             <div class=" col-12 col-md-6">
                 <div class="card ">
                     <div class="card-header sub-well">
-                        <h3 class="card-title">Other Needs</h3>
+                        <h3 class="card-title">Check If Other Needs</h3>
                     </div>
                     <div class="card-body row">
                         <div class="col-md-12">
 
                             <label class="form-check me-3">
-                                <input class="form-check-input" type="checkbox" v-model="localClaimant.transportation">
-                                <span class="form-label">Transportation </span>
-                            </label>
-                            <label class="form-check me-3">
                                 <input class="form-check-input" type="checkbox" v-model="localClaimant.translation">
                                 <span class="form-label">Translation</span>
+                            </label>
+                            <label class="form-check me-3">
+                                <input class="form-check-input" type="checkbox" v-model="localClaimant.transportation">
+                                <span class="form-label">Transportation </span>
                             </label>
                             <label class="form-check">
                                 <input class="form-check-input" type="checkbox" v-model="localClaimant.conference_call">
@@ -395,8 +405,5 @@ watch(physicianDetails, (newVal) => {
 .display-flex {
     display: flex;
 }
-.sub-well {
-    background-color: #7C7C7A !important;
-    color: white !important;
-}
+
 </style>

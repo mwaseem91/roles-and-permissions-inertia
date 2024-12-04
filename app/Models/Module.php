@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\ModelWithAudit;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Module extends ModelWithAudit
+class Module extends Model
 {
     use HasFactory;
 

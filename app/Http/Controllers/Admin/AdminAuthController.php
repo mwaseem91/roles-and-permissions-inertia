@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use PragmaRX\Google2FA\Google2FA;
+use App\Notifications\Email2FACode;
 use App\Http\Controllers\Controller;
+
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Notification;
 
 class AdminAuthController extends Controller
 {
@@ -27,12 +32,25 @@ class AdminAuthController extends Controller
         $remember = $request->has('remember'); 
 
         if (Auth::attempt($request->only('email', 'password'), $remember)) {
-            return Inertia::location(route('admin.dashboard'));
+           return redirect()->route('admin.dashboard');
+            // $this->sendEmail2faCode( $request->email);
+            //  return Inertia::location(route('verification.code'));
         }
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
+    }
+
+    public function sendEmail2faCode($mail)
+    {
+        $code = rand(100000, 999999);
+        session(['email_2fa_code' => $code]);
+        info($code);
+        // Notification::route('mail', $mail)
+        //     ->notify(new Email2FACode($code));
+
+       
     }
 
     public function forgetPassword()
@@ -50,7 +68,6 @@ class AdminAuthController extends Controller
 
     public function sendResetLink(Request $request)
     {
-        // Validate the email address
         $request->validate([
             'email' => 'required|email|exists:users,email',
         ]);

@@ -19,11 +19,21 @@
                     <InputFieldComponent label="Firm Name" placeholder="Enter Firm Name" type="text" classes="col-12 mb-3" 
                         v-model="localDefenseAttorney.firm_name" :error="errors['defenseAttorney.firm_name'] ?? ''"/>
                     
-                    <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
-                        v-model="localDefenseAttorney.address1" :error="errors['defenseAttorney.address1'] ?? ''"/>
+                        <div class="mb-3 col-6">
+                        <label class="form-label">Phone</label>
+                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"  autocomplete="off"
+                             v-model="localDefenseAttorney.phone" >
 
-                    <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3" 
-                        v-model="localDefenseAttorney.address2" :error="errors['defenseAttorney.address2'] ?? ''"/>
+                        <span v-if="errors['defenseAttorney.phone']" class="text-danger">{{errors['defenseAttorney.phone']}}</span>
+                    </div>
+
+                    <div class="mb-3 col-6">
+                        <label class="form-label">Fax</label>
+                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"  placeholder="### ### ####"
+                             autocomplete="off" v-model="localDefenseAttorney.fax">
+
+                        <span v-if="errors['defenseAttorney.fax']" class="text-danger">{{errors['defenseAttorney.fax']}}</span>
+                    </div>
 
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-6" 
                         v-model="localDefenseAttorney.city" :error="errors['defenseAttorney.city'] ?? ''"/>
@@ -47,21 +57,11 @@
                         <span v-if="errors['defenseAttorney.zip_code']" class="text-danger">{{errors['defenseAttorney.zip_code']}}</span>
                     </div>
 
-                    <div class="mb-3 col-6">
-                        <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"  autocomplete="off"
-                             v-model="localDefenseAttorney.phone" >
+                    <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"
+                        v-model="localDefenseAttorney.address1" :error="errors['defenseAttorney.address1'] ?? ''"/>
 
-                        <span v-if="errors['defenseAttorney.phone']" class="text-danger">{{errors['defenseAttorney.phone']}}</span>
-                    </div>
-
-                    <div class="mb-3 col-6">
-                        <label class="form-label">Fax</label>
-                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"  placeholder="### ### ####"
-                             autocomplete="off" v-model="localDefenseAttorney.fax">
-
-                        <span v-if="errors['defenseAttorney.fax']" class="text-danger">{{errors['defenseAttorney.fax']}}</span>
-                    </div>
+                    <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3" 
+                        v-model="localDefenseAttorney.address2" :error="errors['defenseAttorney.address2'] ?? ''"/>
 
                     <div class="mb-3 col-12">
                         <label class="form-label">Contact for Input</label>
@@ -71,6 +71,7 @@
                         </select>
                         <span v-if="errors['defenseAttorney.contact_for_input']" class="text-danger">{{errors['defenseAttorney.contact_for_input']}}</span>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -89,13 +90,23 @@
 
                     <InputFieldComponent label="Firm Name" placeholder="Enter Firm Name" type="text" classes="col-12 mb-3" 
                         v-model="localClaimantAttorney.firm_name" :error="errors['claimantAttorney.firm_name'] ?? ''"/>
+                        <div class="mb-3 col-6">
+                        <label class="form-label">Phone</label>
+                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"  
+                            autocomplete="off" v-model="localClaimantAttorney.phone">
 
-                    <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"  
-                        v-model="localClaimantAttorney.address1" :error="errors['claimantAttorney.address1'] ?? ''"/>
+                        <span v-if="errors['claimantAttorney.phone']" class="text-danger">{{errors['claimantAttorney.phone']}}</span>
+                    </div>
 
-                    <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"   
-                        v-model="localClaimantAttorney.address2" :error="errors['claimantAttorney.address2'] ?? ''"/>
+                    <div class="mb-3  col-6">
+                        <label class="form-label">Fax</label>
+                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"  
+                            placeholder="### ### ####" autocomplete="off" v-model="localClaimantAttorney.fax">
 
+                        <span v-if="errors['claimantAttorney.fax']" class="text-danger">{{errors['claimantAttorney.fax']}}</span>
+                    </div>  
+                    
+                   
                     <InputFieldComponent label="City" placeholder="Enter City" type="text" classes="col-6"   
                         v-model="localClaimantAttorney.city" :error="errors['claimantAttorney.city'] ?? ''"/>
 
@@ -113,21 +124,12 @@
                     <InputFieldComponent label="Zip Code" placeholder="Zip Code" type="number" classes="mb-3 col-3"   
                         v-model="localClaimantAttorney.zip_code" :error="errors['claimantAttorney.zip_code'] ?? ''"/>
 
-                    <div class="mb-3 col-6">
-                        <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" v-mask="'### ### ####'" placeholder="### ### ####"  
-                            autocomplete="off" v-model="localClaimantAttorney.phone">
+                        <InputFieldComponent label="Address" placeholder="Address 1" type="text" classes="col-12"  
+                        v-model="localClaimantAttorney.address1" :error="errors['claimantAttorney.address1'] ?? ''"/>
 
-                        <span v-if="errors['claimantAttorney.phone']" class="text-danger">{{errors['claimantAttorney.phone']}}</span>
-                    </div>
-
-                    <div class="mb-3  col-6">
-                        <label class="form-label">Fax</label>
-                        <input type="text" name="input-mask" class="form-control" v-mask="'### ### ####'"  
-                            placeholder="### ### ####" autocomplete="off" v-model="localClaimantAttorney.fax">
-
-                        <span v-if="errors['claimantAttorney.fax']" class="text-danger">{{errors['claimantAttorney.fax']}}</span>
-                    </div>                    
+                    <InputFieldComponent placeholder="Address 2" type="text" classes="col-12 mb-3"   
+                        v-model="localClaimantAttorney.address2" :error="errors['claimantAttorney.address2'] ?? ''"/>
+              
                 </div>
             </div>
         </div>
@@ -179,9 +181,3 @@
   </script>
 
 
-<style scoped>
-.sub-well {
-    background-color: #7C7C7A !important;
-    color: white !important;
-}
-</style>

@@ -1,7 +1,7 @@
 <template>
     <div class="card mt-3">
         <div class="card-header well">
-            <h3 class="card-title">File Uploads</h3>
+            <h3 class="card-title">Upload Files</h3>
         </div>
         <div class="p-2 row row-cards">
             <div class="col-12">

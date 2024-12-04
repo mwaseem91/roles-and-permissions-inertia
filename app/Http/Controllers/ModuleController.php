@@ -82,18 +82,4 @@ class ModuleController extends Controller
             return to_route('modules.index')->with('error', 'Failed to delete module');
         }
     }
-
-
-    public function viewAudit()
-    {
-        
-        try {
-            $auditlogs = ModulesAudit::latest()->paginate(10);
-            return Inertia::render('Admin/Module/audit', [
-                'auditlogs' => $auditlogs
-            ]);
-        } catch (Exception $e) {
-            return to_route('modules.index')->with('error', 'Failed to load modules');
-        }
-    }
 }
