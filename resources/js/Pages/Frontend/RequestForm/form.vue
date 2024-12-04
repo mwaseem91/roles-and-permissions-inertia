@@ -243,11 +243,11 @@ const showInvalidFieldModal = () => {
 }
 
 .well {
-    background-color:hsla(11,100%,62.2%,1)!important;
+    background-color: #3A226E!important;
     color: white !important;
 }
 .sub-well {
-    background-color: hsl(43.62deg 100% 62.2% / 98%) !important;
+    background-color: #58B6A2 !important;
     color: white !important;
 }
 
